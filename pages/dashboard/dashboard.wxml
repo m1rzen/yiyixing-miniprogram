@@ -1,0 +1,98 @@
+<view class="dashboard-page">
+  <image class="chikan-bg-full" src="https://cloud.tansuozhe.tech/orange/welcome-bg.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=G8BXJH9FD7PUWOXZE1XO%2F20260401%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260401T013450Z&X-Amz-Expires=604800&X-Amz-Security-Token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3NzUwNTAzMTksInBhcmVudCI6InJ1c3Rmc2FkbWluIn0.Igt94Oc3M2b9KSeRM7__GGbNASX0c5CeZPp9_cioFQR3c_jcwFgiuZkkHdyZjPfs9KrhUm0qwbUjcs41jWZeZA&X-Amz-Signature=a8d6028ae2a7274cc752c498c19ed4a3938a878ccbe1b9b4ccbcc0f762a0ed2a&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" mode="aspectFill"></image>
+  <view class="bg-overlay-full"></view>
+
+  <view class="content-wrap">
+    <view class="safe-top-spacer"></view>
+
+    <view class="user-header-glass" bindtap="goToProfile" hover-class="glass-hover">
+      <view class="avatar-wrap">
+        <t-icon name="user" size="44rpx" color="#FFF"></t-icon>
+      </view>
+      <view class="user-info">
+        <view class="user-name">微信用户 <text class="role-tag-warm">访客</text></view>
+        <view class="user-phone">198****0468 <t-icon name="chevron-right" size="24rpx" color="rgba(255,255,255,0.7)"></t-icon></view>
+      </view>
+    </view>
+
+    <view class="main-glass-card">
+      <view class="location-bar">
+        <view class="loc-left">
+          <t-icon name="location" size="36rpx" color="#3F8DB4"></t-icon>
+          <text class="community-name">{{currentCommunity}}</text>
+        </view>
+        <view class="switch-btn-transparent" bindtap="goToCommunity">切换小区</view>
+      </view>
+
+      <view class="status-area">
+        <view class="status-icon-wrap">
+          <t-icon name="info-circle-filled" size="110rpx" color="rgba(63, 141, 180, 0.8)"></t-icon>
+        </view>
+        <text class="status-title-dark">您还未登记</text>
+        <text class="status-desc-mid">请点击去登记按钮登记</text>
+      </view>
+
+      <t-button block t-class="global-primary-btn glass-submit-btn" bindtap="goToRegister">
+        去登记
+      </t-button>
+
+      <view class="divider-wrap-dim">
+        <view class="line"></view>
+        <text class="divider-text">一键登记</text>
+        <view class="line"></view>
+      </view>
+
+      <view class="quick-actions-row-transparent">
+        <view class="quick-btn-glass meituan-t" bindtap="handlePlatformAuth" data-platform="美团">
+          <text>美团骑手</text>
+        </view>
+        <view class="quick-btn-glass shunfeng-t" bindtap="handlePlatformAuth" data-platform="顺丰">
+          <text>顺丰快递</text>
+        </view>
+        <view class="quick-btn-glass jingdong-t" bindtap="handlePlatformAuth" data-platform="京东">
+          <text>京东秒送</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-actions">
+      <view class="delete-btn-glass" bindtap="handleDeleteInfo">
+        <t-icon name="delete" size="32rpx" color="#333" class="del-icon"></t-icon>
+        删除个人信息
+      </view>
+      <view class="logout-btn-glass" bindtap="handleLogout">
+        <t-icon name="poweroff" size="28rpx" color="#555" class="logout-icon"></t-icon>
+        退出当前账号
+      </view>
+    </view>
+  </view>
+
+  <t-popup visible="{{platformPopupVisible}}" placement="bottom" round="{{true}}">
+    <view class="unified-glass-popup">
+      
+      <view class="brand-image-header">
+        <image class="header-banner-img" src="{{currentPlatform.headerImgUrl}}" mode="widthFix"></image>
+      </view>
+      
+      <view class="brand-content-fixed {{currentPlatform.gradientClass}}">
+        <view class="auth-desc-fixed">
+          <text>如果您是</text>
+          <text class="bold-text-fixed">{{currentPlatform.roleName}}</text>
+          <text>，可以点击「确认进行验证」，确认后会将您的手机号发送至</text>
+          <text class="bold-text-fixed">{{currentPlatform.platformName}}</text>
+          <text>，验证您是否为</text>
+          <text class="highlight-text-fixed {{currentPlatform.textClass}}">派送中</text>
+          <text>的骑手，验证通过后可直接亮码，快速通行。</text>
+          <view class="desc-sub-fixed">如不是，或不希望使用手机号进行验证，请点击不验证。</view>
+        </view>
+        
+        <view class="auth-actions-fixed">
+          <view class="btn-cancel-outline" bindtap="cancelPlatformAuth">不验证</view>
+          <view class="btn-confirm-solid {{currentPlatform.btnClass}}" bindtap="executeApiVerification">确认进行验证</view>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-toast id="t-toast"></t-toast>
+</view>

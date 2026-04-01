@@ -1,0 +1,123 @@
+<view class="welcome-container">
+  <image class="chikan-bg" src="https://cloud.tansuozhe.tech/orange/welcome-bg.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=G8BXJH9FD7PUWOXZE1XO%2F20260401%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260401T013450Z&X-Amz-Expires=604800&X-Amz-Security-Token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3NzUwNTAzMTksInBhcmVudCI6InJ1c3Rmc2FkbWluIn0.Igt94Oc3M2b9KSeRM7__GGbNASX0c5CeZPp9_cioFQR3c_jcwFgiuZkkHdyZjPfs9KrhUm0qwbUjcs41jWZeZA&X-Amz-Signature=a8d6028ae2a7274cc752c498c19ed4a3938a878ccbe1b9b4ccbcc0f762a0ed2a&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" mode="aspectFill" />
+  <view class="bg-overlay"></view>
+
+  <view class="branding-content-wrap">
+    <view class="safe-top-spacer"></view> 
+    <view class="frosted-glass-card">
+      <view class="title-row">
+        <text class="greet-text">欢迎来到</text>
+        <text class="app-name">邑易行</text>
+      </view>
+      <view class="divider"></view>
+      <view class="tagline">
+        <t-icon name="map-unlocked" size="28rpx" color="rgba(255,255,255,0.9)" />
+        <text>江门蓬江 · 智享生活 · 智理社区</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="function-card">
+    <view class="card-title-bar">
+      <view class="peacock-icon-wrap">
+        <t-icon name="user-add" size="40rpx" color="#FFF" />
+      </view>
+      <text class="card-title-text">访客自主登记</text>
+    </view>
+    
+    <text class="card-desc">为了确保社区安全，首次入蓬江区社区请先登记身份信息，验证通过后即可亮码通行。</text>
+    
+    <t-button block t-class="global-primary-btn main-action-btn" bindtap="handleRegister" hover-stay-time="100">
+      <t-icon name="edit-1" size="36rpx" slot="icon" color="#FFF" />
+      立即登记
+    </t-button>
+    
+    <view class="code-entry-link" bindtap="handleQuickPass">
+      已有账号？<text class="highlight-link">去亮码通行 ></text>
+    </view>
+  </view>
+
+  <t-popup visible="{{popupVisible}}" bind:visible-change="onVisibleChange" placement="bottom" close-btn>
+    <view class="auth-popup-content">
+      <text class="auth-title">授权登录</text>
+      <text class="auth-desc">为了您更便捷的使用邑易行，我们需要获取您的手机号进行身份核验。</text>
+      
+      <t-button block t-class="global-primary-btn auth-btn" bindtap="handleSimulateAuth">
+        <t-icon name="logo-wechat" size="36rpx" slot="icon" color="#FFF" />
+        微信手机号快捷授权
+      </t-button>
+      
+      <t-button block variant="text" t-class="phone-input-btn" bindtap="goToPhoneLogin">
+        输入手机号登录
+      </t-button>
+      
+      <view class="agreement-box">
+        <t-checkbox checked="{{isAgreed}}" bind:change="onAgreeChange" class="custom-checkbox" />
+        <view class="agreement-text">
+          我已阅读并同意江门市蓬江区<text class="link-text" catchtap="openPrivacy">《邑易行隐私指引》</text>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-popup visible="{{phoneLoginVisible}}" placement="bottom" close-btn bind:visible-change="onPhoneLoginClose">
+    <view class="phone-login-container">
+      <view class="pl-header">手机号登录</view>
+      <view class="pl-form">
+        <view class="pl-input-group">
+          <text class="pl-label">手机号码</text>
+          <input class="pl-input" placeholder="请输入11位手机号码" type="number" maxlength="11" value="{{phoneNumber}}" bindinput="onPhoneInput" />
+        </view>
+        <view class="pl-input-group">
+          <text class="pl-label">验证码</text>
+          <view class="pl-code-box">
+            <input class="pl-input code-input" placeholder="请输入6位验证码" type="number" maxlength="6" value="{{verifyCode}}" bindinput="onCodeInput" />
+            <view class="pl-get-code {{countdown > 0 ? 'disabled' : ''}}" bindtap="handleGetCode">
+              {{countdown > 0 ? countdown + 's 后重发' : '获取验证码'}}
+            </view>
+          </view>
+        </view>
+        <t-button block t-class="global-primary-btn pl-submit-btn" bindtap="handlePhoneSubmit">
+          验证并登录
+        </t-button>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-popup visible="{{privacyVisible}}" bind:visible-change="onPrivacyVisibleChange" placement="center">
+    <view class="privacy-popup">
+      <view class="privacy-header">邑易行隐私保护指引</view>
+      <scroll-view scroll-y class="privacy-content">
+         <view class="p-title">1. 信息收集</view>
+         <view class="p-desc">为了提供访客登记与核验服务，保障社区安全，我们将收集您的必要个人信息，包括但不限于手机号码、身份证明信息、面部特征（若开通人脸通行）以及拜访记录等。</view>
+        <view class="p-title">2. 信息使用</view>
+        <view class="p-desc">您的个人信息将严格仅用于江门市蓬江区各接入社区的安全核验、通行赋码及必要的物业管理服务。我们承诺不会将其用于商业营销或其他无关用途。</view>
+      </scroll-view>
+      <view class="privacy-footer">
+        <t-button block t-class="global-primary-btn privacy-btn" bindtap="closePrivacy">我已经了解并同意</t-button>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-popup visible="{{wechatAuthVisible}}" placement="bottom" round>
+    <view class="wechat-native-mock">
+      <view class="mock-header">
+        <view class="mock-logo"></view> <text class="mock-title">邑易行 申请</text>
+      </view>
+      <view class="mock-subtitle">获取你的手机号</view>
+      <view class="mock-phone-item">
+        <view class="mock-phone-info">
+          <text class="mock-phone-num">198****0468</text>
+          <text class="mock-phone-tag">微信绑定号码</text>
+        </view>
+        <t-icon name="check-circle-filled" color="#07C160" size="44rpx"/>
+      </view>
+      <view class="mock-actions">
+        <button class="mock-btn-cancel" bindtap="cancelWechatAuth">拒绝</button>
+        <button class="mock-btn-confirm" bindtap="confirmWechatAuth">允许</button>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-toast id="t-toast" />
+</view>

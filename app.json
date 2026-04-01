@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/welcome/welcome",
+    "pages/community/community",
+    "pages/register/register",
+    "pages/status/status",
+    "pages/login/login",
+    "pages/dashboard/dashboard",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "邑易行",
+    "navigationBarTextStyle": "black"
+  },
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-toast": "tdesign-miniprogram/toast/toast"
+  },
+  "sitemapLocation": "sitemap.json"
+}

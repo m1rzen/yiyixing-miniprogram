@@ -1,0 +1,82 @@
+<view class="status-page">
+  <image class="chikan-bg-full" src="https://media.nfnews.com/nfplus/ossfs/pic/xy/202504/22/d07bf98e95d64e6caa519631be06909c_batchwm.jpg" mode="aspectFill"></image>
+  <view class="bg-overlay-full"></view>
+
+  <view class="content-wrap">
+    <view class="nav-bar">
+      <view class="back-btn" bindtap="goHome">
+        <t-icon name="home" size="48rpx" color="#FFF"></t-icon>
+      </view>
+      <text class="nav-title">通行凭证</text>
+    </view>
+
+    <view class="main-glass-card text-center">
+      
+      <block wx:if="{{ auditStatus === 'reviewing' }}">
+        <view class="status-icon-wrap wait-shadow">
+          <t-icon name="time-filled" size="140rpx" color="#3F8DB4"></t-icon>
+        </view>
+        <view class="status-title">您的拜访正在审核中</view>
+        <view class="status-desc">您的拜访还在审核，通过后出现通行码</view>
+        
+        <view class="action-btn-wrap">
+          <t-button 
+            t-class="refresh-btn" 
+            theme="primary" 
+            variant="outline" 
+            bindtap="handleRefresh" 
+            loading="{{isRefreshing}}"
+          >
+            {{isRefreshing ? '获取结果中...' : '刷新状态'}}
+          </t-button>
+        </view>
+      </block>
+
+      <block wx:if="{{ auditStatus === 'approved' }}">
+        <view class="status-icon-wrap success-shadow">
+          <t-icon name="check-circle-filled" size="140rpx" color="#00A870"></t-icon>
+        </view>
+        <view class="status-title success-color">审核已通过</view>
+        <view class="status-desc">请向门岗保安出示此通行码或扫码闸机</view>
+        
+        <view class="qr-code-box">
+          <view class="qr-corners">
+            <t-icon name="qrcode" size="280rpx" color="#1A1A1A"></t-icon>
+          </view>
+          <view class="valid-time">有效时间：今日 23:59 前</view>
+        </view>
+      </block>
+
+      <view class="divider-wrap">
+        <view class="half-circle left"></view>
+        <view class="dashed-line"></view>
+        <view class="half-circle right"></view>
+      </view>
+      <view class="detail-title">拜访详情</view>
+
+      <view class="detail-list">
+        <view class="detail-row">
+          <text class="d-label">小区名称</text>
+          <text class="d-value">{{communityName}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="d-label">拜访事由</text>
+          <text class="d-value">{{visitReason}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="d-label">登记时间</text>
+          <text class="d-value">{{currentTime}}</text>
+        </view>
+      </view>
+
+    </view>
+
+    <view class="bottom-action">
+      <t-button block t-class="global-primary-btn glass-submit-btn" bindtap="goHome">
+        返回首页
+      </t-button>
+    </view>
+  </view>
+
+  <t-toast id="t-toast"></t-toast>
+</view>

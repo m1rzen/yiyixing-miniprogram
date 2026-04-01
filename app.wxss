@@ -1,0 +1,31 @@
+page {
+  /* 邑易行品牌色：孔雀蓝 */
+  --brand-color: #3F8DB4; 
+  --brand-color-light: #EBF3F8; /* 浅蓝背景底色 */
+  --brand-color-active: #317292; /* 按钮按下的深色 */
+  
+  /* 字体与背景规范 */
+  --text-main: #222222;
+  --text-sub: #888888;
+  --bg-color: #F5F7FA;
+  
+  /* TDesign 组件库主色强行覆盖为邑易行蓝 */
+  --td-brand-color: var(--brand-color);
+  
+  background-color: var(--bg-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', sans-serif;
+}
+
+/* 全局通用：底部主操作按钮样式 (参考图1) */
+.global-primary-btn {
+  background-color: var(--brand-color) !important;
+  color: #FFFFFF !important;
+  border-radius: 16rpx !important;
+  font-size: 32rpx !important;
+  font-weight: 500 !important;
+  height: 96rpx !important;
+  box-shadow: 0 8rpx 20rpx rgba(63, 141, 180, 0.2) !important;
+}
+.global-primary-btn:active {
+  background-color: var(--brand-color-active) !important;
+}

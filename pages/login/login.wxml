@@ -1,0 +1,61 @@
+<view class="phone-login-page">
+  <view class="header-bg"></view>
+  
+  <view class="login-content">
+    <view class="page-title">
+      <text class="title-main">手机号登录</text>
+      <text class="title-sub">未注册手机号验证后将自动登记</text>
+    </view>
+    
+    <view class="input-card">
+      <view class="input-group">
+        <text class="input-label">手机号</text>
+        <input class="custom-input" placeholder="请输入11位手机号" placeholder-class="ph-color" type="number" maxlength="11" bindinput="onPhoneInput" />
+      </view>
+      
+      <view class="input-group">
+        <text class="input-label">短信验证码</text>
+        <view class="code-wrap">
+          <input class="custom-input code-input" placeholder="请输入验证码" placeholder-class="ph-color" type="number" maxlength="6" bindinput="onCodeInput" />
+          <view class="get-code-btn" bindtap="getCode">获取验证码</view>
+        </view>
+      </view>
+    </view>
+
+    <button class="submit-btn {{canSubmit ? 'active' : ''}}" bindtap="handleSubmit" hover-class="{{canSubmit ? 'btn-hover' : 'none'}}">登录</button>
+    
+    <view class="agreement-box">
+      <t-checkbox checked="{{isAgreed}}" bind:change="onAgreeChange" class="custom-checkbox" />
+      <view class="agreement-text">
+        本人同意<text class="link-text" catchtap="openPrivacy">《个人信息和隐私保护协议》</text>
+      </view>
+    </view>
+  </view>
+
+  <t-popup visible="{{privacyVisible}}" bind:visible-change="onPrivacyVisibleChange" placement="center">
+    <view class="privacy-popup">
+      <view class="privacy-header">个人信息和隐私保护协议</view>
+      <scroll-view scroll-y class="privacy-content">
+        <view class="p-title">1. 信息收集范围</view>
+        <view class="p-desc">当您使用手机号登录时，我们将收集您的手机号码及短信验证码，这是履行国家法律法规实名制网络认证及社区安全登记的必要信息。</view>
+        
+        <view class="p-title">2. 信息的使用目的</view>
+        <view class="p-desc">您的手机号将作为“邑易行”小程序的唯一身份标识，用于建立您的专属数字通行档案、接收通行审核结果通知以及物业服务的必要联络。</view>
+        
+        <view class="p-title">3. 信息的存储与安全</view>
+        <view class="p-desc">我们承诺将您的信息储存于中国境内的安全服务器中。我们采用行业领先的数据加密技术（如SSL传输加密、数据库脱敏等），确保您的信息不会被非法窃取或篡改。</view>
+        
+        <view class="p-title">4. 信息共享限制</view>
+        <view class="p-desc">我们不会向任何未授权的第三方共享您的手机号等隐私信息。仅在法律法规明确要求，或处理您的紧急报事报修工单时，向您所在社区的管理方作必要展示。</view>
+        
+        <view class="p-title">5. 账户注销与数据删除</view>
+        <view class="p-desc">您有权随时在小程序内申请注销账户，账户注销后，您的所有身份及通行数据将被系统作匿名化或彻底删除处理。</view>
+      </scroll-view>
+      <view class="privacy-footer">
+        <t-button block t-class="global-primary-btn privacy-btn" bindtap="closePrivacy">我已经了解并同意</t-button>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-toast id="t-toast" />
+</view>

@@ -1,0 +1,12 @@
+# 小程序特有配置
+node_modules/
+miniprogram_npm/
+project.private.config.json
+
+# 编辑器与系统缓存
+.DS_Store
+.vscode/
+.idea/
+
+# 云开发相关（如果本地有云函数的 node_modules 也忽略）
+cloudfunctions/*/node_modules/

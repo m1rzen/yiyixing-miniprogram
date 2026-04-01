@@ -1,0 +1,61 @@
+.community-page {
+  background-color: #F0F2F5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 吸顶搜索区域 */
+.search-wrap {
+  padding: 20rpx 32rpx;
+  background-color: #FFFFFF;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+.custom-search-input { background-color: #F5F7FA !important; }
+
+/* 标题区 */
+.section-title {
+  padding: 30rpx 32rpx 16rpx;
+  font-size: 26rpx;
+  color: #888888;
+}
+
+/* 列表区域 */
+.community-list { flex: 1; }
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36rpx 40rpx;
+  background-color: #FFFFFF;
+  border-bottom: 2rpx solid #F8F9FA;
+  transition: background-color 0.2s;
+}
+
+.current-item { margin-bottom: 20rpx; border-radius: 0 0 24rpx 24rpx; }
+.item-hover { background-color: #F5F7FA; }
+
+.c-name { font-size: 32rpx; color: #333333; transition: all 0.2s; }
+.c-name.is-selected { font-weight: 600; color: #3F8DB4; }
+
+/* 图标弹跳微动效 */
+.check-icon { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  padding: 100rpx 0;
+  color: #999999;
+  font-size: 28rpx;
+}

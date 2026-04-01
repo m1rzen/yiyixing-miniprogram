@@ -1,0 +1,53 @@
+<view class="profile-page">
+  <image class="chikan-bg-full" src="https://media.nfnews.com/nfplus/ossfs/pic/xy/202504/22/d07bf98e95d64e6caa519631be06909c_batchwm.jpg" mode="aspectFill"></image>
+  <view class="bg-overlay-full"></view>
+
+  <view class="content-wrap">
+    <view class="nav-bar">
+      <view class="back-btn" bindtap="goBack">
+        <t-icon name="chevron-left" size="48rpx" color="#FFF"></t-icon>
+      </view>
+      <text class="nav-title">个人中心</text>
+    </view>
+
+    <view class="profile-glass-card">
+      <view class="avatar-wrap-large">
+        <t-icon name="user" size="80rpx" color="#FFF"></t-icon>
+      </view>
+      <view class="user-name-large">微信用户 <text class="role-tag-warm">已实名</text></view>
+      <view class="user-phone-large">198****0468</view>
+    </view>
+
+    <view class="menu-glass-card">
+      <view class="menu-item" bindtap="goToStatus" hover-class="item-hover">
+        <view class="menu-left">
+          <t-icon name="qrcode" size="44rpx" color="#00A870"></t-icon>
+          <text class="menu-text">我的通行凭证</text>
+        </view>
+        <view class="menu-right">
+          <text class="status-badge" wx:if="{{hasValidPass}}">当前有效</text>
+          <t-icon name="chevron-right" size="40rpx" color="#999"></t-icon>
+        </view>
+      </view>
+
+      <view class="menu-item" bindtap="handleDeleteInfo" hover-class="item-hover">
+        <view class="menu-left">
+          <t-icon name="delete" size="44rpx" color="#E34D59"></t-icon>
+          <text class="menu-text">清除本地通行记录</text>
+        </view>
+        <view class="menu-right">
+          <t-icon name="chevron-right" size="40rpx" color="#999"></t-icon>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-action">
+      <view class="logout-btn-glass" bindtap="handleLogout" hover-class="btn-hover">
+        <t-icon name="poweroff" size="36rpx" color="#E34D59"></t-icon>
+        <text class="logout-text">退出当前账号</text>
+      </view>
+    </view>
+  </view>
+  
+  <t-toast id="t-toast"></t-toast>
+</view>

@@ -1,0 +1,72 @@
+.welcome-container { min-height: 100vh; position: relative; background-color: #000; overflow: hidden; display: flex; flex-direction: column; }
+.chikan-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+.bg-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; background: linear-gradient(180deg, rgba(38, 85, 109, 0.4) 0%, rgba(13, 33, 44, 0.8) 60%, rgba(10, 25, 33, 1) 100%); }
+
+.branding-content-wrap { position: relative; z-index: 3; padding: 0 50rpx; flex: 1; display: flex; flex-direction: column; }
+/* 🌟 核心修复1：把15vh缩小到8vh，让毛玻璃卡片维持在靠上方位置 */
+.safe-top-spacer { height: 8vh; }
+.frosted-glass-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border-radius: 40rpx; padding: 50rpx 40rpx; border: 2rpx solid rgba(255, 255, 255, 0.2); box-shadow: 0 20rpx 40rpx rgba(0,0,0,0.2); }
+.title-row { display: flex; flex-direction: column; gap: 10rpx; }
+.greet-text { font-size: 32rpx; color: rgba(255,255,255,0.8); letter-spacing: 2rpx; }
+.app-name { font-size: 80rpx; font-weight: 800; color: #FFF; text-shadow: 0 4rpx 12rpx rgba(0,0,0,0.3); letter-spacing: 4rpx; }
+.divider { width: 80rpx; height: 6rpx; background: #3F8DB4; margin: 30rpx 0; border-radius: 10rpx; }
+.tagline { display: flex; align-items: center; gap: 12rpx; font-size: 28rpx; color: rgba(255,255,255,0.9); font-weight: 300; letter-spacing: 2rpx; }
+
+.function-card { position: relative; z-index: 3; background: #FFF; border-radius: 40rpx 40rpx 0 0; padding: 60rpx 50rpx calc(env(safe-area-inset-bottom) + 40rpx); box-shadow: 0 -10rpx 30rpx rgba(0,0,0,0.1); }
+.card-title-bar { display: flex; align-items: center; gap: 20rpx; margin-bottom: 24rpx; }
+.peacock-icon-wrap { width: 72rpx; height: 72rpx; background: #3F8DB4; border-radius: 20rpx; display: flex; justify-content: center; align-items: center; box-shadow: 0 8rpx 20rpx rgba(63,141,180,0.3); }
+.card-title-text { font-size: 40rpx; font-weight: 600; color: #1A1A1A; }
+.card-desc { font-size: 28rpx; color: #666; line-height: 1.6; margin-bottom: 50rpx; display: block; text-align: justify; }
+
+.main-action-btn { background: linear-gradient(135deg, #3F8DB4 0%, #2A6685 100%) !important; color: #FFF !important; height: 100rpx !important; border-radius: 24rpx !important; font-size: 34rpx !important; box-shadow: 0 12rpx 30rpx rgba(63, 141, 180, 0.4) !important; border: none !important; }
+.code-entry-link { text-align: center; margin-top: 40rpx; font-size: 28rpx; color: #666; }
+.highlight-link { color: #3F8DB4; font-weight: 600; margin-left: 8rpx; }
+
+.auth-popup-content { padding: 60rpx 50rpx calc(env(safe-area-inset-bottom) + 40rpx); background: #FFF; border-radius: 40rpx 40rpx 0 0; display: flex; flex-direction: column; }
+.auth-title { font-size: 44rpx; font-weight: 600; color: #1A1A1A; margin-bottom: 20rpx; }
+.auth-desc { font-size: 28rpx; color: #666; margin-bottom: 60rpx; line-height: 1.5; }
+.auth-btn { background: #07C160 !important; color: #FFF !important; height: 96rpx !important; border-radius: 20rpx !important; font-size: 32rpx !important; border: none !important; margin-bottom: 24rpx !important; }
+.phone-input-btn { color: #3F8DB4 !important; font-size: 30rpx !important; margin-bottom: 40rpx !important; background: rgba(63, 141, 180, 0.05) !important; height: 96rpx !important; border-radius: 20rpx !important; }
+
+/* 🌟 核心修复2：强制打勾和文字水平垂直居中 */
+.agreement-box { display: flex; align-items: center; margin-top: 20rpx; }
+.custom-checkbox { margin-right: 8rpx; transform: scale(0.9); display: flex; align-items: center; }
+.agreement-text { font-size: 24rpx; color: #999; flex: 1; display: flex; align-items: center; flex-wrap: wrap; }
+.link-text { color: #3F8DB4; font-weight: 500; }
+
+.privacy-popup { width: 620rpx; background: #FFF; border-radius: 32rpx; overflow: hidden; display: flex; flex-direction: column; }
+.privacy-header { padding: 40rpx 0 30rpx; text-align: center; font-size: 36rpx; font-weight: 600; color: #1A1A1A; border-bottom: 2rpx solid #F0F2F5; }
+.privacy-content { height: 500rpx; padding: 40rpx; box-sizing: border-box; }
+.p-title { font-size: 30rpx; font-weight: 600; color: #333; margin-top: 30rpx; margin-bottom: 12rpx; }
+.p-title:first-child { margin-top: 0; }
+.p-desc { font-size: 26rpx; color: #666; line-height: 1.6; text-align: justify; }
+.privacy-footer { padding: 30rpx 40rpx; border-top: 2rpx solid #F0F2F5; }
+.privacy-btn { background: #3F8DB4 !important; border-radius: 20rpx !important; }
+
+.wechat-native-mock { background: #FFF; border-radius: 24rpx 24rpx 0 0; padding: 40rpx 40rpx calc(env(safe-area-inset-bottom) + 30rpx); }
+.mock-header { display: flex; align-items: center; margin-bottom: 40rpx; }
+.mock-logo { width: 56rpx; height: 56rpx; background: #3F8DB4; border-radius: 50%; margin-right: 16rpx; }
+.mock-title { font-size: 30rpx; font-weight: 500; color: #000; }
+.mock-subtitle { font-size: 40rpx; font-weight: 600; color: #000; margin-bottom: 50rpx; }
+.mock-phone-item { display: flex; justify-content: space-between; align-items: center; padding-top: 30rpx; border-top: 2rpx solid #EBEBEB; margin-bottom: 60rpx; }
+.mock-phone-info { display: flex; flex-direction: column; gap: 8rpx; }
+.mock-phone-num { font-size: 32rpx; font-weight: 500; color: #333; }
+.mock-phone-tag { font-size: 24rpx; color: #999; }
+.mock-actions { display: flex; gap: 30rpx; }
+.mock-btn-cancel, .mock-btn-confirm { flex: 1; height: 88rpx; border-radius: 12rpx; font-size: 32rpx; font-weight: 600; display: flex; justify-content: center; align-items: center; margin: 0; padding: 0; }
+.mock-btn-cancel { background: #F2F2F2; color: #07C160; }
+.mock-btn-confirm { background: #07C160; color: #FFF; }
+.mock-btn-cancel::after, .mock-btn-confirm::after { border: none; }
+
+.phone-login-container { background: #FFF; padding: 50rpx 40rpx calc(env(safe-area-inset-bottom) + 40rpx); border-radius: 40rpx 40rpx 0 0; }
+.pl-header { font-size: 44rpx; font-weight: 600; color: #1A1A1A; margin-bottom: 60rpx; text-align: center; }
+.pl-input-group { margin-bottom: 40rpx; }
+.pl-label { font-size: 28rpx; color: #555; margin-bottom: 16rpx; display: block; font-weight: 500; }
+.pl-input { height: 96rpx; background: #F5F7FA; border-radius: 20rpx; padding: 0 30rpx; font-size: 32rpx; color: #333; border: 2rpx solid transparent; transition: all 0.2s;}
+.pl-input:focus { border-color: #3F8DB4; background: #FFF; }
+.pl-code-box { display: flex; align-items: center; gap: 20rpx; }
+.code-input { flex: 1; }
+.pl-get-code { width: 220rpx; height: 96rpx; background: rgba(63, 141, 180, 0.1); color: #3F8DB4; border-radius: 20rpx; display: flex; justify-content: center; align-items: center; font-size: 28rpx; font-weight: 600; transition: all 0.2s; }
+.pl-get-code:active { background: rgba(63, 141, 180, 0.2); transform: scale(0.96); }
+.pl-get-code.disabled { color: #999; background: #F0F2F5; }
+.pl-submit-btn { margin-top: 60rpx !important; background: linear-gradient(135deg, #3F8DB4 0%, #2A6685 100%) !important; color: #FFF !important; height: 100rpx !important; border-radius: 24rpx !important; font-size: 34rpx !important; box-shadow: 0 12rpx 30rpx rgba(63, 141, 180, 0.4) !important; border: none !important;}

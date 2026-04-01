@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "邑易行",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
+    "t-toast": "tdesign-miniprogram/toast/toast"
+  }
+}
