@@ -1,8 +1,4 @@
 {
-  "navigationBarTitleText": "选择社区",
-  "navigationBarBackgroundColor": "#FFFFFF",
-  "usingComponents": {
-    "t-search": "tdesign-miniprogram/search/search",
-    "t-icon": "tdesign-miniprogram/icon/icon"
-  }
+  "navigationBarTitleText": "选择小区",
+  "usingComponents": {}
 }

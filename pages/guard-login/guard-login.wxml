@@ -1,0 +1,55 @@
+<view class="guard-login-page">
+  <view class="bg-gradient"></view>
+  <view class="bg-pattern"></view>
+
+  <view class="content">
+    <view class="custom-nav">
+      <view class="nav-back" bindtap="goBack">
+        <t-icon name="chevron-left" size="44rpx" color="#FFF" />
+      </view>
+      <text class="nav-title">保安端登录</text>
+    </view>
+
+    <!-- 标识 -->
+    <view class="guard-brand">
+      <view class="guard-icon">
+        <t-icon name="user-safety" size="64rpx" color="#FFF" />
+      </view>
+      <text class="guard-brand-title">邑易行 · 保安工作台</text>
+      <text class="guard-brand-desc">江门蓬江区社区安全管理系统</text>
+    </view>
+
+    <!-- 登录表单 -->
+    <view class="login-card">
+      <view class="form-group">
+        <text class="form-label">工号</text>
+        <view class="input-wrap">
+          <t-icon name="user-circle" size="36rpx" color="#9CA3AF" />
+          <input class="form-input" placeholder="请输入保安工号" value="{{jobId}}" bindinput="onJobIdInput" />
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">密码</text>
+        <view class="input-wrap">
+          <t-icon name="lock-on" size="36rpx" color="#9CA3AF" />
+          <input class="form-input" placeholder="请输入登录密码" password="{{!showPassword}}" value="{{password}}" bindinput="onPasswordInput" />
+          <view class="eye-btn" bindtap="togglePassword">
+            <t-icon name="{{showPassword ? 'browse' : 'browse-off'}}" size="36rpx" color="#9CA3AF" />
+          </view>
+        </view>
+      </view>
+
+      <t-button block t-class="btn-primary login-btn" bindtap="handleLogin" loading="{{isLoading}}" disabled="{{isLoading}}">
+        {{isLoading ? '登录中...' : '登录工作台'}}
+      </t-button>
+
+      <view class="login-tip">
+        <t-icon name="info-circle" size="24rpx" color="#9CA3AF" />
+        <text>如忘记密码，请联系物业管理处重置</text>
+      </view>
+    </view>
+  </view>
+
+  <t-toast id="t-toast" />
+</view>

@@ -1,75 +1,107 @@
 <view class="register-page">
-  <image class="chikan-bg-full" src="https://media.nfnews.com/nfplus/ossfs/pic/xy/202504/22/d07bf98e95d64e6caa519631be06909c_batchwm.jpg" mode="aspectFill"></image>
-  <view class="bg-overlay-full"></view>
+  <view class="bg-top"></view>
 
-  <view class="content-wrap">
-    <view class="nav-bar">
-      <view class="back-btn" bindtap="goBack">
-        <t-icon name="chevron-left" size="48rpx" color="#FFF"></t-icon>
+  <view class="content immersive-content">
+    <view class="custom-nav">
+      <view class="nav-back" bindtap="goBack">
+        <t-icon name="chevron-left" size="44rpx" color="#FFF" />
       </view>
       <text class="nav-title">访客登记</text>
     </view>
 
-    <view class="form-glass-card">
+    <!-- 平台标识 -->
+    <view class="platform-badge" wx:if="{{platform !== '普通访客'}}">
+      <t-icon name="secured" size="28rpx" color="#FFF" />
+      <text>{{platform}} 快捷通道</text>
+    </view>
+
+    <!-- 表单卡片 -->
+    <view class="form-card">
       <view class="form-header">
-        <t-icon name="edit-2" size="40rpx" color="#3F8DB4"></t-icon>
+        <t-icon name="edit-2" size="36rpx" color="#2B6CB0" />
         <text class="form-title">填写实名信息</text>
       </view>
 
       <view class="form-item">
-        <text class="item-label"><text class="required">*</text>真实姓名</text>
-        <view class="item-value-box">
-          <input class="value-text input-field" placeholder="请输入姓名" placeholder-class="placeholder" value="{{name}}" bindinput="onNameChange" />
+        <text class="form-label"><text class="required">*</text>真实姓名</text>
+        <view class="form-input-wrap">
+          <input class="form-input" placeholder="请输入身份证上的姓名" value="{{name}}" bindinput="onNameChange" />
         </view>
       </view>
 
       <view class="form-item">
-        <text class="item-label"><text class="required">*</text>手机号码</text>
-        <view class="item-value-box">
-          <input class="value-text input-field" type="number" maxlength="11" placeholder="请输入手机号" placeholder-class="placeholder" value="{{phone}}" bindinput="onPhoneChange" />
+        <text class="form-label"><text class="required">*</text>手机号码</text>
+        <view class="form-input-wrap">
+          <input class="form-input" type="number" maxlength="11" placeholder="请输入11位手机号码" value="{{phone}}" bindinput="onPhoneChange" />
         </view>
       </view>
 
       <view class="form-item">
-        <text class="item-label"><text class="required">*</text>身份证号</text>
-        <view class="item-value-box">
-          <input class="value-text input-field" type="idcard" maxlength="18" placeholder="请输入身份证号" placeholder-class="placeholder" value="{{idCard}}" bindinput="onIdCardChange" />
+        <text class="form-label"><text class="required">*</text>身份证号码</text>
+        <view class="form-input-wrap">
+          <input class="form-input" type="idcard" maxlength="18" placeholder="请输入18位身份证号码" value="{{idCard}}" bindinput="onIdCardChange" />
         </view>
       </view>
 
       <view class="form-item">
-        <text class="item-label"><text class="required">*</text>登记地点</text>
-        <view class="item-value-box read-only">
-          <text class="value-text">{{currentCommunity}}</text>
-          <text class="action-text" bindtap="changeCommunity">修改</text>
+        <text class="form-label"><text class="required">*</text>拜访小区</text>
+        <view class="form-input-wrap clickable" bindtap="changeCommunity">
+          <text class="form-value {{currentCommunity ? '' : 'placeholder'}}">
+            {{currentCommunity || '请选择拜访小区'}}
+          </text>
+          <t-icon name="chevron-right" size="32rpx" color="#9CA3AF" />
         </view>
       </view>
 
       <view class="form-item">
-        <text class="item-label"><text class="required">*</text>登记事由</text>
-        <view class="item-value-box clickable" bindtap="openReasonPopup">
-          <text class="value-text {{reason ? '' : 'placeholder'}}">{{reason ? reason : '请选择拜访事由'}}</text>
-          <text class="action-text">选择</text>
+        <text class="form-label"><text class="required">*</text>拜访事由</text>
+        <view class="form-input-wrap clickable" bindtap="openReasonPopup">
+          <text class="form-value {{reason ? '' : 'placeholder'}}">
+            {{reason || '请选择拜访事由'}}
+          </text>
+          <t-icon name="chevron-right" size="32rpx" color="#9CA3AF" />
+        </view>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">上传照片 <text class="optional">(选填)</text></text>
+        <view class="photo-area">
+          <view wx:if="{{!photoUrl}}" class="photo-upload" bindtap="handleChoosePhoto">
+            <t-icon name="add" size="48rpx" color="#9CA3AF" />
+            <text class="photo-tip">拍摄或选取照片</text>
+          </view>
+          <view wx:else class="photo-preview">
+            <image class="preview-img" src="{{photoUrl}}" mode="aspectFill" />
+            <view class="photo-remove" catchtap="removePhoto">
+              <t-icon name="close" size="24rpx" color="#FFF" />
+            </view>
+          </view>
         </view>
       </view>
     </view>
 
-    <t-button block t-class="global-primary-btn submit-glass-btn" bindtap="handleSubmit">
-      提交登记
-    </t-button>
+    <!-- 提交按钮 -->
+    <view class="submit-area safe-bottom">
+      <t-button block t-class="btn-primary" bindtap="handleSubmit" loading="{{isSubmitting}}" disabled="{{isSubmitting}}">
+        {{isSubmitting ? '提交中...' : '提交登记'}}
+      </t-button>
+    </view>
   </view>
 
+  <!-- 事由选择弹窗 -->
   <t-popup visible="{{reasonVisible}}" bind:visible-change="onReasonVisibleChange" placement="bottom" close-btn>
-    <view class="popup-container">
-      <view class="popup-title">请选择登记事由</view>
+    <view class="reason-popup">
+      <view class="reason-popup-title">选择拜访事由</view>
       <view class="reason-grid">
         <view class="reason-item" wx:for="{{reasonOptions}}" wx:key="name" bindtap="selectReason" data-name="{{item.name}}">
-          <t-icon name="{{item.icon}}" size="56rpx" color="{{item.color}}"></t-icon>
+          <view class="reason-icon" style="background: {{item.color}}20;">
+            <t-icon name="{{item.icon}}" size="44rpx" color="{{item.color}}" />
+          </view>
           <text class="reason-name">{{item.name}}</text>
         </view>
       </view>
     </view>
   </t-popup>
 
-  <t-toast id="t-toast"></t-toast>
+  <t-toast id="t-toast" />
 </view>

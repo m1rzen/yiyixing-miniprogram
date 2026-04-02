@@ -1,0 +1,77 @@
+<view class="signout-page">
+  <view class="bg-top"></view>
+
+  <view class="content immersive-content">
+    <view class="custom-nav">
+      <view class="nav-back" bindtap="goBack">
+        <t-icon name="chevron-left" size="44rpx" color="#FFF" />
+      </view>
+      <text class="nav-title">签退离场</text>
+    </view>
+
+    <!-- 未签退状态 -->
+    <block wx:if="{{!isSignedOut}}">
+      <view class="signout-card">
+        <view class="sc-icon-area">
+          <view class="sc-ring">
+            <t-icon name="logout" size="72rpx" color="#E34D59" />
+          </view>
+        </view>
+        <text class="sc-title">离开小区签退</text>
+        <text class="sc-desc">签退后，系统将停止采集您的位置信息，本次通行凭证将自动失效。</text>
+
+        <view class="sc-info" wx:if="{{visit}}">
+          <view class="sci-row">
+            <text class="sci-label">拜访小区</text>
+            <text class="sci-value">{{visit.community}}</text>
+          </view>
+          <view class="sci-row">
+            <text class="sci-label">拜访事由</text>
+            <text class="sci-value">{{visit.reason}}</text>
+          </view>
+          <view class="sci-row">
+            <text class="sci-label">通行状态</text>
+            <view class="status-tag approved">已通过</view>
+          </view>
+        </view>
+
+        <t-button block t-class="btn-danger" bindtap="handleSignout" loading="{{isLoading}}" disabled="{{isLoading}}">
+          {{isLoading ? '签退中...' : '确认签退'}}
+        </t-button>
+      </view>
+    </block>
+
+    <!-- 已签退状态 -->
+    <block wx:if="{{isSignedOut}}">
+      <view class="done-card">
+        <view class="dc-icon">
+          <t-icon name="check-circle-filled" size="100rpx" color="#00A870" />
+        </view>
+        <text class="dc-title">已成功签退</text>
+        <text class="dc-time">签退时间：{{signoutTime}}</text>
+        <text class="dc-desc">感谢您的配合，位置追踪已停止。</text>
+
+        <view class="dc-info" wx:if="{{visit}}">
+          <view class="sci-row">
+            <text class="sci-label">拜访小区</text>
+            <text class="sci-value">{{visit.community}}</text>
+          </view>
+          <view class="sci-row">
+            <text class="sci-label">拜访事由</text>
+            <text class="sci-value">{{visit.reason}}</text>
+          </view>
+        </view>
+
+        <t-button block t-class="btn-primary" bindtap="goHome">返回首页</t-button>
+      </view>
+    </block>
+
+    <!-- 提示 -->
+    <view class="tips-card">
+      <t-icon name="info-circle" size="28rpx" color="#9CA3AF" />
+      <text class="tips-text">如果您在离开小区时忘记签退，系统将在当日24:00自动结束本次访问记录。</text>
+    </view>
+  </view>
+
+  <t-toast id="t-toast" />
+</view>

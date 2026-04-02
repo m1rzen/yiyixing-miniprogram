@@ -1,0 +1,125 @@
+<view class="approval-page">
+  <view class="bg-top"></view>
+
+  <view class="content immersive-content">
+    <view class="custom-nav">
+      <view class="nav-back" bindtap="goBack">
+        <t-icon name="chevron-left" size="44rpx" color="#FFF" />
+      </view>
+      <text class="nav-title">审批详情</text>
+    </view>
+
+    <!-- 加载中 -->
+    <view class="loading-state" wx:if="{{isLoading}}">
+      <t-loading theme="circular" size="80rpx" />
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <block wx:if="{{visit && !isLoading}}">
+      <!-- 状态标头 -->
+      <view class="status-header {{visit.status}}">
+        <block wx:if="{{visit.status === 'pending'}}">
+          <t-icon name="time-filled" size="44rpx" color="#ED7B2F" />
+          <text class="sh-text pending-c">等待您的审批</text>
+        </block>
+        <block wx:if="{{visit.status === 'approved'}}">
+          <t-icon name="check-circle-filled" size="44rpx" color="#00A870" />
+          <text class="sh-text approved-c">已批准通行</text>
+        </block>
+        <block wx:if="{{visit.status === 'rejected'}}">
+          <t-icon name="close-circle-filled" size="44rpx" color="#E34D59" />
+          <text class="sh-text rejected-c">已驳回</text>
+        </block>
+      </view>
+
+      <!-- 访客信息卡片 -->
+      <view class="info-card">
+        <view class="ic-section-title">
+          <t-icon name="user" size="32rpx" color="#2B6CB0" />
+          <text>访客信息</text>
+        </view>
+
+        <view class="ic-row">
+          <text class="ic-label">姓名</text>
+          <text class="ic-value bold">{{visit.visitorName}}</text>
+        </view>
+        <view class="ic-row">
+          <text class="ic-label">手机号</text>
+          <text class="ic-value">{{visit.visitorPhone}}</text>
+        </view>
+        <view class="ic-row">
+          <text class="ic-label">身份证号</text>
+          <text class="ic-value mono">{{visit.visitorIdCard}}</text>
+        </view>
+
+        <view class="ic-divider"></view>
+
+        <view class="ic-section-title">
+          <t-icon name="map-information" size="32rpx" color="#2B6CB0" />
+          <text>拜访信息</text>
+        </view>
+
+        <view class="ic-row">
+          <text class="ic-label">拜访小区</text>
+          <text class="ic-value">{{visit.community}}</text>
+        </view>
+        <view class="ic-row">
+          <text class="ic-label">拜访事由</text>
+          <text class="ic-value">{{visit.reason}}</text>
+        </view>
+        <view class="ic-row" wx:if="{{visit.platform && visit.platform !== '普通访客'}}">
+          <text class="ic-label">来源平台</text>
+          <view class="platform-tag">{{visit.platform}}</view>
+        </view>
+        <view class="ic-row" wx:if="{{visit.platformVerified}}">
+          <text class="ic-label">平台核验</text>
+          <view class="status-tag approved">已验证</view>
+        </view>
+
+        <!-- 访客照片 -->
+        <view class="photo-section" wx:if="{{visit.photoFileId}}">
+          <text class="ic-label">访客照片</text>
+          <image class="visitor-photo" src="{{visit.photoFileId}}" mode="aspectFill" bindtap="previewPhoto" />
+        </view>
+
+        <!-- 驳回原因 -->
+        <view class="reject-info" wx:if="{{visit.status === 'rejected' && visit.rejectReason}}">
+          <view class="ic-divider"></view>
+          <view class="ic-section-title">
+            <t-icon name="info-circle" size="32rpx" color="#E34D59" />
+            <text style="color: #E34D59;">驳回原因</text>
+          </view>
+          <text class="reject-reason-text">{{visit.rejectReason}}</text>
+        </view>
+      </view>
+
+      <!-- 审批操作按钮 -->
+      <view class="action-area safe-bottom" wx:if="{{visit.status === 'pending'}}">
+        <view class="action-row">
+          <t-button t-class="reject-btn" bindtap="handleReject" disabled="{{isProcessing}}">
+            <t-icon name="close" size="32rpx" slot="icon" color="#E34D59" />
+            驳回
+          </t-button>
+          <t-button t-class="approve-btn" bindtap="handleApprove" disabled="{{isProcessing}}">
+            <t-icon name="check" size="32rpx" slot="icon" color="#FFF" />
+            批准通行
+          </t-button>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 驳回原因弹窗 -->
+  <t-popup visible="{{rejectPopupVisible}}" placement="bottom" close-btn bind:visible-change="onRejectPopupChange">
+    <view class="reject-popup">
+      <text class="rp-title">填写驳回原因</text>
+      <text class="rp-desc">请简要说明驳回原因，访客将收到此信息。</text>
+      <textarea class="rp-textarea" placeholder="请输入驳回原因..." value="{{rejectReason}}" bindinput="onRejectReasonInput" maxlength="200" auto-height />
+      <t-button block t-class="btn-danger" bindtap="confirmReject" style="margin-top: 32rpx;">
+        确认驳回
+      </t-button>
+    </view>
+  </t-popup>
+
+  <t-toast id="t-toast" />
+</view>
