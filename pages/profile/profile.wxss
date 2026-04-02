@@ -1,31 +1,69 @@
-.profile-page { min-height: 100vh; position: relative; background-color: #F0F2F5; display: flex; flex-direction: column; }
-.chikan-bg-full { position: fixed; left: 0; top: 0; width: 100%; height: 100vh; z-index: 1; }
-.bg-overlay-full { position: fixed; left: 0; top: 0; width: 100%; height: 100vh; z-index: 2; background: linear-gradient(180deg, rgba(38, 85, 109, 0.95) 0%, rgba(240, 242, 245, 0.2) 40%, rgba(240, 242, 245, 0.9) 100%); }
-.content-wrap { position: relative; z-index: 3; padding: 0 40rpx; display: flex; flex-direction: column; flex: 1; min-height: 100vh; }
+.profile-page { min-height: 100vh; position: relative; background: var(--bg-primary); }
 
-.nav-bar { display: flex; align-items: center; padding-top: 100rpx; margin-bottom: 40rpx; }
-.back-btn { width: 80rpx; height: 80rpx; display: flex; align-items: center; justify-content: flex-start; }
-.nav-title { font-size: 36rpx; font-weight: 600; color: #FFF; margin-left: -20rpx; text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1); }
+.bg-top {
+  position: fixed; top: 0; left: 0; width: 100%; height: 480rpx;
+  background: linear-gradient(160deg, #1a365d 0%, #2B6CB0 50%, #1E4E8C 100%);
+  z-index: 1;
+}
 
-/* 头部名片 */
-.profile-glass-card { border-radius: 40rpx; padding: 60rpx 40rpx; margin-bottom: 40rpx; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(25px); border: 2rpx solid rgba(255, 255, 255, 0.4); box-shadow: 0 20rpx 50rpx rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; align-items: center; }
-.avatar-wrap-large { width: 140rpx; height: 140rpx; background: rgba(255, 255, 255, 0.3); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 24rpx; border: 4rpx solid rgba(255, 255, 255, 0.6); box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.1); }
-.user-name-large { font-size: 40rpx; font-weight: 600; color: #FFF; margin-bottom: 12rpx; display: flex; align-items: center; text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.15); }
-.role-tag-warm { font-size: 22rpx; background: #00A870; color: #FFF; padding: 4rpx 16rpx; border-radius: 10rpx; margin-left: 16rpx; font-weight: 400; text-shadow: none; box-shadow: 0 4rpx 8rpx rgba(0,168,112,0.3); }
-.user-phone-large { font-size: 30rpx; color: rgba(255, 255, 255, 0.9); }
+.content { position: relative; z-index: 3; padding: 0 32rpx; min-height: 100vh; display: flex; flex-direction: column; }
 
-/* 菜单列表 */
-.menu-glass-card { border-radius: 30rpx; padding: 10rpx 30rpx; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(25px); border: 2rpx solid #FFF; box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.08); margin-bottom: 60rpx; }
-.menu-item { display: flex; justify-content: space-between; align-items: center; padding: 36rpx 10rpx; border-bottom: 2rpx solid rgba(0,0,0,0.04); transition: background 0.2s; }
+/* 头像卡片 */
+.profile-header-card {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 48rpx 40rpx; margin-bottom: 24rpx;
+  background: rgba(255,255,255,0.12); backdrop-filter: blur(15px);
+  border-radius: var(--radius-xl); border: 1rpx solid rgba(255,255,255,0.15);
+}
+.ph-avatar {
+  width: 120rpx; height: 120rpx; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: 3rpx solid rgba(255,255,255,0.4);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20rpx; box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.15);
+}
+.ph-name {
+  font-size: 36rpx; font-weight: 700; color: #FFF;
+  display: flex; align-items: center; gap: 12rpx; margin-bottom: 8rpx;
+}
+.ph-phone { font-size: 28rpx; color: rgba(255,255,255,0.8); }
+
+/* 菜单卡片 */
+.menu-card {
+  background: #FFF; border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm); margin-bottom: 16rpx;
+  overflow: hidden;
+}
+.action-card {
+  background: #FFF; border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm); margin-bottom: 24rpx;
+  overflow: hidden;
+}
+.menu-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 32rpx; border-bottom: 2rpx solid var(--border-color);
+}
 .menu-item:last-child { border-bottom: none; }
-.item-hover { background: rgba(0,0,0,0.02); border-radius: 16rpx; }
-.menu-left { display: flex; align-items: center; gap: 20rpx; }
-.menu-text { font-size: 32rpx; color: #333; font-weight: 500; }
-.menu-right { display: flex; align-items: center; gap: 16rpx; }
-.status-badge { font-size: 24rpx; color: #00A870; background: rgba(0,168,112,0.1); padding: 4rpx 16rpx; border-radius: 100rpx; }
+.menu-hover { background: var(--bg-hover); }
+.mi-left { display: flex; align-items: center; gap: 20rpx; }
+.mi-icon {
+  width: 72rpx; height: 72rpx; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+}
+.mi-text { font-size: 30rpx; color: var(--text-primary); font-weight: 500; }
+.mi-right { display: flex; align-items: center; gap: 12rpx; }
+.mi-count { font-size: 26rpx; color: var(--text-tertiary); }
 
-/* 退出按钮 */
-.bottom-action { margin-top: auto; padding-bottom: calc(env(safe-area-inset-bottom) + 60rpx); }
-.logout-btn-glass { width: 100%; height: 96rpx; border-radius: 24rpx; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 2rpx solid #FFF; box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.05); display: flex; justify-content: center; align-items: center; gap: 12rpx; transition: all 0.2s; }
-.logout-text { font-size: 32rpx; font-weight: 600; color: #E34D59; }
-.btn-hover { background: rgba(255, 255, 255, 1); transform: scale(0.98); }
+/* 退出 */
+.bottom-area { margin-top: auto; padding: 24rpx 0; display: flex; flex-direction: column; align-items: center; gap: 32rpx; }
+.logout-btn {
+  width: 100%; height: 96rpx; border-radius: var(--radius-lg);
+  background: #FFF; box-shadow: var(--shadow-sm);
+  display: flex; align-items: center; justify-content: center; gap: 12rpx;
+}
+.logout-hover { background: var(--bg-hover); }
+.logout-text { font-size: 30rpx; font-weight: 600; color: var(--danger-color); }
+
+.app-info {
+  display: flex; flex-direction: column; align-items: center; gap: 4rpx;
+  font-size: 22rpx; color: var(--text-tertiary); padding-bottom: 20rpx;
+}

@@ -1,0 +1,92 @@
+<view class="tracking-page">
+  <view class="bg-top"></view>
+
+  <view class="content immersive-content">
+    <view class="custom-nav">
+      <view class="nav-back" bindtap="goBack">
+        <t-icon name="chevron-left" size="44rpx" color="#FFF" />
+      </view>
+      <text class="nav-title">位置打卡</text>
+    </view>
+
+    <!-- 追踪状态卡片 -->
+    <view class="tracking-card">
+      <view class="tc-status {{isTracking ? 'active' : 'inactive'}}">
+        <view class="tc-ring {{isTracking ? 'pulse' : ''}}">
+          <t-icon name="map-information" size="64rpx" color="{{isTracking ? '#00A870' : '#9CA3AF'}}" />
+        </view>
+        <text class="tc-title">{{isTracking ? '位置追踪中' : '未开启追踪'}}</text>
+        <text class="tc-time" wx:if="{{isTracking}}">持续时间 {{trackingDuration}}</text>
+      </view>
+
+      <!-- 统计数据 -->
+      <view class="tc-stats">
+        <view class="stat-item">
+          <text class="stat-num">{{checkInCount}}</text>
+          <text class="stat-label">打卡次数</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-num">3</text>
+          <text class="stat-label">打卡间隔(分)</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-num">{{currentLocation ? currentLocation.accuracy + 'm' : '-'}}</text>
+          <text class="stat-label">定位精度</text>
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="tc-actions">
+        <block wx:if="{{!isTracking}}">
+          <t-button block t-class="btn-primary" bindtap="startTracking">
+            <t-icon name="play-circle" size="32rpx" slot="icon" color="#FFF" />
+            开启位置追踪
+          </t-button>
+        </block>
+        <block wx:else>
+          <view class="action-row">
+            <t-button t-class="btn-secondary manual-btn" bindtap="manualCheckIn">
+              <t-icon name="location" size="28rpx" slot="icon" color="#2B6CB0" />
+              手动打卡
+            </t-button>
+            <t-button t-class="btn-danger signout-btn" bindtap="goToSignout">
+              <t-icon name="logout" size="28rpx" slot="icon" color="#FFF" />
+              签退离场
+            </t-button>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 打卡记录 -->
+    <view class="logs-section" wx:if="{{locationLogs.length > 0}}">
+      <view class="logs-header">
+        <text class="logs-title">打卡记录</text>
+        <text class="logs-count">共 {{locationLogs.length}} 条</text>
+      </view>
+      <view class="logs-list">
+        <view class="log-item" wx:for="{{locationLogs}}" wx:key="time">
+          <view class="log-dot {{index === 0 ? 'latest' : ''}}"></view>
+          <view class="log-line" wx:if="{{index < locationLogs.length - 1}}"></view>
+          <view class="log-content">
+            <text class="log-time">{{item.time}}</text>
+            <text class="log-coord">
+              {{item.latitude ? item.latitude.toFixed(6) : '-'}}, {{item.longitude ? item.longitude.toFixed(6) : '-'}}
+            </text>
+            <view class="log-tag" wx:if="{{index === 0}}">最新</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提示信息 -->
+    <view class="tips-card">
+      <t-icon name="info-circle" size="28rpx" color="#9CA3AF" />
+      <text class="tips-text">系统每3分钟自动采集一次位置信息，直至您完成签退。位置信息仅用于安全管控，您可随时手动打卡更新位置。</text>
+    </view>
+  </view>
+
+  <t-toast id="t-toast" />
+</view>

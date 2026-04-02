@@ -1,82 +1,123 @@
 <view class="status-page">
-  <image class="chikan-bg-full" src="https://media.nfnews.com/nfplus/ossfs/pic/xy/202504/22/d07bf98e95d64e6caa519631be06909c_batchwm.jpg" mode="aspectFill"></image>
-  <view class="bg-overlay-full"></view>
+  <view class="bg-top"></view>
 
-  <view class="content-wrap">
-    <view class="nav-bar">
-      <view class="back-btn" bindtap="goHome">
-        <t-icon name="home" size="48rpx" color="#FFF"></t-icon>
+  <view class="content immersive-content">
+    <view class="custom-nav">
+      <view class="nav-back" bindtap="goHome">
+        <t-icon name="home" size="40rpx" color="#FFF" />
       </view>
       <text class="nav-title">通行凭证</text>
     </view>
 
-    <view class="main-glass-card text-center">
-      
-      <block wx:if="{{ auditStatus === 'reviewing' }}">
-        <view class="status-icon-wrap wait-shadow">
-          <t-icon name="time-filled" size="140rpx" color="#3F8DB4"></t-icon>
+    <view class="pass-card">
+      <!-- 审核中 -->
+      <block wx:if="{{status === 'pending'}}">
+        <view class="pass-status-area pending-bg">
+          <view class="status-ring pending-ring">
+            <t-icon name="time-filled" size="80rpx" color="#ED7B2F" />
+          </view>
+          <text class="pass-status-title pending-text">审核中</text>
+          <text class="pass-status-desc">您的入区申请正在等待保安审批</text>
         </view>
-        <view class="status-title">您的拜访正在审核中</view>
-        <view class="status-desc">您的拜访还在审核，通过后出现通行码</view>
-        
-        <view class="action-btn-wrap">
-          <t-button 
-            t-class="refresh-btn" 
-            theme="primary" 
-            variant="outline" 
-            bindtap="handleRefresh" 
-            loading="{{isRefreshing}}"
-          >
-            {{isRefreshing ? '获取结果中...' : '刷新状态'}}
+        <view class="pass-action-area">
+          <t-button t-class="btn-secondary refresh-btn" loading="{{isRefreshing}}" bindtap="handleRefresh">
+            {{isRefreshing ? '刷新中...' : '刷新状态'}}
           </t-button>
         </view>
       </block>
 
-      <block wx:if="{{ auditStatus === 'approved' }}">
-        <view class="status-icon-wrap success-shadow">
-          <t-icon name="check-circle-filled" size="140rpx" color="#00A870"></t-icon>
-        </view>
-        <view class="status-title success-color">审核已通过</view>
-        <view class="status-desc">请向门岗保安出示此通行码或扫码闸机</view>
-        
-        <view class="qr-code-box">
-          <view class="qr-corners">
-            <t-icon name="qrcode" size="280rpx" color="#1A1A1A"></t-icon>
+      <!-- 已通过 -->
+      <block wx:if="{{status === 'approved'}}">
+        <view class="pass-status-area approved-bg">
+          <view class="status-ring approved-ring">
+            <t-icon name="check-circle-filled" size="80rpx" color="#00A870" />
           </view>
-          <view class="valid-time">有效时间：今日 23:59 前</view>
+          <text class="pass-status-title approved-text">准予通行</text>
+          <text class="pass-status-desc">请向门岗保安出示此通行码</text>
+        </view>
+
+        <view class="qr-area">
+          <view class="qr-box">
+            <view class="qr-corner tl"></view>
+            <view class="qr-corner tr"></view>
+            <view class="qr-corner bl"></view>
+            <view class="qr-corner br"></view>
+            <t-icon name="qrcode" size="240rpx" color="#1A1A2E" />
+          </view>
+          <text class="qr-valid">有效期至：今日 23:59</text>
+        </view>
+
+        <view class="pass-quick-actions">
+          <view class="pqa-btn" bindtap="goToTracking">
+            <t-icon name="map-information" size="36rpx" color="#2B6CB0" />
+            <text>进入打卡</text>
+          </view>
+          <view class="pqa-btn danger" bindtap="goToSignout">
+            <t-icon name="logout" size="36rpx" color="#E34D59" />
+            <text>签退离场</text>
+          </view>
         </view>
       </block>
 
-      <view class="divider-wrap">
-        <view class="half-circle left"></view>
-        <view class="dashed-line"></view>
-        <view class="half-circle right"></view>
-      </view>
-      <view class="detail-title">拜访详情</view>
+      <!-- 已驳回 -->
+      <block wx:if="{{status === 'rejected'}}">
+        <view class="pass-status-area rejected-bg">
+          <view class="status-ring rejected-ring">
+            <t-icon name="close-circle-filled" size="80rpx" color="#E34D59" />
+          </view>
+          <text class="pass-status-title rejected-text">申请被驳回</text>
+          <text class="pass-status-desc">{{visit.rejectReason || '您的入区申请未通过审核'}}</text>
+        </view>
+      </block>
 
-      <view class="detail-list">
-        <view class="detail-row">
-          <text class="d-label">小区名称</text>
-          <text class="d-value">{{communityName}}</text>
+      <!-- 已签退 -->
+      <block wx:if="{{status === 'completed'}}">
+        <view class="pass-status-area completed-bg">
+          <view class="status-ring completed-ring">
+            <t-icon name="check-circle" size="80rpx" color="#9CA3AF" />
+          </view>
+          <text class="pass-status-title completed-text">已签退</text>
+          <text class="pass-status-desc">本次拜访已结束</text>
         </view>
-        <view class="detail-row">
-          <text class="d-label">拜访事由</text>
-          <text class="d-value">{{visitReason}}</text>
-        </view>
-        <view class="detail-row">
-          <text class="d-label">登记时间</text>
-          <text class="d-value">{{currentTime}}</text>
-        </view>
+      </block>
+
+      <!-- 分割线 -->
+      <view class="ticket-divider">
+        <view class="punch left"></view>
+        <view class="dash-line"></view>
+        <view class="punch right"></view>
       </view>
 
+      <!-- 拜访详情 -->
+      <view class="detail-section" wx:if="{{visit}}">
+        <text class="detail-label">拜访详情</text>
+        <view class="detail-row">
+          <text class="dr-key">小区名称</text>
+          <text class="dr-val">{{visit.community || '-'}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="dr-key">拜访事由</text>
+          <text class="dr-val">{{visit.reason || '-'}}</text>
+        </view>
+        <view class="detail-row" wx:if="{{visit.platform && visit.platform !== '普通访客'}}">
+          <text class="dr-key">平台认证</text>
+          <text class="dr-val">{{visit.platform}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="dr-key">申请时间</text>
+          <text class="dr-val">{{currentTime}}</text>
+        </view>
+        <view class="detail-row" wx:if="{{visit.approvedBy && visit.approvedBy !== 'system'}}">
+          <text class="dr-key">审批人</text>
+          <text class="dr-val">{{visit.approvedBy}}</text>
+        </view>
+      </view>
     </view>
 
-    <view class="bottom-action">
-      <t-button block t-class="global-primary-btn glass-submit-btn" bindtap="goHome">
-        返回首页
-      </t-button>
+    <view class="bottom-area safe-bottom">
+      <t-button block t-class="btn-primary" bindtap="goHome">返回首页</t-button>
     </view>
   </view>
 
-  <t-toast id="t-toast"></t-toast>
+  <t-toast id="t-toast" />
 </view>

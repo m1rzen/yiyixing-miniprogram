@@ -1,98 +1,147 @@
 <view class="dashboard-page">
-  <image class="chikan-bg-full" src="https://cloud.tansuozhe.tech/orange/welcome-bg.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=G8BXJH9FD7PUWOXZE1XO%2F20260401%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260401T013450Z&X-Amz-Expires=604800&X-Amz-Security-Token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3NzUwNTAzMTksInBhcmVudCI6InJ1c3Rmc2FkbWluIn0.Igt94Oc3M2b9KSeRM7__GGbNASX0c5CeZPp9_cioFQR3c_jcwFgiuZkkHdyZjPfs9KrhUm0qwbUjcs41jWZeZA&X-Amz-Signature=a8d6028ae2a7274cc752c498c19ed4a3938a878ccbe1b9b4ccbcc0f762a0ed2a&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" mode="aspectFill"></image>
-  <view class="bg-overlay-full"></view>
+  <view class="bg-gradient"></view>
+  <view class="bg-pattern"></view>
 
-  <view class="content-wrap">
-    <view class="safe-top-spacer"></view>
-
-    <view class="user-header-glass" bindtap="goToProfile" hover-class="glass-hover">
-      <view class="avatar-wrap">
-        <t-icon name="user" size="44rpx" color="#FFF"></t-icon>
+  <view class="content immersive-content">
+    <!-- 用户信息头部 -->
+    <view class="user-bar" bindtap="goToProfile">
+      <view class="avatar">
+        <t-icon name="user" size="40rpx" color="#FFF" />
       </view>
-      <view class="user-info">
-        <view class="user-name">微信用户 <text class="role-tag-warm">访客</text></view>
-        <view class="user-phone">198****0468 <t-icon name="chevron-right" size="24rpx" color="rgba(255,255,255,0.7)"></t-icon></view>
+      <view class="user-text">
+        <view class="user-name">
+          {{userInfo.name || '微信用户'}}
+          <view class="role-tag">访客</view>
+        </view>
+        <view class="user-phone">{{userInfo.phone || '未绑定'}}</view>
+      </view>
+      <t-icon name="chevron-right" size="32rpx" color="rgba(255,255,255,0.6)" />
+    </view>
+
+    <!-- 小区选择 -->
+    <view class="community-bar" bindtap="goToCommunity">
+      <view class="community-left">
+        <t-icon name="location" size="36rpx" color="#2B6CB0" />
+        <text class="community-name">{{currentCommunity || '请选择小区'}}</text>
+      </view>
+      <view class="community-switch">
+        <text>切换</text>
+        <t-icon name="chevron-right" size="24rpx" color="#2B6CB0" />
       </view>
     </view>
 
-    <view class="main-glass-card">
-      <view class="location-bar">
-        <view class="loc-left">
-          <t-icon name="location" size="36rpx" color="#3F8DB4"></t-icon>
-          <text class="community-name">{{currentCommunity}}</text>
+    <!-- 有活跃访问时显示状态卡片 -->
+    <block wx:if="{{hasActiveVisit && activeVisit}}">
+      <view class="active-visit-card">
+        <view class="avc-header">
+          <view class="avc-status {{activeVisit.status}}">
+            <t-icon wx:if="{{activeVisit.status === 'pending'}}" name="time-filled" size="36rpx" color="#ED7B2F" />
+            <t-icon wx:if="{{activeVisit.status === 'approved'}}" name="check-circle-filled" size="36rpx" color="#00A870" />
+            <text class="avc-status-text">
+              {{activeVisit.status === 'pending' ? '审核中' : '已通过'}}
+            </text>
+          </view>
+          <text class="avc-community">{{activeVisit.community}}</text>
         </view>
-        <view class="switch-btn-transparent" bindtap="goToCommunity">切换小区</view>
-      </view>
-
-      <view class="status-area">
-        <view class="status-icon-wrap">
-          <t-icon name="info-circle-filled" size="110rpx" color="rgba(63, 141, 180, 0.8)"></t-icon>
+        <view class="avc-info">
+          <view class="avc-row">
+            <text class="avc-label">拜访事由</text>
+            <text class="avc-value">{{activeVisit.reason}}</text>
+          </view>
+          <view class="avc-row" wx:if="{{activeVisit.platform !== '普通访客'}}">
+            <text class="avc-label">平台认证</text>
+            <text class="avc-value">{{activeVisit.platform}}</text>
+          </view>
         </view>
-        <text class="status-title-dark">您还未登记</text>
-        <text class="status-desc-mid">请点击去登记按钮登记</text>
-      </view>
-
-      <t-button block t-class="global-primary-btn glass-submit-btn" bindtap="goToRegister">
-        去登记
-      </t-button>
-
-      <view class="divider-wrap-dim">
-        <view class="line"></view>
-        <text class="divider-text">一键登记</text>
-        <view class="line"></view>
-      </view>
-
-      <view class="quick-actions-row-transparent">
-        <view class="quick-btn-glass meituan-t" bindtap="handlePlatformAuth" data-platform="美团">
-          <text>美团骑手</text>
-        </view>
-        <view class="quick-btn-glass shunfeng-t" bindtap="handlePlatformAuth" data-platform="顺丰">
-          <text>顺丰快递</text>
-        </view>
-        <view class="quick-btn-glass jingdong-t" bindtap="handlePlatformAuth" data-platform="京东">
-          <text>京东秒送</text>
+        <view class="avc-actions">
+          <view class="avc-btn" bindtap="goToStatus">
+            <t-icon name="qrcode" size="32rpx" color="#2B6CB0" />
+            <text>通行凭证</text>
+          </view>
+          <view class="avc-btn" wx:if="{{activeVisit.status === 'approved' && activeVisit.isInside}}" bindtap="goToTracking">
+            <t-icon name="map-information" size="32rpx" color="#00A870" />
+            <text>位置打卡</text>
+          </view>
+          <view class="avc-btn" wx:if="{{activeVisit.status === 'approved'}}" bindtap="goToSignout">
+            <t-icon name="logout" size="32rpx" color="#E34D59" />
+            <text>签退离场</text>
+          </view>
         </view>
       </view>
-    </view>
+    </block>
 
-    <view class="bottom-actions">
-      <view class="delete-btn-glass" bindtap="handleDeleteInfo">
-        <t-icon name="delete" size="32rpx" color="#333" class="del-icon"></t-icon>
-        删除个人信息
+    <!-- 无活跃访问时的主操作区 -->
+    <block wx:if="{{!hasActiveVisit}}">
+      <view class="main-card">
+        <view class="mc-status">
+          <view class="mc-icon">
+            <t-icon name="info-circle-filled" size="80rpx" color="rgba(43, 108, 176, 0.6)" />
+          </view>
+          <text class="mc-title">暂无通行记录</text>
+          <text class="mc-desc">登记身份信息，审核通过即可通行</text>
+        </view>
+
+        <t-button block t-class="btn-primary register-btn" bindtap="goToRegister">
+          <t-icon name="edit-1" size="32rpx" slot="icon" color="#FFF" />
+          去登记
+        </t-button>
+
+        <view class="divider">
+          <view class="line"></view>
+          <view class="text">合作平台快捷通行</view>
+          <view class="line"></view>
+        </view>
+
+        <view class="platform-row">
+          <view class="platform-btn meituan" bindtap="handlePlatformAuth" data-platform="美团">
+            <t-icon name="shop" size="36rpx" color="#FF9800" />
+            <text>美团骑手</text>
+          </view>
+          <view class="platform-btn shunfeng" bindtap="handlePlatformAuth" data-platform="顺丰">
+            <t-icon name="gift" size="36rpx" color="#D32F2F" />
+            <text>顺丰快递</text>
+          </view>
+          <view class="platform-btn jingdong" bindtap="handlePlatformAuth" data-platform="京东">
+            <t-icon name="cart" size="36rpx" color="#E53935" />
+            <text>京东秒送</text>
+          </view>
+        </view>
       </view>
-      <view class="logout-btn-glass" bindtap="handleLogout">
-        <t-icon name="poweroff" size="28rpx" color="#555" class="logout-icon"></t-icon>
-        退出当前账号
+    </block>
+
+    <!-- 底部操作 -->
+    <view class="bottom-area">
+      <view class="logout-btn" bindtap="handleLogout">
+        <t-icon name="poweroff" size="28rpx" color="#9CA3AF" />
+        <text>退出登录</text>
       </view>
     </view>
   </view>
 
-  <t-popup visible="{{platformPopupVisible}}" placement="bottom" round="{{true}}">
-    <view class="unified-glass-popup">
-      
-      <view class="brand-image-header">
-        <image class="header-banner-img" src="{{currentPlatform.headerImgUrl}}" mode="widthFix"></image>
-      </view>
-      
-      <view class="brand-content-fixed {{currentPlatform.gradientClass}}">
-        <view class="auth-desc-fixed">
-          <text>如果您是</text>
-          <text class="bold-text-fixed">{{currentPlatform.roleName}}</text>
-          <text>，可以点击「确认进行验证」，确认后会将您的手机号发送至</text>
-          <text class="bold-text-fixed">{{currentPlatform.platformName}}</text>
-          <text>，验证您是否为</text>
-          <text class="highlight-text-fixed {{currentPlatform.textClass}}">派送中</text>
-          <text>的骑手，验证通过后可直接亮码，快速通行。</text>
-          <view class="desc-sub-fixed">如不是，或不希望使用手机号进行验证，请点击不验证。</view>
+  <!-- 平台验证弹窗 -->
+  <t-popup visible="{{platformPopupVisible}}" placement="bottom" round>
+    <view class="platform-popup">
+      <view class="pp-header {{currentPlatform.gradientClass}}">
+        <view class="pp-brand">
+          <t-icon name="{{currentPlatform.icon || 'shop'}}" size="44rpx" color="#FFF" />
+          <text class="pp-brand-name">{{currentPlatform.title}}</text>
         </view>
-        
-        <view class="auth-actions-fixed">
-          <view class="btn-cancel-outline" bindtap="cancelPlatformAuth">不验证</view>
-          <view class="btn-confirm-solid {{currentPlatform.btnClass}}" bindtap="executeApiVerification">确认进行验证</view>
+        <text class="pp-header-desc">身份快捷核验</text>
+      </view>
+      <view class="pp-body">
+        <view class="pp-desc">
+          点击「确认验证」后，系统将向<text class="bold">{{currentPlatform.platformName}}</text>发送核验请求，
+          验证您是否为<text class="bold {{currentPlatform.textClass}}">在岗{{currentPlatform.roleName}}</text>。
+          核验通过后可免审直接通行。
+        </view>
+        <view class="pp-tip">如非平台骑手，请点击「手动登记」</view>
+        <view class="pp-actions">
+          <view class="pp-btn cancel" bindtap="cancelPlatformAuth">手动登记</view>
+          <view class="pp-btn confirm {{currentPlatform.btnClass}}" bindtap="executePlatformVerify">确认验证</view>
         </view>
       </view>
     </view>
   </t-popup>
 
-  <t-toast id="t-toast"></t-toast>
+  <t-toast id="t-toast" />
 </view>
