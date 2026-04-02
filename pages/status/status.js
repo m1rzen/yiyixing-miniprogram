@@ -34,6 +34,15 @@ Page({
     if (prevPage && (prevPage.route.includes('dashboard') || prevPage.route.includes('welcome'))) {
        this.setData({ auditStatus: 'approved' });
     }
+
+    wx.cloud.callFunction({
+      name: 'login' // 假设您有基础的获取OpenID云函数
+    }).then(res => {
+      this.setData({
+        visitorToken: res.result.openid // 将OpenID作为核验令牌
+      });
+    });
+    
   },
 
   handleRefresh() {
