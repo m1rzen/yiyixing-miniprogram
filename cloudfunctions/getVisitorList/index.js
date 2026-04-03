@@ -9,25 +9,33 @@ exports.main = async (event, context) => {
   const { status, communityId, page, pageSize, jobId } = event;
 
   try {
-    // 验证保安身份：优先用 openid 查找，找不到则用 jobId 查找
-    let guardCheck = await db.collection('guards').where({ _openid: guardOpenid }).get();
+    // 查找保安身份：优先用 jobId 精确匹配，回退到 openid
+    let guardInfo;
 
-    if (guardCheck.data.length === 0 && jobId) {
-      // openid 匹配失败，用工号查找并绑定 openid
-      guardCheck = await db.collection('guards').where({ jobId: jobId }).get();
-      if (guardCheck.data.length > 0) {
-        // 补绑 openid，确保下次可以直接匹配
-        await db.collection('guards').doc(guardCheck.data[0]._id).update({
-          data: { _openid: guardOpenid }
-        });
+    if (jobId) {
+      const guardByJob = await db.collection('guards').where({ jobId: jobId }).get();
+      if (guardByJob.data.length > 0) {
+        guardInfo = guardByJob.data[0];
+        // 确保 openid 已绑定
+        if (guardInfo._openid !== guardOpenid) {
+          await db.collection('guards').doc(guardInfo._id).update({
+            data: { _openid: guardOpenid }
+          });
+        }
       }
     }
 
-    if (guardCheck.data.length === 0) {
+    if (!guardInfo) {
+      const guardByOpenid = await db.collection('guards').where({ _openid: guardOpenid }).get();
+      if (guardByOpenid.data.length > 0) {
+        guardInfo = guardByOpenid.data[0];
+      }
+    }
+
+    if (!guardInfo) {
       return { success: false, errMsg: '无权操作，非保安账号' };
     }
 
-    const guardInfo = guardCheck.data[0];
     const limit = pageSize || 20;
     const skip = ((page || 1) - 1) * limit;
 
@@ -38,6 +46,7 @@ exports.main = async (event, context) => {
     if (guardInfo.communityId) {
       query.communityId = guardInfo.communityId;
     }
+    // 前端主动传入的 communityId 覆盖
     if (communityId) {
       query.communityId = communityId;
     }
@@ -55,7 +64,6 @@ exports.main = async (event, context) => {
     } else if (status === 'completed') {
       query.status = 'completed';
     } else if (status === 'history') {
-      // 历史记录：包含所有非 pending 的记录
       query.status = _.in(['approved', 'rejected', 'completed']);
     }
 
