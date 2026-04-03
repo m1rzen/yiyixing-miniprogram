@@ -13,7 +13,7 @@
     <view class="tracking-card">
       <view class="tc-status {{isTracking ? 'active' : 'inactive'}}">
         <view class="tc-ring {{isTracking ? 'pulse' : ''}}">
-          <t-icon name="map-information" size="64rpx" color="{{isTracking ? '#00A870' : '#9CA3AF'}}" />
+          <t-icon name="map-information" size="64rpx" color="{{isTracking ? '#2D8B6F' : '#9CA3AF'}}" />
         </view>
         <text class="tc-title">{{isTracking ? '位置追踪中' : '未开启追踪'}}</text>
         <text class="tc-time" wx:if="{{isTracking}}">持续时间 {{trackingDuration}}</text>
@@ -48,7 +48,7 @@
         <block wx:else>
           <view class="action-row">
             <t-button t-class="btn-secondary manual-btn" bindtap="manualCheckIn">
-              <t-icon name="location" size="28rpx" slot="icon" color="#2B6CB0" />
+              <t-icon name="location" size="28rpx" slot="icon" color="#1D5F8A" />
               手动打卡
             </t-button>
             <t-button t-class="btn-danger signout-btn" bindtap="goToSignout">

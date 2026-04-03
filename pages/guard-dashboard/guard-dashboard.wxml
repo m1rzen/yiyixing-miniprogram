@@ -101,8 +101,8 @@
             </view>
           </view>
           <view class="vc-footer">
-            <t-icon name="map-information" size="28rpx" color="#2B6CB0" />
-            <text class="vc-action-hint" style="color: #2B6CB0;">查看实时位置</text>
+            <t-icon name="map-information" size="28rpx" color="#1D5F8A" />
+            <text class="vc-action-hint" style="color: #1D5F8A;">查看实时位置</text>
           </view>
         </view>
 

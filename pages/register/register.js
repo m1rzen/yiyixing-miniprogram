@@ -17,7 +17,7 @@ Page({
 
     reasonOptions: [
       { name: '送外卖', icon: 'shop', color: '#FF9800' },
-      { name: '送快递', icon: 'gift', color: '#2B6CB0' },
+      { name: '送快递', icon: 'gift', color: '#1D5F8A' },
       { name: '去住户家', icon: 'home', color: '#4CAF50' },
       { name: '在小区办事', icon: 'city-1', color: '#9C27B0' },
       { name: '中介服务', icon: 'usergroup', color: '#795548' },

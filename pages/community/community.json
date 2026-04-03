@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "选择小区",
+  "navigationStyle": "custom",
   "usingComponents": {}
 }

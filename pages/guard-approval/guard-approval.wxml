@@ -19,15 +19,15 @@
       <!-- 状态标头 -->
       <view class="status-header {{visit.status}}">
         <block wx:if="{{visit.status === 'pending'}}">
-          <t-icon name="time-filled" size="44rpx" color="#ED7B2F" />
+          <t-icon name="time-filled" size="44rpx" color="#C8963E" />
           <text class="sh-text pending-c">等待您的审批</text>
         </block>
         <block wx:if="{{visit.status === 'approved'}}">
-          <t-icon name="check-circle-filled" size="44rpx" color="#00A870" />
+          <t-icon name="check-circle-filled" size="44rpx" color="#2D8B6F" />
           <text class="sh-text approved-c">已批准通行</text>
         </block>
         <block wx:if="{{visit.status === 'rejected'}}">
-          <t-icon name="close-circle-filled" size="44rpx" color="#E34D59" />
+          <t-icon name="close-circle-filled" size="44rpx" color="#C94545" />
           <text class="sh-text rejected-c">已驳回</text>
         </block>
       </view>
@@ -35,7 +35,7 @@
       <!-- 访客信息卡片 -->
       <view class="info-card">
         <view class="ic-section-title">
-          <t-icon name="user" size="32rpx" color="#2B6CB0" />
+          <t-icon name="user" size="32rpx" color="#1D5F8A" />
           <text>访客信息</text>
         </view>
 
@@ -55,7 +55,7 @@
         <view class="ic-divider"></view>
 
         <view class="ic-section-title">
-          <t-icon name="map-information" size="32rpx" color="#2B6CB0" />
+          <t-icon name="map-information" size="32rpx" color="#1D5F8A" />
           <text>拜访信息</text>
         </view>
 
@@ -86,7 +86,7 @@
         <view class="reject-info" wx:if="{{visit.status === 'rejected' && visit.rejectReason}}">
           <view class="ic-divider"></view>
           <view class="ic-section-title">
-            <t-icon name="info-circle" size="32rpx" color="#E34D59" />
+            <t-icon name="info-circle" size="32rpx" color="#C94545" />
             <text style="color: #E34D59;">驳回原因</text>
           </view>
           <text class="reject-reason-text">{{visit.rejectReason}}</text>
@@ -97,7 +97,7 @@
       <view class="action-area safe-bottom" wx:if="{{visit.status === 'pending'}}">
         <view class="action-row">
           <t-button t-class="reject-btn" bindtap="handleReject" disabled="{{isProcessing}}">
-            <t-icon name="close" size="32rpx" slot="icon" color="#E34D59" />
+            <t-icon name="close" size="32rpx" slot="icon" color="#C94545" />
             驳回
           </t-button>
           <t-button t-class="approve-btn" bindtap="handleApprove" disabled="{{isProcessing}}">

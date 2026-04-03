@@ -14,7 +14,7 @@
       <block wx:if="{{status === 'pending'}}">
         <view class="pass-status-area pending-bg">
           <view class="status-ring pending-ring">
-            <t-icon name="time-filled" size="80rpx" color="#ED7B2F" />
+            <t-icon name="time-filled" size="80rpx" color="#C8963E" />
           </view>
           <text class="pass-status-title pending-text">审核中</text>
           <text class="pass-status-desc">您的入区申请正在等待保安审批</text>
@@ -30,7 +30,7 @@
       <block wx:if="{{status === 'approved'}}">
         <view class="pass-status-area approved-bg">
           <view class="status-ring approved-ring">
-            <t-icon name="check-circle-filled" size="80rpx" color="#00A870" />
+            <t-icon name="check-circle-filled" size="80rpx" color="#2D8B6F" />
           </view>
           <text class="pass-status-title approved-text">准予通行</text>
           <text class="pass-status-desc">请向门岗保安出示此通行码</text>
@@ -49,11 +49,11 @@
 
         <view class="pass-quick-actions">
           <view class="pqa-btn" bindtap="goToTracking">
-            <t-icon name="map-information" size="36rpx" color="#2B6CB0" />
+            <t-icon name="map-information" size="36rpx" color="#1D5F8A" />
             <text>进入打卡</text>
           </view>
           <view class="pqa-btn danger" bindtap="goToSignout">
-            <t-icon name="logout" size="36rpx" color="#E34D59" />
+            <t-icon name="logout" size="36rpx" color="#C94545" />
             <text>签退离场</text>
           </view>
         </view>
@@ -63,7 +63,7 @@
       <block wx:if="{{status === 'rejected'}}">
         <view class="pass-status-area rejected-bg">
           <view class="status-ring rejected-ring">
-            <t-icon name="close-circle-filled" size="80rpx" color="#E34D59" />
+            <t-icon name="close-circle-filled" size="80rpx" color="#C94545" />
           </view>
           <text class="pass-status-title rejected-text">申请被驳回</text>
           <text class="pass-status-desc">{{visit.rejectReason || '您的入区申请未通过审核'}}</text>

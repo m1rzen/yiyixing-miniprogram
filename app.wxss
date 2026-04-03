@@ -1,37 +1,55 @@
 page {
-  --brand-color: #2B6CB0;
-  --brand-color-light: #EBF4FF;
-  --brand-color-dark: #1E4E8C;
-  --brand-color-active: #1A4178;
-  --brand-gradient: linear-gradient(135deg, #2B6CB0 0%, #1E4E8C 100%);
+  /* === 五邑侨乡品牌色系 === */
+  /* 主色：碉楼青砖蓝 */
+  --brand-color: #1D5F8A;
+  --brand-color-light: #E8F2FA;
+  --brand-color-dark: #134566;
+  --brand-color-active: #0F3A56;
+  --brand-gradient: linear-gradient(135deg, #1D5F8A 0%, #134566 50%, #0C2E45 100%);
 
-  --success-color: #00A870;
-  --success-light: #E8F8F0;
-  --warning-color: #ED7B2F;
-  --warning-light: #FFF3E8;
-  --danger-color: #E34D59;
+  /* 侨乡特色辅助色 */
+  --qiao-gold: #C8963E;
+  --qiao-gold-light: #FBF5EB;
+  --qiao-terracotta: #B85C38;
+  --qiao-terracotta-light: #FDF2ED;
+  --qiao-jade: #2D8B6F;
+  --qiao-jade-light: #ECF7F3;
+
+  /* 功能色 */
+  --success-color: #2D8B6F;
+  --success-light: #ECF7F3;
+  --warning-color: #C8963E;
+  --warning-light: #FBF5EB;
+  --danger-color: #C94545;
   --danger-light: #FDECEE;
 
+  /* 文字色 */
   --text-primary: #1A1A2E;
   --text-secondary: #4A5568;
   --text-tertiary: #9CA3AF;
   --text-inverse: #FFFFFF;
 
-  --bg-primary: #F7F8FC;
+  /* 背景色 */
+  --bg-primary: #F5F6FA;
   --bg-card: #FFFFFF;
-  --bg-hover: #F0F2F5;
+  --bg-hover: #EEF0F5;
+  --bg-warm: #FEFCF8;
 
+  /* 边框与阴影 */
   --border-color: #E8ECF1;
-  --shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 16rpx 48rpx rgba(0, 0, 0, 0.12);
-  --shadow-brand: 0 8rpx 24rpx rgba(43, 108, 176, 0.25);
+  --shadow-sm: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 16rpx 48rpx rgba(0, 0, 0, 0.10);
+  --shadow-brand: 0 8rpx 24rpx rgba(29, 95, 138, 0.20);
+  --shadow-gold: 0 8rpx 24rpx rgba(200, 150, 62, 0.15);
 
+  /* 圆角 */
   --radius-sm: 12rpx;
   --radius-md: 20rpx;
-  --radius-lg: 32rpx;
-  --radius-xl: 40rpx;
+  --radius-lg: 28rpx;
+  --radius-xl: 36rpx;
 
+  /* TDesign 覆盖 */
   --td-brand-color: var(--brand-color);
 
   background-color: var(--bg-primary);
@@ -39,11 +57,11 @@ page {
   color: var(--text-primary);
 }
 
-/* 全局主按钮 */
+/* ========== 全局按钮 ========== */
 .btn-primary {
   background: var(--brand-gradient) !important;
   color: var(--text-inverse) !important;
-  border-radius: var(--radius-md) !important;
+  border-radius: var(--radius-lg) !important;
   font-size: 32rpx !important;
   font-weight: 600 !important;
   height: 96rpx !important;
@@ -56,32 +74,30 @@ page {
   transform: scale(0.98);
 }
 
-/* 全局次按钮 */
 .btn-secondary {
   background: var(--bg-card) !important;
   color: var(--brand-color) !important;
   border: 2rpx solid var(--brand-color) !important;
-  border-radius: var(--radius-md) !important;
+  border-radius: var(--radius-lg) !important;
   font-size: 30rpx !important;
   font-weight: 500 !important;
   height: 88rpx !important;
 }
 
-/* 全局危险按钮 */
 .btn-danger {
-  background: linear-gradient(135deg, #E34D59 0%, #C93545 100%) !important;
+  background: linear-gradient(135deg, #C94545 0%, #A33535 100%) !important;
   color: var(--text-inverse) !important;
-  border-radius: var(--radius-md) !important;
+  border-radius: var(--radius-lg) !important;
   font-size: 32rpx !important;
   font-weight: 600 !important;
   height: 96rpx !important;
-  box-shadow: 0 8rpx 24rpx rgba(227, 77, 89, 0.25) !important;
+  box-shadow: 0 8rpx 24rpx rgba(201, 69, 69, 0.20) !important;
   border: none !important;
 }
 
-/* 毛玻璃卡片 */
+/* ========== 卡片 ========== */
 .glass-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(20px);
   border-radius: var(--radius-xl);
   border: 2rpx solid rgba(255, 255, 255, 0.8);
@@ -89,7 +105,6 @@ page {
   padding: 40rpx;
 }
 
-/* 纯白卡片 */
 .card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
@@ -97,7 +112,7 @@ page {
   padding: 40rpx;
 }
 
-/* 标准自定义导航栏 */
+/* ========== 自定义导航栏 ========== */
 .custom-nav {
   display: flex;
   align-items: center;
@@ -113,34 +128,32 @@ page {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   margin-right: 16rpx;
+  backdrop-filter: blur(10px);
+  border: 1rpx solid rgba(255,255,255,0.1);
 }
 .custom-nav .nav-back:active {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
 }
 .custom-nav .nav-title {
   font-size: 36rpx;
   font-weight: 600;
   color: #FFF;
-  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.15);
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
 }
 
-/* 沉浸式背景 */
+/* ========== 沉浸式背景 ========== */
 .immersive-bg {
   position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100vh;
+  left: 0; top: 0;
+  width: 100%; height: 100vh;
   z-index: 1;
 }
 .immersive-overlay {
   position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100vh;
+  left: 0; top: 0;
+  width: 100%; height: 100vh;
   z-index: 2;
 }
 .immersive-content {
@@ -149,7 +162,7 @@ page {
   min-height: 100vh;
 }
 
-/* 状态标签 */
+/* ========== 状态标签 ========== */
 .status-tag {
   display: inline-flex;
   align-items: center;
@@ -175,7 +188,7 @@ page {
   color: var(--brand-color);
 }
 
-/* 分割线 */
+/* ========== 分割线 ========== */
 .divider {
   display: flex;
   align-items: center;
@@ -192,7 +205,27 @@ page {
   color: var(--text-tertiary);
 }
 
-/* 安全区适配 */
+/* ========== 侨乡纹饰 ========== */
+.qiao-pattern-bg {
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(200,150,62,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(29,95,138,0.03) 0%, transparent 50%);
+}
+
+.qiao-header-deco {
+  position: relative;
+}
+.qiao-header-deco::after {
+  content: '';
+  display: block;
+  width: 48rpx;
+  height: 4rpx;
+  background: linear-gradient(90deg, var(--qiao-gold), transparent);
+  border-radius: 2rpx;
+  margin-top: 8rpx;
+}
+
+/* ========== 安全区适配 ========== */
 .safe-bottom {
   padding-bottom: calc(env(safe-area-inset-bottom) + 40rpx);
 }

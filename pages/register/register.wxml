@@ -18,7 +18,7 @@
     <!-- 表单卡片 -->
     <view class="form-card">
       <view class="form-header">
-        <t-icon name="edit-2" size="36rpx" color="#2B6CB0" />
+        <t-icon name="edit-2" size="36rpx" color="#1D5F8A" />
         <text class="form-title">填写实名信息</text>
       </view>
 

@@ -2,19 +2,23 @@
   <!-- 沉浸式背景 -->
   <view class="bg-gradient"></view>
   <view class="bg-pattern"></view>
+  <!-- 碉楼剪影装饰 -->
+  <view class="bg-deco-bottom"></view>
 
   <!-- 品牌区域 -->
   <view class="brand-area {{animReady ? 'anim-in' : ''}}">
     <view class="brand-icon-wrap">
-      <t-icon name="secured" size="64rpx" color="#FFF" />
+      <view class="brand-icon-inner">
+        <t-icon name="secured" size="56rpx" color="#FFF" />
+      </view>
     </view>
     <view class="brand-title">邑易行</view>
     <view class="brand-subtitle">
-      <text class="dot"></text>
-      <text>江门蓬江 · 智慧社区通行管理</text>
-      <text class="dot"></text>
+      <view class="subtitle-line"></view>
+      <text>江门蓬江 · 智慧社区通行</text>
+      <view class="subtitle-line"></view>
     </view>
-    <view class="brand-desc">安全 · 便捷 · 智能</view>
+    <view class="brand-slogan">五邑侨乡 · 安居乐业</view>
   </view>
 
   <!-- 功能入口卡片 -->
@@ -25,7 +29,7 @@
       </view>
       <view class="entry-header-text">
         <text class="entry-title">访客登记通行</text>
-        <text class="entry-desc">实名登记 · 审核通行 · 全程可控</text>
+        <text class="entry-desc">实名登记 · 智能审核 · 全程可控</text>
       </view>
     </view>
 
@@ -35,9 +39,9 @@
     </t-button>
 
     <view class="quick-entry" bindtap="handleQuickPass">
-      <t-icon name="qrcode" size="32rpx" color="#2B6CB0" />
+      <t-icon name="qrcode" size="32rpx" color="{{brandColor}}" />
       <text>已有通行证？去亮码通行</text>
-      <t-icon name="chevron-right" size="28rpx" color="#2B6CB0" />
+      <t-icon name="chevron-right" size="28rpx" color="{{brandColor}}" />
     </view>
 
     <view class="divider">
@@ -47,7 +51,9 @@
     </view>
 
     <view class="guard-entry" bindtap="goToGuardLogin">
-      <t-icon name="user-safety" size="36rpx" color="#4A5568" />
+      <view class="guard-icon-wrap">
+        <t-icon name="user-safety" size="32rpx" color="#FFF" />
+      </view>
       <text class="guard-entry-text">保安端登录</text>
       <t-icon name="chevron-right" size="28rpx" color="#9CA3AF" />
     </view>
@@ -58,7 +64,7 @@
     <view class="auth-popup">
       <view class="auth-popup-header">
         <view class="auth-icon-wrap">
-          <t-icon name="lock-on" size="48rpx" color="#2B6CB0" />
+          <t-icon name="lock-on" size="48rpx" color="{{brandColor}}" />
         </view>
         <text class="auth-title">身份授权</text>
         <text class="auth-desc">为保障社区安全，我们需要验证您的身份信息</text>
