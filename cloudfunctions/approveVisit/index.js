@@ -16,21 +16,31 @@ exports.main = async (event, context) => {
   }
 
   try {
-    // 验证操作者是否为保安：优先 openid，回退 jobId
-    let guardCheck = await db.collection('guards').where({ _openid: guardOpenid }).get();
-    if (guardCheck.data.length === 0 && jobId) {
-      guardCheck = await db.collection('guards').where({ jobId: jobId }).get();
-      if (guardCheck.data.length > 0) {
-        await db.collection('guards').doc(guardCheck.data[0]._id).update({
-          data: { _openid: guardOpenid }
-        });
+    // 查找保安身份：优先用 jobId 精确匹配，回退到 openid
+    let guardInfo;
+
+    if (jobId) {
+      const guardByJob = await db.collection('guards').where({ jobId: jobId }).get();
+      if (guardByJob.data.length > 0) {
+        guardInfo = guardByJob.data[0];
+        if (guardInfo._openid !== guardOpenid) {
+          await db.collection('guards').doc(guardInfo._id).update({
+            data: { _openid: guardOpenid }
+          });
+        }
       }
     }
-    if (guardCheck.data.length === 0) {
-      return { success: false, errMsg: '无权操作，非保安账号' };
+
+    if (!guardInfo) {
+      const guardByOpenid = await db.collection('guards').where({ _openid: guardOpenid }).get();
+      if (guardByOpenid.data.length > 0) {
+        guardInfo = guardByOpenid.data[0];
+      }
     }
 
-    const guardInfo = guardCheck.data[0];
+    if (!guardInfo) {
+      return { success: false, errMsg: '无权操作，非保安账号' };
+    }
 
     // 获取拜访记录
     const visitDoc = await db.collection('visits').doc(visitId).get();
