@@ -42,8 +42,14 @@
       </view>
     </view>
 
+    <!-- 加载中 -->
+    <view class="loading-placeholder" wx:if="{{isLoading}}">
+      <t-loading theme="circular" size="60rpx" />
+      <text class="loading-placeholder-text">加载中...</text>
+    </view>
+
     <!-- 有活跃访问时显示状态卡片 -->
-    <block wx:if="{{hasActiveVisit && activeVisit}}">
+    <block wx:if="{{!isLoading && hasActiveVisit && activeVisit}}">
       <view class="active-visit-card">
         <view class="avc-header">
           <view class="avc-status {{activeVisit.status}}">
@@ -89,7 +95,7 @@
     </block>
 
     <!-- 无活跃访问时的主操作区 -->
-    <block wx:if="{{!hasActiveVisit}}">
+    <block wx:if="{{!isLoading && !hasActiveVisit}}">
       <view class="main-card">
         <view class="mc-status">
           <view class="mc-icon-wrap">

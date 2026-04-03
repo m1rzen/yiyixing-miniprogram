@@ -22,11 +22,11 @@
       <view class="ph-phone">{{userInfo.phone || '未绑定手机'}}</view>
     </view>
 
-    <!-- 功能菜单 -->
+    <!-- 通行凭证入口 -->
     <view class="menu-card">
       <view class="menu-item" bindtap="goToStatus" hover-class="menu-hover">
         <view class="mi-left">
-          <view class="mi-icon" style="background: rgba(0,168,112,0.1);">
+          <view class="mi-icon" style="background: rgba(45,139,111,0.1);">
             <t-icon name="qrcode" size="36rpx" color="#2D8B6F" />
           </view>
           <text class="mi-text">我的通行凭证</text>
@@ -36,16 +36,44 @@
           <t-icon name="chevron-right" size="36rpx" color="#D1D5DB" />
         </view>
       </view>
+    </view>
 
+    <!-- 历史通行记录 -->
+    <view class="history-section" wx:if="{{visitHistory.length > 0}}">
+      <view class="history-header">
+        <text class="history-title">历史通行记录</text>
+        <text class="history-count">{{visitHistory.length}} 条</text>
+      </view>
+      <view class="history-list">
+        <view class="history-item" wx:for="{{visitHistory}}" wx:key="_id">
+          <view class="hi-left">
+            <view class="hi-status-dot {{item.status}}"></view>
+          </view>
+          <view class="hi-content">
+            <view class="hi-top-row">
+              <text class="hi-community">{{item.community}}</text>
+              <view class="status-tag {{item.status === 'approved' ? 'approved' : item.status === 'rejected' ? 'rejected' : item.status === 'completed' ? 'approved' : 'pending'}}">
+                {{item.status === 'approved' ? '通行中' : item.status === 'rejected' ? '已驳回' : item.status === 'completed' ? '已签退' : '审核中'}}
+              </view>
+            </view>
+            <text class="hi-reason">{{item.reason}}</text>
+            <text class="hi-time">{{item.createTimeStr || '-'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 无历史记录 -->
+    <view class="menu-card" wx:if="{{visitHistory.length === 0}}">
       <view class="menu-item" hover-class="menu-hover">
         <view class="mi-left">
-          <view class="mi-icon" style="background: rgba(43,108,176,0.1);">
+          <view class="mi-icon" style="background: rgba(29,95,138,0.1);">
             <t-icon name="time" size="36rpx" color="#1D5F8A" />
           </view>
           <text class="mi-text">历史通行记录</text>
         </view>
         <view class="mi-right">
-          <text class="mi-count" wx:if="{{visitHistory.length > 0}}">{{visitHistory.length}}条</text>
+          <text class="mi-count">暂无记录</text>
           <t-icon name="chevron-right" size="36rpx" color="#D1D5DB" />
         </view>
       </view>
@@ -55,7 +83,7 @@
     <view class="action-card">
       <view class="menu-item" bindtap="handleClearData" hover-class="menu-hover">
         <view class="mi-left">
-          <view class="mi-icon" style="background: rgba(227,77,89,0.1);">
+          <view class="mi-icon" style="background: rgba(201,69,69,0.1);">
             <t-icon name="delete" size="36rpx" color="#C94545" />
           </view>
           <text class="mi-text">清除本地数据</text>
@@ -73,7 +101,7 @@
 
       <view class="app-info">
         <text>邑易行 v2.0.0</text>
-        <text>江门市蓬江区智慧社区管理系统</text>
+        <text>五邑侨乡 · 江门蓬江区智慧社区</text>
       </view>
     </view>
   </view>

@@ -24,9 +24,29 @@ Page({
       data: {}
     }).then(res => {
       if (res.result.success && res.result.history) {
-        this.setData({ visitHistory: res.result.history });
+        const history = res.result.history.map(item => ({
+          ...item,
+          createTimeStr: this.formatTime(item.createTime)
+        }));
+        this.setData({ visitHistory: history });
       }
+    }).catch(err => {
+      console.error('加载历史记录失败', err);
     });
+  },
+
+  formatTime(dateVal) {
+    if (!dateVal) return '-';
+    let d;
+    if (dateVal instanceof Date) {
+      d = dateVal;
+    } else if (typeof dateVal === 'object' && dateVal.$date) {
+      d = new Date(dateVal.$date);
+    } else {
+      d = new Date(dateVal);
+    }
+    if (isNaN(d.getTime())) return String(dateVal);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
   },
 
   goBack() { wx.navigateBack(); },
@@ -44,7 +64,7 @@ Page({
     wx.showModal({
       title: '确认清除',
       content: '清除后所有本地登录信息和通行记录都将被删除，需要重新登记。',
-      confirmColor: '#E34D59',
+      confirmColor: '#C94545',
       success: (res) => {
         if (res.confirm) {
           wx.clearStorageSync();

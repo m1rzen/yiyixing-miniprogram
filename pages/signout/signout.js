@@ -39,7 +39,7 @@ Page({
     wx.showModal({
       title: '确认签退',
       content: '签退后位置追踪将停止，本次通行凭证将失效。确定要签退吗？',
-      confirmColor: '#E34D59',
+      confirmColor: '#C94545',
       confirmText: '确认签退',
       success: (res) => {
         if (res.confirm) {

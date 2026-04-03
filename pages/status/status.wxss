@@ -19,6 +19,19 @@
   flex-direction: column;
 }
 
+/* 加载中 */
+.loading-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  padding: 160rpx 0 80rpx;
+}
+.loading-text {
+  font-size: 28rpx;
+  color: rgba(255,255,255,0.7);
+}
+
 /* 通行证卡片 */
 .pass-card {
   background: #FFF;
@@ -49,9 +62,18 @@
   margin-bottom: 24rpx;
 }
 .pending-ring { background: rgba(200,150,62,0.1); }
-.approved-ring { background: rgba(45,139,111,0.1); animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.approved-ring {
+  background: rgba(45,139,111,0.1);
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
 .rejected-ring { background: rgba(201,69,69,0.1); }
 .completed-ring { background: rgba(156,163,175,0.1); }
+
+.pulse-ring { animation: ringPulse 2s ease-in-out infinite; }
+@keyframes ringPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200,150,62,0.2); }
+  50% { box-shadow: 0 0 0 16rpx rgba(200,150,62,0.05); }
+}
 
 .pass-status-title {
   font-size: 44rpx;
@@ -69,14 +91,40 @@
   text-align: center;
 }
 
+/* 轮询提示 */
+.polling-hint {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 20rpx;
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+}
+.polling-dot {
+  width: 10rpx; height: 10rpx;
+  border-radius: 50%;
+  background: var(--warning-color);
+  animation: blink 1.5s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
 .pass-action-area {
   padding: 24rpx 36rpx 36rpx;
   display: flex;
   justify-content: center;
+  gap: 16rpx;
 }
 .refresh-btn {
-  width: 320rpx !important;
+  width: 280rpx !important;
   border-radius: 100rpx !important;
+}
+.reapply-btn {
+  width: 280rpx !important;
+  border-radius: 100rpx !important;
+  height: 88rpx !important;
 }
 
 /* 二维码区域 */
@@ -84,7 +132,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16rpx 36rpx 32rpx;
+  padding: 16rpx 36rpx 28rpx;
 }
 .qr-box {
   position: relative;
@@ -103,20 +151,31 @@
 .qr-corner.tr { top: 8rpx; right: 8rpx; border-left: none; border-bottom: none; border-radius: 0 8rpx 0 0; }
 .qr-corner.bl { bottom: 8rpx; left: 8rpx; border-right: none; border-top: none; border-radius: 0 0 0 8rpx; }
 .qr-corner.br { bottom: 8rpx; right: 8rpx; border-left: none; border-top: none; border-radius: 0 0 8rpx 0; }
+.qr-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  margin-top: 16rpx;
+}
 .qr-valid {
-  margin-top: 20rpx;
   font-size: 24rpx;
   color: var(--text-tertiary);
   background: var(--bg-primary);
   padding: 6rpx 24rpx;
   border-radius: 100rpx;
 }
+.qr-id {
+  font-size: 20rpx;
+  color: var(--text-tertiary);
+  font-family: monospace;
+}
 
 /* 快捷操作 */
 .pass-quick-actions {
   display: flex;
   gap: 16rpx;
-  padding: 0 36rpx 32rpx;
+  padding: 0 36rpx 28rpx;
 }
 .pqa-btn {
   flex: 1;
@@ -174,10 +233,7 @@
   margin-bottom: 18rpx;
 }
 .detail-row:last-child { margin-bottom: 0; }
-.dr-key {
-  font-size: 28rpx;
-  color: var(--text-tertiary);
-}
+.dr-key { font-size: 28rpx; color: var(--text-tertiary); }
 .dr-val {
   font-size: 28rpx;
   color: var(--text-primary);
@@ -185,6 +241,7 @@
   text-align: right;
   max-width: 60%;
 }
+.dr-val.platform-text { color: var(--brand-color); }
 
 /* 底部 */
 .bottom-area {

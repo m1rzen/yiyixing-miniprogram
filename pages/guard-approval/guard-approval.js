@@ -44,7 +44,7 @@ Page({
     wx.showModal({
       title: '确认批准',
       content: `确定批准 ${this.data.visit.visitorName} 的入区申请？`,
-      confirmColor: '#00A870',
+      confirmColor: '#2D8B6F',
       confirmText: '批准',
       success: (res) => {
         if (res.confirm) this.executeAction('approve');

@@ -5,29 +5,30 @@ Page({
   data: {
     visitId: '',
     visit: null,
-    status: 'loading', // loading | pending | approved | rejected | completed
+    status: 'loading', // loading | pending | approved | rejected | completed | error
     isRefreshing: false,
     currentTime: '',
     pollingTimer: null
   },
 
   onLoad(options) {
+    this.setData({ currentTime: app.formatTime(new Date()) });
+
     if (options.visitId) {
       this.setData({ visitId: options.visitId });
       this.loadVisitStatus(options.visitId);
     } else {
-      // 从缓存获取
       const activeVisit = wx.getStorageSync('activeVisit');
       if (activeVisit && activeVisit.visitId) {
         this.setData({ visitId: activeVisit.visitId });
         this.loadVisitStatus(activeVisit.visitId);
+      } else {
+        this.setData({ status: 'error' });
       }
     }
-    this.setData({ currentTime: app.formatTime(new Date()) });
   },
 
   onShow() {
-    // 开始轮询审核状态（pending时）
     if (this.data.status === 'pending') {
       this.startPolling();
     }
@@ -37,18 +38,20 @@ Page({
   onUnload() { this.stopPolling(); },
 
   loadVisitStatus(visitId) {
+    this.setData({ status: 'loading' });
     wx.cloud.callFunction({
       name: 'getVisitStatus',
-      data: { visitId: visitId }
+      data: { visitId }
     }).then(res => {
-      if (res.result.success && res.result.visit) {
+      if (res.result && res.result.success && res.result.visit) {
         const visit = res.result.visit;
         this.setData({
-          visit: visit,
+          visit,
           status: visit.status
         });
         wx.setStorageSync('activeVisit', { visitId: visit._id, status: visit.status });
         if (visit.status === 'pending') this.startPolling();
+        else this.stopPolling();
       } else {
         this.setData({ status: 'error' });
       }
@@ -61,24 +64,28 @@ Page({
   startPolling() {
     this.stopPolling();
     this.data.pollingTimer = setInterval(() => {
-      if (this.data.visitId) {
-        wx.cloud.callFunction({
-          name: 'getVisitStatus',
-          data: { visitId: this.data.visitId }
-        }).then(res => {
-          if (res.result.success && res.result.visit) {
-            const visit = res.result.visit;
-            if (visit.status !== 'pending') {
-              this.stopPolling();
-              this.setData({ visit, status: visit.status });
-              wx.setStorageSync('activeVisit', { visitId: visit._id, status: visit.status });
-              if (visit.status === 'approved') {
-                Toast({ context: this, selector: '#t-toast', message: '审核已通过，准予通行！', theme: 'success' });
-              }
+      if (!this.data.visitId || this.data.status !== 'pending') {
+        this.stopPolling();
+        return;
+      }
+      wx.cloud.callFunction({
+        name: 'getVisitStatus',
+        data: { visitId: this.data.visitId }
+      }).then(res => {
+        if (res.result && res.result.success && res.result.visit) {
+          const visit = res.result.visit;
+          if (visit.status !== 'pending') {
+            this.stopPolling();
+            this.setData({ visit, status: visit.status });
+            wx.setStorageSync('activeVisit', { visitId: visit._id, status: visit.status });
+            if (visit.status === 'approved') {
+              Toast({ context: this, selector: '#t-toast', message: '审核已通过，准予通行！', theme: 'success' });
+            } else if (visit.status === 'rejected') {
+              Toast({ context: this, selector: '#t-toast', message: '申请未通过，请查看驳回原因' });
             }
           }
-        });
-      }
+        }
+      }).catch(err => console.error('轮询失败', err));
     }, 5000);
   },
 
@@ -94,6 +101,25 @@ Page({
     this.setData({ isRefreshing: true });
     this.loadVisitStatus(this.data.visitId);
     setTimeout(() => this.setData({ isRefreshing: false }), 1500);
+  },
+
+  handleRetry() {
+    const visitId = this.data.visitId;
+    if (visitId) {
+      this.loadVisitStatus(visitId);
+    } else {
+      const activeVisit = wx.getStorageSync('activeVisit');
+      if (activeVisit && activeVisit.visitId) {
+        this.setData({ visitId: activeVisit.visitId });
+        this.loadVisitStatus(activeVisit.visitId);
+      } else {
+        wx.navigateBack({ fail: () => wx.reLaunch({ url: '/pages/dashboard/dashboard' }) });
+      }
+    }
+  },
+
+  handleReapply() {
+    wx.navigateTo({ url: '/pages/register/register' });
   },
 
   goToTracking() {
