@@ -59,8 +59,8 @@ exports.main = async (event, context) => {
     } else if (status === 'rejected') {
       query.status = 'rejected';
     } else if (status === 'active') {
+      // 所有已审批通过的访客都算在场人员（签退后变为 completed 自动移出）
       query.status = 'approved';
-      query.isInside = true;
     } else if (status === 'completed') {
       query.status = 'completed';
     } else if (status === 'history') {

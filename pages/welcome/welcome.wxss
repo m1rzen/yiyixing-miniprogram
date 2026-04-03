@@ -351,6 +351,16 @@
   line-height: 1.7;
   text-align: justify;
 }
+.privacy-highlight {
+  color: #1D5F8A;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 12rpx;
+  padding: 16rpx;
+  background: rgba(29,95,138,0.06);
+  border-left: 6rpx solid #1D5F8A;
+  border-radius: 0 8rpx 8rpx 0;
+}
 .privacy-footer {
   padding: 24rpx 32rpx 32rpx;
   border-top: 2rpx solid var(--border-color);

@@ -125,8 +125,11 @@
           <view class="privacy-section-text">您的个人信息将严格仅用于江门市蓬江区各接入社区的安全核验、通行赋码及必要的物业管理服务。我们承诺不会将其用于商业营销或其他无关用途。</view>
         </view>
         <view class="privacy-section">
-          <view class="privacy-section-title">3. 位置信息</view>
-          <view class="privacy-section-text">在您进入小区后，系统将定时获取您的位置信息用于安全管控。此信息仅在您入区期间收集，签退后即停止采集。位置数据将在30天后自动清除。</view>
+          <view class="privacy-section-title">3. 位置信息（重要）</view>
+          <view class="privacy-section-text">
+            <text class="privacy-highlight">根据社区安全管理规定，外来人员审核通过入场后，系统将强制自动开启位置追踪功能，每3分钟采集一次位置信息，用于实时安全管控。该功能在入场期间不可手动关闭，直至您完成签退操作后自动停止。</text>
+            位置数据仅供社区安保人员查看，用于保障小区公共安全。数据将在30天后自动清除。
+          </view>
         </view>
         <view class="privacy-section">
           <view class="privacy-section-title">4. 信息安全</view>

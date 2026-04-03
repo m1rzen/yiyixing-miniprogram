@@ -19,6 +19,8 @@ Page({
     if (options.visitId) {
       this.setData({ visitId: options.visitId });
     }
+    // 进入页面自动开启位置追踪（强制）
+    this.autoStartTracking();
   },
 
   onUnload() {
@@ -27,30 +29,51 @@ Page({
 
   goBack() { wx.navigateBack(); },
 
-  // 开始位置追踪
-  startTracking() {
+  // 自动开启追踪，无需用户确认
+  autoStartTracking() {
     wx.authorize({
       scope: 'scope.userLocation',
       success: () => {
-        this.setData({ isTracking: true, startTime: Date.now() });
-        this.doCheckIn();
-        // 每3分钟自动打卡
-        const interval = setInterval(() => {
-          this.doCheckIn();
-        }, 180000);
-        this.setData({ trackingInterval: interval });
-        // 计时器
-        const durationTimer = setInterval(() => {
-          this.updateDuration();
-        }, 1000);
-        this.setData({ durationTimer });
-        Toast({ context: this, selector: '#t-toast', message: '位置追踪已开启', theme: 'success' });
+        this.beginTracking();
       },
       fail: () => {
-        Toast({ context: this, selector: '#t-toast', message: '需要授权位置权限才能使用此功能' });
-        wx.openSetting();
+        // 权限被拒绝时，引导用户开启
+        wx.showModal({
+          title: '位置权限必需',
+          content: '根据社区安全管理规定，外来人员入场后必须开启位置追踪功能。请在设置中开启位置权限。',
+          confirmText: '去设置',
+          confirmColor: '#1D5F8A',
+          showCancel: false,
+          success: () => {
+            wx.openSetting({
+              success: (settingRes) => {
+                if (settingRes.authSetting['scope.userLocation']) {
+                  this.beginTracking();
+                } else {
+                  Toast({ context: this, selector: '#t-toast', message: '未授权位置权限，无法使用' });
+                }
+              }
+            });
+          }
+        });
       }
     });
+  },
+
+  beginTracking() {
+    this.setData({ isTracking: true, startTime: Date.now() });
+    this.doCheckIn();
+    // 每3分钟自动打卡
+    const interval = setInterval(() => {
+      this.doCheckIn();
+    }, 180000);
+    this.setData({ trackingInterval: interval });
+    // 计时器
+    const durationTimer = setInterval(() => {
+      this.updateDuration();
+    }, 1000);
+    this.setData({ durationTimer });
+    Toast({ context: this, selector: '#t-toast', message: '位置追踪已自动开启', theme: 'success' });
   },
 
   stopTracking() {
@@ -120,10 +143,6 @@ Page({
 
   // 手动打卡
   manualCheckIn() {
-    if (!this.data.isTracking) {
-      Toast({ context: this, selector: '#t-toast', message: '请先开启位置追踪' });
-      return;
-    }
     this.doCheckIn();
     Toast({ context: this, selector: '#t-toast', message: '手动打卡成功', theme: 'success' });
   },
