@@ -9,13 +9,19 @@
       <text class="nav-title">位置打卡</text>
     </view>
 
+    <!-- 强制追踪提示 -->
+    <view class="mandatory-notice">
+      <t-icon name="info-circle-filled" size="28rpx" color="#1D5F8A" />
+      <text class="mandatory-text">根据社区安全管理规定，入场后位置追踪将自动开启</text>
+    </view>
+
     <!-- 追踪状态卡片 -->
     <view class="tracking-card">
-      <view class="tc-status {{isTracking ? 'active' : 'inactive'}}">
-        <view class="tc-ring {{isTracking ? 'pulse' : ''}}">
-          <t-icon name="map-information" size="64rpx" color="{{isTracking ? '#2D8B6F' : '#9CA3AF'}}" />
+      <view class="tc-status active">
+        <view class="tc-ring pulse">
+          <t-icon name="map-information" size="64rpx" color="#2D8B6F" />
         </view>
-        <text class="tc-title">{{isTracking ? '位置追踪中' : '未开启追踪'}}</text>
+        <text class="tc-title">{{isTracking ? '位置追踪中' : '正在启动追踪...'}}</text>
         <text class="tc-time" wx:if="{{isTracking}}">持续时间 {{trackingDuration}}</text>
       </view>
 
@@ -39,24 +45,16 @@
 
       <!-- 操作按钮 -->
       <view class="tc-actions">
-        <block wx:if="{{!isTracking}}">
-          <t-button block t-class="btn-primary" bindtap="startTracking">
-            <t-icon name="play-circle" size="32rpx" slot="icon" color="#FFF" />
-            开启位置追踪
+        <view class="action-row">
+          <t-button t-class="btn-secondary manual-btn" bindtap="manualCheckIn">
+            <t-icon name="location" size="28rpx" slot="icon" color="#1D5F8A" />
+            手动打卡
           </t-button>
-        </block>
-        <block wx:else>
-          <view class="action-row">
-            <t-button t-class="btn-secondary manual-btn" bindtap="manualCheckIn">
-              <t-icon name="location" size="28rpx" slot="icon" color="#1D5F8A" />
-              手动打卡
-            </t-button>
-            <t-button t-class="btn-danger signout-btn" bindtap="goToSignout">
-              <t-icon name="logout" size="28rpx" slot="icon" color="#FFF" />
-              签退离场
-            </t-button>
-          </view>
-        </block>
+          <t-button t-class="btn-danger signout-btn" bindtap="goToSignout">
+            <t-icon name="logout" size="28rpx" slot="icon" color="#FFF" />
+            签退离场
+          </t-button>
+        </view>
       </view>
     </view>
 

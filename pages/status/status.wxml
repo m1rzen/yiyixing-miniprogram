@@ -52,35 +52,73 @@
         </view>
       </block>
 
-      <!-- 已通过 -->
+      <!-- 已通过 — 通行凭证 -->
       <block wx:if="{{status === 'approved'}}">
         <view class="pass-status-area approved-bg">
           <view class="status-ring approved-ring">
             <t-icon name="check-circle-filled" size="80rpx" color="#2D8B6F" />
           </view>
           <text class="pass-status-title approved-text">准予通行</text>
-          <text class="pass-status-desc">请向门岗保安出示此通行码</text>
+          <text class="pass-status-desc">请向门岗保安出示此通行凭证</text>
         </view>
 
-        <!-- 二维码区域 -->
-        <view class="qr-area">
-          <view class="qr-box">
-            <view class="qr-corner tl"></view>
-            <view class="qr-corner tr"></view>
-            <view class="qr-corner bl"></view>
-            <view class="qr-corner br"></view>
-            <t-icon name="qrcode" size="240rpx" color="#1A1A2E" />
+        <!-- 通行凭证主体 -->
+        <view class="pass-credential">
+          <!-- 大号凭证编号 -->
+          <view class="pass-id-area">
+            <text class="pass-id-label">通行凭证编号</text>
+            <text class="pass-id-code">{{passCode}}</text>
           </view>
-          <view class="qr-meta">
-            <text class="qr-valid">有效期至：今日 23:59</text>
-            <text class="qr-id" wx:if="{{visitId}}">凭证 #{{visitId.substr(-8).toUpperCase()}}</text>
+
+          <!-- 准予通行印章 -->
+          <view class="pass-stamp">
+            <view class="stamp-ring">
+              <text class="stamp-text">准予</text>
+              <text class="stamp-text">通行</text>
+            </view>
+          </view>
+
+          <!-- 访客信息摘要 -->
+          <view class="pass-info-grid">
+            <view class="pass-info-item">
+              <text class="pi-label">访客姓名</text>
+              <text class="pi-value">{{visit.visitorName || '-'}}</text>
+            </view>
+            <view class="pass-info-item">
+              <text class="pi-label">目的小区</text>
+              <text class="pi-value">{{visit.community || '-'}}</text>
+            </view>
+            <view class="pass-info-item">
+              <text class="pi-label">拜访事由</text>
+              <text class="pi-value">{{visit.reason || '-'}}</text>
+            </view>
+            <view class="pass-info-item">
+              <text class="pi-label">有效期至</text>
+              <text class="pi-value highlight">今日 23:59</text>
+            </view>
+          </view>
+
+          <!-- 动态验证码 -->
+          <view class="pass-verify-bar">
+            <view class="verify-dot active"></view>
+            <text class="verify-label">实时验证码</text>
+            <text class="verify-code">{{verifyCode}}</text>
+            <text class="verify-timer">{{verifyCountdown}}s 后刷新</text>
+          </view>
+        </view>
+
+        <!-- 平台认证标识 -->
+        <view class="platform-badge-row" wx:if="{{visit.platform && visit.platform !== '普通访客'}}">
+          <view class="platform-verified-badge">
+            <t-icon name="check-circle-filled" size="28rpx" color="#2D8B6F" />
+            <text>{{visit.platform}} · 平台身份已核验</text>
           </view>
         </view>
 
         <view class="pass-quick-actions">
           <view class="pqa-btn" bindtap="goToTracking">
             <t-icon name="map-information" size="36rpx" color="#1D5F8A" />
-            <text>进入打卡</text>
+            <text>位置打卡</text>
           </view>
           <view class="pqa-btn danger" bindtap="goToSignout">
             <t-icon name="logout" size="36rpx" color="#C94545" />
