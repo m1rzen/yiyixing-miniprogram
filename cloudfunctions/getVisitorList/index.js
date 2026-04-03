@@ -6,11 +6,23 @@ const _ = db.command;
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const guardOpenid = wxContext.OPENID;
-  const { status, communityId, page, pageSize } = event;
+  const { status, communityId, page, pageSize, jobId } = event;
 
   try {
-    // 验证保安身份
-    const guardCheck = await db.collection('guards').where({ _openid: guardOpenid }).get();
+    // 验证保安身份：优先用 openid 查找，找不到则用 jobId 查找
+    let guardCheck = await db.collection('guards').where({ _openid: guardOpenid }).get();
+
+    if (guardCheck.data.length === 0 && jobId) {
+      // openid 匹配失败，用工号查找并绑定 openid
+      guardCheck = await db.collection('guards').where({ jobId: jobId }).get();
+      if (guardCheck.data.length > 0) {
+        // 补绑 openid，确保下次可以直接匹配
+        await db.collection('guards').doc(guardCheck.data[0]._id).update({
+          data: { _openid: guardOpenid }
+        });
+      }
+    }
+
     if (guardCheck.data.length === 0) {
       return { success: false, errMsg: '无权操作，非保安账号' };
     }
@@ -42,6 +54,9 @@ exports.main = async (event, context) => {
       query.isInside = true;
     } else if (status === 'completed') {
       query.status = 'completed';
+    } else if (status === 'history') {
+      // 历史记录：包含所有非 pending 的记录
+      query.status = _.in(['approved', 'rejected', 'completed']);
     }
 
     // 查询总数

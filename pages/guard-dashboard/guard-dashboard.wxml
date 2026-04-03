@@ -55,11 +55,7 @@
 
   <!-- Tab 切换 -->
   <t-tabs value="{{currentTab}}" bind:change="onTabChange" t-class="guard-tabs">
-    <t-tab-panel value="{{0}}">
-      <view slot="label" class="tab-label-wrap">
-        <text>待审批</text>
-        <view class="tab-badge" wx:if="{{pendingCount > 0}}">{{pendingCount > 99 ? '99+' : pendingCount}}</view>
-      </view>
+    <t-tab-panel label="待审批" value="{{0}}">
       <view class="list-container">
         <!-- 加载中 -->
         <view class="loading-card" wx:if="{{isLoading}}">
@@ -115,11 +111,7 @@
       </view>
     </t-tab-panel>
 
-    <t-tab-panel value="{{1}}">
-      <view slot="label" class="tab-label-wrap">
-        <text>在场人员</text>
-        <view class="tab-badge tab-badge-green" wx:if="{{activeCount > 0}}">{{activeCount}}</view>
-      </view>
+    <t-tab-panel label="在场人员" value="{{1}}">
       <view class="list-container">
         <view class="loading-card" wx:if="{{isLoading}}">
           <t-loading theme="circular" size="60rpx" />

@@ -52,18 +52,20 @@ Page({
     this.setData({ isLoading: true });
     const lastRefreshTime = this.formatShortTime(new Date());
 
-    // 并行请求三个列表
+    const jobId = this.data.guardInfo ? this.data.guardInfo.jobId : '';
+
+    // 并行请求三个列表（传入 jobId 确保身份可被识别）
     const pendingReq = wx.cloud.callFunction({
       name: 'getVisitorList',
-      data: { status: 'pending', page: 1, pageSize: 50 }
+      data: { status: 'pending', page: 1, pageSize: 50, jobId }
     });
     const activeReq = wx.cloud.callFunction({
       name: 'getVisitorList',
-      data: { status: 'active', page: 1, pageSize: 50 }
+      data: { status: 'active', page: 1, pageSize: 50, jobId }
     });
     const historyReq = wx.cloud.callFunction({
       name: 'getVisitorList',
-      data: { status: 'completed', page: 1, pageSize: 30 }
+      data: { status: 'history', page: 1, pageSize: 30, jobId }
     });
 
     Promise.all([pendingReq, activeReq, historyReq])

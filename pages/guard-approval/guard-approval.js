@@ -79,12 +79,14 @@ Page({
     const actionText = action === 'approve' ? '批准' : '驳回';
     wx.showLoading({ title: `${actionText}中...`, mask: true });
 
+    const guardInfo = wx.getStorageSync('guardInfo') || {};
     wx.cloud.callFunction({
       name: 'approveVisit',
       data: {
         visitId: this.data.visitId,
         action: action,
-        rejectReason: this.data.rejectReason || ''
+        rejectReason: this.data.rejectReason || '',
+        jobId: guardInfo.jobId || ''
       }
     }).then(res => {
       wx.hideLoading();

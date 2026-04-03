@@ -5,7 +5,7 @@ const db = cloud.database();
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const guardOpenid = wxContext.OPENID;
-  const { visitId, action, rejectReason } = event;
+  const { visitId, action, rejectReason, jobId } = event;
 
   if (!visitId || !action) {
     return { success: false, errMsg: '参数缺失' };
@@ -16,8 +16,16 @@ exports.main = async (event, context) => {
   }
 
   try {
-    // 验证操作者是否为保安
-    const guardCheck = await db.collection('guards').where({ _openid: guardOpenid }).get();
+    // 验证操作者是否为保安：优先 openid，回退 jobId
+    let guardCheck = await db.collection('guards').where({ _openid: guardOpenid }).get();
+    if (guardCheck.data.length === 0 && jobId) {
+      guardCheck = await db.collection('guards').where({ jobId: jobId }).get();
+      if (guardCheck.data.length > 0) {
+        await db.collection('guards').doc(guardCheck.data[0]._id).update({
+          data: { _openid: guardOpenid }
+        });
+      }
+    }
     if (guardCheck.data.length === 0) {
       return { success: false, errMsg: '无权操作，非保安账号' };
     }
