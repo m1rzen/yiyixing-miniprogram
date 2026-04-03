@@ -11,6 +11,7 @@ Page({
     platformPopupVisible: false,
     currentPlatform: {},
     isLoading: true,
+    brandColor: '#1D5F8A',
 
     platformConfigs: {
       '美团': {
@@ -174,7 +175,7 @@ Page({
     wx.showModal({
       title: '退出确认',
       content: '确定要退出当前账号吗？',
-      confirmColor: '#2B6CB0',
+      confirmColor: '#1D5F8A',
       success: (res) => {
         if (res.confirm) {
           wx.clearStorageSync();

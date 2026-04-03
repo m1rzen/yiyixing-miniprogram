@@ -11,7 +11,8 @@ Page({
     countdown: 0,
     phoneNumber: '',
     verifyCode: '',
-    animReady: false
+    animReady: false,
+    brandColor: '#1D5F8A'
   },
 
   onLoad() {

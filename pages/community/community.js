@@ -7,7 +7,9 @@ Page({
     selectedCommunity: '',
     keyword: '',
     areaFilter: '全部',
-    areas: ['全部']
+    areas: ['全部'],
+    brandColor: '#1D5F8A',
+    qiaoGold: '#C8963E'
   },
 
   onLoad() {
@@ -29,9 +31,20 @@ Page({
     });
   },
 
+  goBack() {
+    wx.navigateBack({
+      fail: () => wx.navigateTo({ url: '/pages/dashboard/dashboard' })
+    });
+  },
+
   onSearch(e) {
-    const keyword = (e.detail.value || e.detail || '').trim();
+    const keyword = (e.detail.value || '').trim();
     this.setData({ keyword });
+    this.filterList();
+  },
+
+  clearSearch() {
+    this.setData({ keyword: '' });
     this.filterList();
   },
 

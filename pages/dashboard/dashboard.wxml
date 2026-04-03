@@ -18,15 +18,27 @@
       <t-icon name="chevron-right" size="32rpx" color="rgba(255,255,255,0.6)" />
     </view>
 
+    <!-- 侨乡文化标语 -->
+    <view class="culture-banner">
+      <view class="culture-dot"></view>
+      <text class="culture-text">五邑侨乡 · 蓬江智慧社区</text>
+      <view class="culture-dot"></view>
+    </view>
+
     <!-- 小区选择 -->
     <view class="community-bar" bindtap="goToCommunity">
       <view class="community-left">
-        <t-icon name="location" size="36rpx" color="#2B6CB0" />
-        <text class="community-name">{{currentCommunity || '请选择小区'}}</text>
+        <view class="community-icon-wrap">
+          <t-icon name="location" size="32rpx" color="#FFF" />
+        </view>
+        <view class="community-info">
+          <text class="community-label">当前小区</text>
+          <text class="community-name">{{currentCommunity || '请选择小区'}}</text>
+        </view>
       </view>
       <view class="community-switch">
         <text>切换</text>
-        <t-icon name="chevron-right" size="24rpx" color="#2B6CB0" />
+        <t-icon name="chevron-right" size="24rpx" color="{{brandColor}}" />
       </view>
     </view>
 
@@ -35,8 +47,8 @@
       <view class="active-visit-card">
         <view class="avc-header">
           <view class="avc-status {{activeVisit.status}}">
-            <t-icon wx:if="{{activeVisit.status === 'pending'}}" name="time-filled" size="36rpx" color="#ED7B2F" />
-            <t-icon wx:if="{{activeVisit.status === 'approved'}}" name="check-circle-filled" size="36rpx" color="#00A870" />
+            <t-icon wx:if="{{activeVisit.status === 'pending'}}" name="time-filled" size="36rpx" color="#C8963E" />
+            <t-icon wx:if="{{activeVisit.status === 'approved'}}" name="check-circle-filled" size="36rpx" color="#2D8B6F" />
             <text class="avc-status-text">
               {{activeVisit.status === 'pending' ? '审核中' : '已通过'}}
             </text>
@@ -55,15 +67,21 @@
         </view>
         <view class="avc-actions">
           <view class="avc-btn" bindtap="goToStatus">
-            <t-icon name="qrcode" size="32rpx" color="#2B6CB0" />
+            <view class="avc-btn-icon blue">
+              <t-icon name="qrcode" size="32rpx" color="#FFF" />
+            </view>
             <text>通行凭证</text>
           </view>
           <view class="avc-btn" wx:if="{{activeVisit.status === 'approved' && activeVisit.isInside}}" bindtap="goToTracking">
-            <t-icon name="map-information" size="32rpx" color="#00A870" />
+            <view class="avc-btn-icon green">
+              <t-icon name="map-information" size="32rpx" color="#FFF" />
+            </view>
             <text>位置打卡</text>
           </view>
           <view class="avc-btn" wx:if="{{activeVisit.status === 'approved'}}" bindtap="goToSignout">
-            <t-icon name="logout" size="32rpx" color="#E34D59" />
+            <view class="avc-btn-icon red">
+              <t-icon name="logout" size="32rpx" color="#FFF" />
+            </view>
             <text>签退离场</text>
           </view>
         </view>
@@ -74,8 +92,8 @@
     <block wx:if="{{!hasActiveVisit}}">
       <view class="main-card">
         <view class="mc-status">
-          <view class="mc-icon">
-            <t-icon name="info-circle-filled" size="80rpx" color="rgba(43, 108, 176, 0.6)" />
+          <view class="mc-icon-wrap">
+            <t-icon name="info-circle-filled" size="64rpx" color="rgba(29,95,138,0.5)" />
           </view>
           <text class="mc-title">暂无通行记录</text>
           <text class="mc-desc">登记身份信息，审核通过即可通行</text>
@@ -94,15 +112,21 @@
 
         <view class="platform-row">
           <view class="platform-btn meituan" bindtap="handlePlatformAuth" data-platform="美团">
-            <t-icon name="shop" size="36rpx" color="#FF9800" />
+            <view class="platform-icon-wrap" style="background: rgba(255,152,0,0.15);">
+              <t-icon name="shop" size="36rpx" color="#FF9800" />
+            </view>
             <text>美团骑手</text>
           </view>
           <view class="platform-btn shunfeng" bindtap="handlePlatformAuth" data-platform="顺丰">
-            <t-icon name="gift" size="36rpx" color="#D32F2F" />
+            <view class="platform-icon-wrap" style="background: rgba(211,47,47,0.12);">
+              <t-icon name="gift" size="36rpx" color="#D32F2F" />
+            </view>
             <text>顺丰快递</text>
           </view>
           <view class="platform-btn jingdong" bindtap="handlePlatformAuth" data-platform="京东">
-            <t-icon name="cart" size="36rpx" color="#E53935" />
+            <view class="platform-icon-wrap" style="background: rgba(229,57,53,0.12);">
+              <t-icon name="cart" size="36rpx" color="#E53935" />
+            </view>
             <text>京东秒送</text>
           </view>
         </view>

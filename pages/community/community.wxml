@@ -1,59 +1,94 @@
 <view class="community-page">
-  <!-- 搜索栏 -->
-  <view class="search-bar">
-    <t-search
-      placeholder="搜索小区名称或地址"
-      shape="round"
-      clearable
-      bind:change="onSearch"
-    />
-  </view>
+  <!-- 顶部背景 -->
+  <view class="bg-top"></view>
 
-  <!-- 区域筛选 -->
-  <scroll-view class="area-tabs" scroll-x enable-flex>
-    <view
-      class="area-tab {{areaFilter === item ? 'active' : ''}}"
-      wx:for="{{areas}}" wx:key="*this"
-      bindtap="onAreaChange" data-area="{{item}}"
-    >{{item}}</view>
-  </scroll-view>
-
-  <!-- 当前选中 -->
-  <view class="current-section" wx:if="{{selectedCommunity && !keyword}}">
-    <text class="section-label">当前选择</text>
-    <view class="current-item">
-      <view class="ci-left">
-        <t-icon name="location" size="36rpx" color="#2B6CB0" />
-        <text class="ci-name">{{selectedCommunity}}</text>
+  <view class="content">
+    <view class="custom-nav">
+      <view class="nav-back" bindtap="goBack">
+        <t-icon name="chevron-left" size="44rpx" color="#FFF" />
       </view>
-      <t-icon name="check-circle-filled" size="40rpx" color="#2B6CB0" />
+      <text class="nav-title">选择小区</text>
     </view>
-  </view>
 
-  <!-- 社区列表 -->
-  <text class="section-label list-label">{{keyword ? '搜索结果' : '全部小区'}} ({{filteredList.length}})</text>
-  <scroll-view class="community-list" scroll-y>
-    <view
-      class="list-item"
-      wx:for="{{filteredList}}" wx:key="id"
-      bindtap="handleSelect"
-      data-name="{{item.name}}" data-id="{{item.id}}"
-      hover-class="item-hover"
-    >
-      <view class="item-content">
-        <view class="item-name-row">
-          <text class="item-name {{selectedCommunity === item.name ? 'selected' : ''}}">{{item.name}}</text>
-          <view class="item-area-tag" wx:if="{{item.area}}">{{item.area}}</view>
+    <!-- 搜索栏 -->
+    <view class="search-wrap">
+      <view class="search-box">
+        <t-icon name="search" size="36rpx" color="#9CA3AF" />
+        <input class="search-input" placeholder="搜索小区名称或地址" value="{{keyword}}" bindinput="onSearch" />
+        <t-icon wx:if="{{keyword}}" name="close-circle-filled" size="32rpx" color="#D1D5DB" bindtap="clearSearch" />
+      </view>
+    </view>
+
+    <!-- 区域筛选 - 使用 flex-wrap 网格布局 -->
+    <view class="area-filter-card">
+      <view class="area-filter-header">
+        <t-icon name="map-information" size="32rpx" color="{{qiaoGold}}" />
+        <text class="area-filter-title">蓬江区街道</text>
+      </view>
+      <view class="area-grid">
+        <view
+          class="area-chip {{areaFilter === item ? 'active' : ''}}"
+          wx:for="{{areas}}" wx:key="*this"
+          bindtap="onAreaChange" data-area="{{item}}"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 当前选中 -->
+    <view class="current-section" wx:if="{{selectedCommunity && !keyword}}">
+      <view class="current-item">
+        <view class="ci-left">
+          <view class="ci-icon">
+            <t-icon name="location" size="32rpx" color="#FFF" />
+          </view>
+          <view class="ci-info">
+            <text class="ci-label">当前选择</text>
+            <text class="ci-name">{{selectedCommunity}}</text>
+          </view>
         </view>
-        <text class="item-address">{{item.address}}</text>
+        <t-icon name="check-circle-filled" size="44rpx" color="{{brandColor}}" />
       </view>
-      <t-icon wx:if="{{selectedCommunity === item.name}}" name="check" size="36rpx" color="#2B6CB0" class="check-anim" />
     </view>
 
-    <view class="empty-state" wx:if="{{filteredList.length === 0}}">
-      <t-icon name="info-circle" size="80rpx" color="#D1D5DB" />
-      <text class="empty-text">未找到相关小区</text>
-      <text class="empty-sub">请尝试其他关键词</text>
+    <!-- 社区列表 -->
+    <view class="list-header">
+      <text class="list-title">{{keyword ? '搜索结果' : '全部小区'}}</text>
+      <text class="list-count">{{filteredList.length}} 个</text>
     </view>
-  </scroll-view>
+
+    <scroll-view class="community-list" scroll-y enhanced show-scrollbar="{{false}}">
+      <view
+        class="list-item"
+        wx:for="{{filteredList}}" wx:key="id"
+        bindtap="handleSelect"
+        data-name="{{item.name}}" data-id="{{item.id}}"
+        hover-class="item-hover"
+      >
+        <view class="item-content">
+          <view class="item-name-row">
+            <text class="item-name {{selectedCommunity === item.name ? 'selected' : ''}}">{{item.name}}</text>
+            <view class="item-area-tag">{{item.area}}</view>
+          </view>
+          <view class="item-address-row">
+            <t-icon name="location" size="24rpx" color="#9CA3AF" />
+            <text class="item-address">{{item.address}}</text>
+          </view>
+        </view>
+        <view class="item-check" wx:if="{{selectedCommunity === item.name}}">
+          <t-icon name="check" size="32rpx" color="#FFF" />
+        </view>
+      </view>
+
+      <view class="empty-state" wx:if="{{filteredList.length === 0}}">
+        <view class="empty-icon-wrap">
+          <t-icon name="search" size="64rpx" color="#D1D5DB" />
+        </view>
+        <text class="empty-text">未找到相关小区</text>
+        <text class="empty-sub">请尝试其他关键词或切换区域</text>
+      </view>
+
+      <!-- 底部安全区 -->
+      <view style="height: 60rpx;"></view>
+    </scroll-view>
+  </view>
 </view>

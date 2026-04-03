@@ -97,7 +97,7 @@ Page({
     wx.showModal({
       title: '退出确认',
       content: '确定退出保安工作台？',
-      confirmColor: '#2B6CB0',
+      confirmColor: '#1D5F8A',
       success: (res) => {
         if (res.confirm) {
           this.clearRefresh();

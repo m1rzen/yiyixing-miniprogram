@@ -27,7 +27,7 @@
       <view class="menu-item" bindtap="goToStatus" hover-class="menu-hover">
         <view class="mi-left">
           <view class="mi-icon" style="background: rgba(0,168,112,0.1);">
-            <t-icon name="qrcode" size="36rpx" color="#00A870" />
+            <t-icon name="qrcode" size="36rpx" color="#2D8B6F" />
           </view>
           <text class="mi-text">我的通行凭证</text>
         </view>
@@ -40,7 +40,7 @@
       <view class="menu-item" hover-class="menu-hover">
         <view class="mi-left">
           <view class="mi-icon" style="background: rgba(43,108,176,0.1);">
-            <t-icon name="time" size="36rpx" color="#2B6CB0" />
+            <t-icon name="time" size="36rpx" color="#1D5F8A" />
           </view>
           <text class="mi-text">历史通行记录</text>
         </view>
@@ -56,7 +56,7 @@
       <view class="menu-item" bindtap="handleClearData" hover-class="menu-hover">
         <view class="mi-left">
           <view class="mi-icon" style="background: rgba(227,77,89,0.1);">
-            <t-icon name="delete" size="36rpx" color="#E34D59" />
+            <t-icon name="delete" size="36rpx" color="#C94545" />
           </view>
           <text class="mi-text">清除本地数据</text>
         </view>
@@ -67,7 +67,7 @@
     <!-- 退出按钮 -->
     <view class="bottom-area safe-bottom">
       <view class="logout-btn" bindtap="handleLogout" hover-class="logout-hover">
-        <t-icon name="poweroff" size="32rpx" color="#E34D59" />
+        <t-icon name="poweroff" size="32rpx" color="#C94545" />
         <text class="logout-text">退出当前账号</text>
       </view>
 
