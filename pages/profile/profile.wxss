@@ -107,6 +107,80 @@
   color: var(--text-tertiary);
 }
 
+/* 历史记录 */
+.history-section {
+  background: #FFF;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16rpx;
+  overflow: hidden;
+}
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 32rpx 20rpx;
+  border-bottom: 2rpx solid var(--border-color);
+}
+.history-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.history-count {
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+}
+.history-list { padding: 16rpx 32rpx 24rpx; }
+.history-item {
+  display: flex;
+  gap: 16rpx;
+  padding: 20rpx 0;
+  border-bottom: 2rpx solid var(--border-color);
+}
+.history-item:last-child { border-bottom: none; padding-bottom: 0; }
+.hi-left {
+  padding-top: 8rpx;
+  flex-shrink: 0;
+}
+.hi-status-dot {
+  width: 14rpx; height: 14rpx;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+}
+.hi-status-dot.approved { background: var(--success-color); }
+.hi-status-dot.pending { background: var(--warning-color); }
+.hi-status-dot.rejected { background: var(--danger-color); }
+.hi-status-dot.completed { background: var(--text-tertiary); }
+.hi-content { flex: 1; min-width: 0; }
+.hi-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6rpx;
+}
+.hi-community {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  margin-right: 12rpx;
+}
+.hi-reason {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 4rpx;
+}
+.hi-time {
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+  display: block;
+}
+
 /* 退出 */
 .bottom-area {
   margin-top: auto;

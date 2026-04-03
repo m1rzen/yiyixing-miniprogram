@@ -9,19 +9,45 @@
       <text class="nav-title">通行凭证</text>
     </view>
 
-    <view class="pass-card">
+    <!-- 加载中 -->
+    <view class="loading-card" wx:if="{{status === 'loading'}}">
+      <t-loading theme="circular" size="80rpx" />
+      <text class="loading-text">加载凭证中...</text>
+    </view>
+
+    <!-- 错误状态 -->
+    <view class="pass-card" wx:if="{{status === 'error'}}">
+      <view class="pass-status-area rejected-bg">
+        <view class="status-ring rejected-ring">
+          <t-icon name="close-circle-filled" size="80rpx" color="#C94545" />
+        </view>
+        <text class="pass-status-title rejected-text">加载失败</text>
+        <text class="pass-status-desc">无法获取通行凭证，请检查网络后重试</text>
+      </view>
+      <view class="pass-action-area">
+        <t-button t-class="btn-secondary refresh-btn" bindtap="handleRetry">
+          重新加载
+        </t-button>
+      </view>
+    </view>
+
+    <view class="pass-card" wx:if="{{status !== 'loading' && status !== 'error'}}">
       <!-- 审核中 -->
       <block wx:if="{{status === 'pending'}}">
         <view class="pass-status-area pending-bg">
-          <view class="status-ring pending-ring">
+          <view class="status-ring pending-ring pulse-ring">
             <t-icon name="time-filled" size="80rpx" color="#C8963E" />
           </view>
           <text class="pass-status-title pending-text">审核中</text>
           <text class="pass-status-desc">您的入区申请正在等待保安审批</text>
+          <view class="polling-hint">
+            <view class="polling-dot"></view>
+            <text>自动刷新中，无需手动操作</text>
+          </view>
         </view>
         <view class="pass-action-area">
           <t-button t-class="btn-secondary refresh-btn" loading="{{isRefreshing}}" bindtap="handleRefresh">
-            {{isRefreshing ? '刷新中...' : '刷新状态'}}
+            {{isRefreshing ? '刷新中...' : '手动刷新'}}
           </t-button>
         </view>
       </block>
@@ -36,6 +62,7 @@
           <text class="pass-status-desc">请向门岗保安出示此通行码</text>
         </view>
 
+        <!-- 二维码区域 -->
         <view class="qr-area">
           <view class="qr-box">
             <view class="qr-corner tl"></view>
@@ -44,7 +71,10 @@
             <view class="qr-corner br"></view>
             <t-icon name="qrcode" size="240rpx" color="#1A1A2E" />
           </view>
-          <text class="qr-valid">有效期至：今日 23:59</text>
+          <view class="qr-meta">
+            <text class="qr-valid">有效期至：今日 23:59</text>
+            <text class="qr-id" wx:if="{{visitId}}">凭证 #{{visitId.substr(-8).toUpperCase()}}</text>
+          </view>
         </view>
 
         <view class="pass-quick-actions">
@@ -68,6 +98,11 @@
           <text class="pass-status-title rejected-text">申请被驳回</text>
           <text class="pass-status-desc">{{visit.rejectReason || '您的入区申请未通过审核'}}</text>
         </view>
+        <view class="pass-action-area">
+          <t-button t-class="btn-primary reapply-btn" bindtap="handleReapply">
+            重新申请
+          </t-button>
+        </view>
       </block>
 
       <!-- 已签退 -->
@@ -77,11 +112,11 @@
             <t-icon name="check-circle" size="80rpx" color="#9CA3AF" />
           </view>
           <text class="pass-status-title completed-text">已签退</text>
-          <text class="pass-status-desc">本次拜访已结束</text>
+          <text class="pass-status-desc">本次拜访已结束，感谢您的配合</text>
         </view>
       </block>
 
-      <!-- 分割线 -->
+      <!-- 票根分割线 -->
       <view class="ticket-divider">
         <view class="punch left"></view>
         <view class="dash-line"></view>
@@ -90,7 +125,7 @@
 
       <!-- 拜访详情 -->
       <view class="detail-section" wx:if="{{visit}}">
-        <text class="detail-label">拜访详情</text>
+        <text class="detail-label">— 拜访详情 —</text>
         <view class="detail-row">
           <text class="dr-key">小区名称</text>
           <text class="dr-val">{{visit.community || '-'}}</text>
@@ -101,7 +136,7 @@
         </view>
         <view class="detail-row" wx:if="{{visit.platform && visit.platform !== '普通访客'}}">
           <text class="dr-key">平台认证</text>
-          <text class="dr-val">{{visit.platform}}</text>
+          <text class="dr-val platform-text">{{visit.platform}}</text>
         </view>
         <view class="detail-row">
           <text class="dr-key">申请时间</text>

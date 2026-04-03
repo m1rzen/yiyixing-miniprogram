@@ -10,8 +10,10 @@ Page({
     historyList: [],
     pendingCount: 0,
     activeCount: 0,
+    historyCount: 0,
     isLoading: false,
-    refreshTimer: null
+    refreshTimer: null,
+    lastRefreshTime: ''
   },
 
   onLoad() {
@@ -24,9 +26,11 @@ Page({
   },
 
   onShow() {
-    this.loadData();
-    // 每15秒自动刷新待审批列表
-    this.data.refreshTimer = setInterval(() => this.loadData(), 15000);
+    this.loadAllData();
+    // 每15秒自动刷新
+    if (!this.data.refreshTimer) {
+      this.data.refreshTimer = setInterval(() => this.loadAllData(), 15000);
+    }
   },
 
   onHide() { this.clearRefresh(); },
@@ -41,41 +45,55 @@ Page({
 
   onTabChange(e) {
     this.setData({ currentTab: e.detail.value });
-    this.loadData();
   },
 
-  loadData() {
-    const tab = this.data.currentTab;
-    let status = 'pending';
-    if (tab === 1) status = 'active';
-    else if (tab === 2) status = 'completed';
-
+  // 同时加载所有状态数据（待审批/在场/历史）
+  loadAllData() {
     this.setData({ isLoading: true });
-    wx.cloud.callFunction({
-      name: 'getVisitorList',
-      data: { status, page: 1, pageSize: 50 }
-    }).then(res => {
-      this.setData({ isLoading: false });
-      if (res.result.success) {
-        if (tab === 0) {
-          this.setData({ pendingList: res.result.list, pendingCount: res.result.total });
-        } else if (tab === 1) {
-          this.setData({ activeList: res.result.list, activeCount: res.result.total });
-        } else {
-          this.setData({ historyList: res.result.list });
-        }
-      }
-    }).catch(() => this.setData({ isLoading: false }));
+    const lastRefreshTime = this.formatShortTime(new Date());
 
-    // 同时加载待审批计数
-    if (tab !== 0) {
-      wx.cloud.callFunction({
-        name: 'getVisitorList',
-        data: { status: 'pending', page: 1, pageSize: 1 }
-      }).then(res => {
-        if (res.result.success) this.setData({ pendingCount: res.result.total });
+    // 并行请求三个列表
+    const pendingReq = wx.cloud.callFunction({
+      name: 'getVisitorList',
+      data: { status: 'pending', page: 1, pageSize: 50 }
+    });
+    const activeReq = wx.cloud.callFunction({
+      name: 'getVisitorList',
+      data: { status: 'active', page: 1, pageSize: 50 }
+    });
+    const historyReq = wx.cloud.callFunction({
+      name: 'getVisitorList',
+      data: { status: 'completed', page: 1, pageSize: 30 }
+    });
+
+    Promise.all([pendingReq, activeReq, historyReq])
+      .then(([pendingRes, activeRes, historyRes]) => {
+        const pendingList = pendingRes.result.success ? pendingRes.result.list : [];
+        const activeList = activeRes.result.success ? activeRes.result.list : [];
+        const historyList = historyRes.result.success ? historyRes.result.list : [];
+
+        // 格式化时间
+        const fmt = (list) => list.map(item => ({
+          ...item,
+          createTimeStr: this.formatShortTime(item.createTime),
+          approveTimeStr: item.approveTime ? this.formatShortTime(item.approveTime) : ''
+        }));
+
+        this.setData({
+          isLoading: false,
+          pendingList: fmt(pendingList),
+          activeList: fmt(activeList),
+          historyList: fmt(historyList),
+          pendingCount: pendingRes.result.success ? pendingRes.result.total : 0,
+          activeCount: activeRes.result.success ? activeRes.result.total : 0,
+          historyCount: historyRes.result.success ? historyRes.result.total : 0,
+          lastRefreshTime
+        });
+      })
+      .catch(err => {
+        this.setData({ isLoading: false });
+        console.error('加载数据失败', err);
       });
-    }
   },
 
   goToApproval(e) {
@@ -89,7 +107,7 @@ Page({
   },
 
   handleRefresh() {
-    this.loadData();
+    this.loadAllData();
     Toast({ context: this, selector: '#t-toast', message: '已刷新', theme: 'success' });
   },
 
@@ -109,10 +127,19 @@ Page({
     });
   },
 
-  formatTime(dateStr) {
-    if (!dateStr) return '-';
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return dateStr;
+  formatShortTime(dateVal) {
+    if (!dateVal) return '-';
+    let d;
+    if (dateVal instanceof Date) {
+      d = dateVal;
+    } else if (typeof dateVal === 'object' && dateVal.$date) {
+      d = new Date(dateVal.$date);
+    } else if (typeof dateVal === 'string' || typeof dateVal === 'number') {
+      d = new Date(dateVal);
+    } else {
+      return '-';
+    }
+    if (isNaN(d.getTime())) return String(dateVal);
     return `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
   }
 });
