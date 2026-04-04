@@ -9,29 +9,21 @@ exports.main = async (event, context) => {
   const { status, communityId, page, pageSize, jobId } = event;
 
   try {
-    // 查找保安身份：优先用 jobId 精确匹配，回退到 openid
+    // 查找保安身份：优先 jobId 精确匹配，回退 openid
     let guardInfo;
-
     if (jobId) {
-      const guardByJob = await db.collection('guards').where({ jobId: jobId }).get();
+      const guardByJob = await db.collection('guards').where({ jobId }).get();
       if (guardByJob.data.length > 0) {
         guardInfo = guardByJob.data[0];
-        // 确保 openid 已绑定
         if (guardInfo._openid !== guardOpenid) {
-          await db.collection('guards').doc(guardInfo._id).update({
-            data: { _openid: guardOpenid }
-          });
+          await db.collection('guards').doc(guardInfo._id).update({ data: { _openid: guardOpenid } });
         }
       }
     }
-
     if (!guardInfo) {
       const guardByOpenid = await db.collection('guards').where({ _openid: guardOpenid }).get();
-      if (guardByOpenid.data.length > 0) {
-        guardInfo = guardByOpenid.data[0];
-      }
+      if (guardByOpenid.data.length > 0) guardInfo = guardByOpenid.data[0];
     }
-
     if (!guardInfo) {
       return { success: false, errMsg: '无权操作，非保安账号' };
     }
@@ -41,25 +33,14 @@ exports.main = async (event, context) => {
 
     // 构建查询条件
     let query = {};
+    if (guardInfo.communityId) query.communityId = guardInfo.communityId;
+    if (communityId) query.communityId = communityId;
 
-    // 如果保安绑定了特定小区，只显示该小区的数据
-    if (guardInfo.communityId) {
-      query.communityId = guardInfo.communityId;
-    }
-    // 前端主动传入的 communityId 覆盖
-    if (communityId) {
-      query.communityId = communityId;
-    }
-
-    // 按状态筛选
     if (status === 'pending') {
       query.status = 'pending';
     } else if (status === 'approved') {
       query.status = 'approved';
-    } else if (status === 'rejected') {
-      query.status = 'rejected';
     } else if (status === 'active') {
-      // 所有已审批通过的访客都算在场人员（签退后变为 completed 自动移出）
       query.status = 'approved';
     } else if (status === 'completed') {
       query.status = 'completed';
@@ -67,10 +48,7 @@ exports.main = async (event, context) => {
       query.status = _.in(['approved', 'rejected', 'completed']);
     }
 
-    // 查询总数
     const countResult = await db.collection('visits').where(query).count();
-
-    // 查询列表
     const listResult = await db.collection('visits')
       .where(query)
       .orderBy('createTime', 'desc')
@@ -78,10 +56,41 @@ exports.main = async (event, context) => {
       .limit(limit)
       .get();
 
+    const visits = listResult.data;
+
+    // 批量查询访客的身份认证状态（最多20条，与分页一致）
+    let userVerifyMap = {};
+    if (visits.length > 0) {
+      const openids = [...new Set(visits.map(v => v._openid).filter(Boolean))];
+      // 微信云数据库 _.in 最多支持100个值
+      const usersResult = await db.collection('users')
+        .where({ _openid: _.in(openids) })
+        .field({ _openid: true, identityVerified: true, verifiedBy: true, verifiedCommunity: true, verifiedAt: true, totalVisits: true })
+        .limit(openids.length)
+        .get();
+      usersResult.data.forEach(u => {
+        userVerifyMap[u._openid] = {
+          identityVerified: u.identityVerified || false,
+          verifiedBy: u.verifiedBy || '',
+          verifiedCommunity: u.verifiedCommunity || '',
+          totalVisits: u.totalVisits || 0
+        };
+      });
+    }
+
+    // 将身份认证信息合并到每条拜访记录
+    const enrichedList = visits.map(v => ({
+      ...v,
+      userIdentityVerified: userVerifyMap[v._openid] ? userVerifyMap[v._openid].identityVerified : false,
+      userVerifiedBy: userVerifyMap[v._openid] ? userVerifyMap[v._openid].verifiedBy : '',
+      userVerifiedCommunity: userVerifyMap[v._openid] ? userVerifyMap[v._openid].verifiedCommunity : '',
+      userTotalVisits: userVerifyMap[v._openid] ? userVerifyMap[v._openid].totalVisits : 0
+    }));
+
     return {
       success: true,
       total: countResult.total,
-      list: listResult.data,
+      list: enrichedList,
       guardName: guardInfo.name,
       guardCommunity: guardInfo.community || '全部小区'
     };

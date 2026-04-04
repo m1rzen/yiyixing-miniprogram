@@ -193,6 +193,20 @@
   font-weight: 600;
   color: var(--text-primary);
 }
+.vc-verify-tag {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 2rpx 12rpx;
+  border-radius: 6rpx;
+}
+.vc-verify-tag.verified {
+  background: rgba(45,139,111,0.1);
+  color: #2D8B6F;
+}
+.vc-verify-tag.new-visitor {
+  background: rgba(200,150,62,0.1);
+  color: #C8963E;
+}
 .vc-time {
   font-size: 22rpx;
   color: var(--text-tertiary);

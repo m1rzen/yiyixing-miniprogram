@@ -47,6 +47,55 @@
 .approved-c { color: var(--success-color); }
 .rejected-c { color: var(--danger-color); }
 
+/* ═══ 身份认证状态标识 ═══ */
+.verify-banner {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  border-radius: var(--radius-lg);
+  margin-bottom: 16rpx;
+}
+.verify-banner.verified {
+  background: rgba(45,139,111,0.08);
+  border: 2rpx solid rgba(45,139,111,0.15);
+}
+.verify-banner.unverified {
+  background: rgba(200,150,62,0.08);
+  border: 2rpx solid rgba(200,150,62,0.15);
+}
+.vb-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  flex: 1;
+}
+.vb-icon-wrap {
+  width: 56rpx; height: 56rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+.vb-icon-wrap.verified { background: rgba(45,139,111,0.1); }
+.vb-icon-wrap.unverified { background: rgba(200,150,62,0.1); }
+.vb-text-group { flex: 1; min-width: 0; }
+.vb-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4rpx;
+}
+.vb-title.verified { color: #2D8B6F; }
+.vb-title.unverified { color: #C8963E; }
+.vb-sub {
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+  display: block;
+  line-height: 1.5;
+}
+
 /* 信息卡片 */
 .info-card {
   background: #FFF;

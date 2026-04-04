@@ -8,7 +8,12 @@ Page({
     isLoading: true,
     isProcessing: false,
     rejectReason: '',
-    rejectPopupVisible: false
+    rejectPopupVisible: false,
+    // 访客身份认证信息
+    userIdentityVerified: false,
+    userVerifiedBy: '',
+    userVerifiedCommunity: '',
+    userTotalVisits: 0
   },
 
   onLoad(options) {
@@ -29,6 +34,15 @@ Page({
       this.setData({ isLoading: false });
       if (res.result.success && res.result.visit) {
         this.setData({ visit: res.result.visit });
+        // 设置身份认证信息
+        if (res.result.identityInfo) {
+          this.setData({
+            userIdentityVerified: res.result.identityInfo.identityVerified || false,
+            userVerifiedBy: res.result.identityInfo.verifiedBy || '',
+            userVerifiedCommunity: res.result.identityInfo.verifiedCommunity || '',
+            userTotalVisits: res.result.identityInfo.totalVisits || 0
+          });
+        }
       } else {
         Toast({ context: this, selector: '#t-toast', message: '加载失败' });
       }
@@ -39,7 +53,6 @@ Page({
     });
   },
 
-  // 批准通行
   handleApprove() {
     wx.showModal({
       title: '确认批准',
@@ -52,7 +65,6 @@ Page({
     });
   },
 
-  // 打开驳回弹窗
   handleReject() {
     this.setData({ rejectPopupVisible: true, rejectReason: '' });
   },
@@ -94,9 +106,7 @@ Page({
 
       if (res.result.success) {
         Toast({ context: this, selector: '#t-toast', message: `已${actionText}`, theme: 'success' });
-        // 刷新详情
         this.loadVisitDetail(this.data.visitId);
-        // 1.5秒后返回
         setTimeout(() => wx.navigateBack(), 1500);
       } else {
         Toast({ context: this, selector: '#t-toast', message: res.result.errMsg || `${actionText}失败` });
@@ -109,7 +119,6 @@ Page({
     });
   },
 
-  // 预览访客照片
   previewPhoto() {
     if (this.data.visit && this.data.visit.photoFileId) {
       wx.previewImage({
