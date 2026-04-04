@@ -72,11 +72,17 @@
             <view class="vc-header">
               <view class="vc-name-row">
                 <text class="vc-name">{{item.visitorName}}</text>
+                <view class="vc-verify-tag verified" wx:if="{{item.userIdentityVerified}}">已认证</view>
+                <view class="vc-verify-tag new-visitor" wx:else>首次</view>
                 <view class="status-tag pending">待审批</view>
               </view>
               <text class="vc-time">{{item.createTimeStr || '-'}}</text>
             </view>
             <view class="vc-body">
+              <view class="vc-row" wx:if="{{item.userIdentityVerified}}">
+                <text class="vc-label">认证信息</text>
+                <text class="vc-value" style="color:#2D8B6F;">来访{{item.userTotalVisits}}次 · {{item.userVerifiedCommunity}}认证</text>
+              </view>
               <view class="vc-row">
                 <text class="vc-label">手机号</text>
                 <text class="vc-value">{{item.visitorPhone}}</text>

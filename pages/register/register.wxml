@@ -6,7 +6,7 @@
       <view class="nav-back" bindtap="goBack">
         <t-icon name="chevron-left" size="44rpx" color="#FFF" />
       </view>
-      <text class="nav-title">访客登记</text>
+      <text class="nav-title">{{profileMode === 'returning_verified' ? '快捷通行' : '访客登记'}}</text>
     </view>
 
     <!-- 平台标识 -->
@@ -15,77 +15,128 @@
       <text>{{platform}} 快捷通道</text>
     </view>
 
-    <!-- 表单卡片 -->
-    <view class="form-card">
-      <view class="form-header">
-        <t-icon name="edit-2" size="36rpx" color="#1D5F8A" />
-        <text class="form-title">填写实名信息</text>
-      </view>
+    <!-- 加载中 -->
+    <view class="loading-placeholder" wx:if="{{isLoadingProfile}}">
+      <t-loading theme="circular" size="60rpx" />
+      <text class="loading-text">加载用户档案...</text>
+    </view>
 
-      <view class="form-item">
-        <text class="form-label"><text class="required">*</text>真实姓名</text>
-        <view class="form-input-wrap">
-          <input class="form-input" placeholder="请输入身份证上的姓名" value="{{name}}" bindinput="onNameChange" />
-        </view>
-      </view>
+    <block wx:if="{{!isLoadingProfile}}">
 
-      <view class="form-item">
-        <text class="form-label"><text class="required">*</text>手机号码</text>
-        <view class="form-input-wrap">
-          <input class="form-input" type="number" maxlength="11" placeholder="请输入11位手机号码" value="{{phone}}" bindinput="onPhoneChange" />
-        </view>
-      </view>
-
-      <view class="form-item">
-        <text class="form-label"><text class="required">*</text>身份证号码</text>
-        <view class="form-input-wrap">
-          <input class="form-input" type="idcard" maxlength="18" placeholder="请输入18位身份证号码" value="{{idCard}}" bindinput="onIdCardChange" />
-        </view>
-      </view>
-
-      <view class="form-item">
-        <text class="form-label"><text class="required">*</text>拜访小区</text>
-        <view class="form-input-wrap clickable" bindtap="changeCommunity">
-          <text class="form-value {{currentCommunity ? '' : 'placeholder'}}">
-            {{currentCommunity || '请选择拜访小区'}}
-          </text>
-          <t-icon name="chevron-right" size="32rpx" color="#9CA3AF" />
-        </view>
-      </view>
-
-      <view class="form-item">
-        <text class="form-label"><text class="required">*</text>拜访事由</text>
-        <view class="form-input-wrap clickable" bindtap="openReasonPopup">
-          <text class="form-value {{reason ? '' : 'placeholder'}}">
-            {{reason || '请选择拜访事由'}}
-          </text>
-          <t-icon name="chevron-right" size="32rpx" color="#9CA3AF" />
-        </view>
-      </view>
-
-      <view class="form-item">
-        <text class="form-label">上传照片 <text class="optional">(选填)</text></text>
-        <view class="photo-area">
-          <view wx:if="{{!photoUrl}}" class="photo-upload" bindtap="handleChoosePhoto">
-            <t-icon name="add" size="48rpx" color="#9CA3AF" />
-            <text class="photo-tip">拍摄或选取照片</text>
+      <!-- ═══ 已认证用户：身份卡片 + 快捷表单 ═══ -->
+      <block wx:if="{{profileMode === 'returning_verified'}}">
+        <view class="identity-card">
+          <view class="id-card-header">
+            <view class="id-verified-badge">
+              <t-icon name="check-circle-filled" size="28rpx" color="#FFF" />
+              <text>邑易行 已认证用户</text>
+            </view>
+            <text class="id-visits-count">来访 {{totalVisits}} 次</text>
           </view>
-          <view wx:else class="photo-preview">
-            <image class="preview-img" src="{{photoUrl}}" mode="aspectFill" />
-            <view class="photo-remove" catchtap="removePhoto">
-              <t-icon name="close" size="24rpx" color="#FFF" />
+          <view class="id-card-body">
+            <view class="id-info-row">
+              <text class="id-name">{{name}}</text>
+              <text class="id-phone">{{phone}}</text>
+            </view>
+            <view class="id-info-row">
+              <text class="id-idcard">{{idCard}}</text>
+            </view>
+            <view class="id-verified-info">
+              <t-icon name="verified" size="24rpx" color="#2D8B6F" />
+              <text>首次认证于 {{verifiedCommunity}} · 由 {{verifiedBy}} 认证</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="quick-hint">
+          <t-icon name="tips" size="28rpx" color="#C8963E" />
+          <text>身份已认证，只需选择小区和事由即可快速提交</text>
+        </view>
+      </block>
+
+      <!-- ═══ 未认证老用户：提示 + 可编辑表单 ═══ -->
+      <view class="returning-hint" wx:if="{{profileMode === 'returning_unverified'}}">
+        <t-icon name="info-circle-filled" size="28rpx" color="#C8963E" />
+        <text>已有登记信息，首次审批通过后将完成身份认证，后续可快捷通行</text>
+      </view>
+
+      <!-- ═══ 表单卡片 ═══ -->
+      <view class="form-card">
+        <view class="form-header">
+          <t-icon name="edit-2" size="36rpx" color="#1D5F8A" />
+          <text class="form-title">{{profileMode === 'returning_verified' ? '选择通行信息' : '填写实名信息'}}</text>
+        </view>
+
+        <!-- 身份信息区（新用户+未认证用户可见） -->
+        <block wx:if="{{profileMode !== 'returning_verified'}}">
+          <view class="form-item">
+            <text class="form-label"><text class="required">*</text>真实姓名</text>
+            <view class="form-input-wrap">
+              <input class="form-input" placeholder="请输入身份证上的姓名" value="{{name}}" bindinput="onNameChange" />
+            </view>
+          </view>
+
+          <view class="form-item">
+            <text class="form-label"><text class="required">*</text>手机号码</text>
+            <view class="form-input-wrap">
+              <input class="form-input" type="number" maxlength="11" placeholder="请输入11位手机号码" value="{{phone}}" bindinput="onPhoneChange" />
+            </view>
+          </view>
+
+          <view class="form-item">
+            <text class="form-label"><text class="required">*</text>身份证号码</text>
+            <view class="form-input-wrap">
+              <input class="form-input" type="idcard" maxlength="18" placeholder="请输入18位身份证号码" value="{{idCard}}" bindinput="onIdCardChange" />
+            </view>
+          </view>
+        </block>
+
+        <!-- 通行信息区（所有模式可见） -->
+        <view class="form-item">
+          <text class="form-label"><text class="required">*</text>拜访小区</text>
+          <view class="form-input-wrap clickable" bindtap="changeCommunity">
+            <text class="form-value {{currentCommunity ? '' : 'placeholder'}}">
+              {{currentCommunity || '请选择拜访小区'}}
+            </text>
+            <t-icon name="chevron-right" size="32rpx" color="#9CA3AF" />
+          </view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label"><text class="required">*</text>拜访事由</text>
+          <view class="form-input-wrap clickable" bindtap="openReasonPopup">
+            <text class="form-value {{reason ? '' : 'placeholder'}}">
+              {{reason || '请选择拜访事由'}}
+            </text>
+            <t-icon name="chevron-right" size="32rpx" color="#9CA3AF" />
+          </view>
+        </view>
+
+        <!-- 照片上传（新用户+未认证用户可见） -->
+        <view class="form-item" wx:if="{{profileMode !== 'returning_verified'}}">
+          <text class="form-label">上传照片 <text class="optional">(选填)</text></text>
+          <view class="photo-area">
+            <view wx:if="{{!photoUrl}}" class="photo-upload" bindtap="handleChoosePhoto">
+              <t-icon name="add" size="48rpx" color="#9CA3AF" />
+              <text class="photo-tip">拍摄或选取照片</text>
+            </view>
+            <view wx:else class="photo-preview">
+              <image class="preview-img" src="{{photoUrl}}" mode="aspectFill" />
+              <view class="photo-remove" catchtap="removePhoto">
+                <t-icon name="close" size="24rpx" color="#FFF" />
+              </view>
             </view>
           </view>
         </view>
       </view>
-    </view>
 
-    <!-- 提交按钮 -->
-    <view class="submit-area safe-bottom">
-      <t-button block t-class="btn-primary" bindtap="handleSubmit" loading="{{isSubmitting}}" disabled="{{isSubmitting}}">
-        {{isSubmitting ? '提交中...' : '提交登记'}}
-      </t-button>
-    </view>
+      <!-- 提交按钮 -->
+      <view class="submit-area safe-bottom">
+        <t-button block t-class="btn-primary" bindtap="handleSubmit" loading="{{isSubmitting}}" disabled="{{isSubmitting}}">
+          {{isSubmitting ? '提交中...' : (profileMode === 'returning_verified' ? '一键申请通行' : '提交登记')}}
+        </t-button>
+      </view>
+    </block>
   </view>
 
   <!-- 事由选择弹窗 -->

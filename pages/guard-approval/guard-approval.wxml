@@ -32,6 +32,30 @@
         </block>
       </view>
 
+      <!-- ═══ 身份认证状态标识 ═══ -->
+      <view class="verify-banner verified" wx:if="{{userIdentityVerified}}">
+        <view class="vb-left">
+          <view class="vb-icon-wrap verified">
+            <t-icon name="check-circle-filled" size="36rpx" color="#2D8B6F" />
+          </view>
+          <view class="vb-text-group">
+            <text class="vb-title verified">邑易行已认证用户</text>
+            <text class="vb-sub">认证于 {{userVerifiedCommunity}} · 由 {{userVerifiedBy}} 认证 · 累计来访 {{userTotalVisits}} 次</text>
+          </view>
+        </view>
+      </view>
+      <view class="verify-banner unverified" wx:if="{{!userIdentityVerified}}">
+        <view class="vb-left">
+          <view class="vb-icon-wrap unverified">
+            <t-icon name="error-circle-filled" size="36rpx" color="#C8963E" />
+          </view>
+          <view class="vb-text-group">
+            <text class="vb-title unverified">首次来访 · 需核验身份</text>
+            <text class="vb-sub">该访客尚未通过身份认证，审批通过后将完成认证</text>
+          </view>
+        </view>
+      </view>
+
       <!-- 访客信息卡片 -->
       <view class="info-card">
         <view class="ic-section-title">
@@ -87,7 +111,7 @@
           <view class="ic-divider"></view>
           <view class="ic-section-title">
             <t-icon name="info-circle" size="32rpx" color="#C94545" />
-            <text style="color: #E34D59;">驳回原因</text>
+            <text style="color: #C94545;">驳回原因</text>
           </view>
           <text class="reject-reason-text">{{visit.rejectReason}}</text>
         </view>
