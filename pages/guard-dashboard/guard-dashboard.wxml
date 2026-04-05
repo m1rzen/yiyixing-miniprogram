@@ -10,14 +10,6 @@
           <text class="gd-name">{{guardInfo.name || '保安'}} <text class="gd-badge">门岗</text></text>
           <text class="gd-community">{{guardInfo.community || '全部小区'}} · {{guardInfo.jobId}}</text>
         </view>
-        <view class="gd-actions">
-          <view class="gd-action-btn" bindtap="handleRefresh">
-            <t-icon name="refresh" size="32rpx" color="#FFF" />
-          </view>
-          <view class="gd-action-btn" bindtap="handleLogout">
-            <t-icon name="poweroff" size="28rpx" color="rgba(255,255,255,0.8)" />
-          </view>
-        </view>
       </view>
 
       <!-- 统计卡片 -->
@@ -45,10 +37,26 @@
         </view>
       </view>
 
-      <!-- 刷新时间 -->
-      <view class="refresh-time" wx:if="{{lastRefreshTime}}">
-        <t-icon name="check-circle" size="20rpx" color="rgba(255,255,255,0.4)" />
-        <text>{{lastRefreshTime}} 已更新</text>
+      <!-- 操作按钮栏 -->
+      <view class="gd-action-bar">
+        <view class="gd-action-item" bindtap="handleRefresh">
+          <view class="gd-action-icon refresh-icon">
+            <t-icon name="refresh" size="28rpx" color="#FFF" />
+          </view>
+          <text class="gd-action-label">刷新数据</text>
+        </view>
+        <view class="gd-action-divider"></view>
+        <view class="gd-action-item" wx:if="{{lastRefreshTime}}">
+          <t-icon name="check-circle" size="22rpx" color="rgba(255,255,255,0.4)" />
+          <text class="gd-action-time">{{lastRefreshTime}} 更新</text>
+        </view>
+        <view class="gd-action-spacer"></view>
+        <view class="gd-action-item" bindtap="handleLogout">
+          <view class="gd-action-icon logout-icon">
+            <t-icon name="poweroff" size="26rpx" color="#FFF" />
+          </view>
+          <text class="gd-action-label">退出</text>
+        </view>
       </view>
     </view>
   </view>

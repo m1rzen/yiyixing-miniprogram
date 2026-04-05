@@ -366,80 +366,127 @@
   border-top: 2rpx solid var(--border-color);
 }
 
-/* ========== 微信授权弹窗 ========== */
-.wechat-auth-popup {
-  background: #FFF;
-  padding: 40rpx 40rpx calc(env(safe-area-inset-bottom) + 30rpx);
-  border-radius: 24rpx 24rpx 0 0;
-}
-.wechat-auth-header {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-  margin-bottom: 36rpx;
-}
-.wechat-app-icon {
-  width: 56rpx; height: 56rpx;
-  background: var(--brand-color);
-  border-radius: 14rpx;
+/* ========== 微信手机号授权按钮（原生 button） ========== */
+.wechat-auth-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.wechat-app-name {
-  font-size: 30rpx;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-.wechat-auth-title {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 40rpx;
-}
-.wechat-phone-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 32rpx 0;
-  border-top: 2rpx solid var(--border-color);
-  margin-bottom: 48rpx;
-}
-.phone-info {
-  display: flex;
-  flex-direction: column;
-  gap: 8rpx;
-}
-.phone-num {
-  font-size: 34rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-.phone-tag {
-  font-size: 24rpx;
-  color: var(--text-tertiary);
-}
-.wechat-auth-actions {
-  display: flex;
-  gap: 24rpx;
-}
-.wa-btn {
-  flex: 1; height: 88rpx;
-  border-radius: 14rpx;
-  font-size: 32rpx;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0; padding: 0;
-  border: none;
-}
-.wa-btn::after { border: none; }
-.wa-btn.cancel {
-  background: #F5F5F5;
-  color: #07C160;
-}
-.wa-btn.confirm {
+  gap: 12rpx;
+  width: 100%;
+  height: 96rpx;
   background: #07C160;
   color: #FFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  border: none;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 20rpx rgba(7, 193, 96, 0.20);
+  line-height: 96rpx;
+  padding: 0;
 }
+.wechat-auth-btn::after { border: none; }
+.wechat-auth-btn:active { opacity: 0.85; }
+.wechat-auth-btn.disabled {
+  background: #A8D8B8;
+  box-shadow: none;
+}
+
+/* ========== 头像选择弹窗 ========== */
+.avatar-popup {
+  background: #FFF;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 0 0 calc(env(safe-area-inset-bottom) + 20rpx);
+}
+.avatar-popup-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48rpx 44rpx 32rpx;
+  border-bottom: 2rpx solid var(--border-color);
+}
+.avatar-success-icon {
+  margin-bottom: 16rpx;
+}
+.avatar-popup-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+.avatar-popup-phone {
+  font-size: 32rpx;
+  color: #07C160;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+}
+.avatar-popup-body {
+  padding: 36rpx 44rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.avatar-popup-desc {
+  font-size: 28rpx;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-bottom: 36rpx;
+}
+.avatar-preview-wrap {
+  margin-bottom: 32rpx;
+}
+.avatar-preview-img {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  border: 4rpx solid var(--brand-color);
+  box-shadow: 0 8rpx 24rpx rgba(29, 95, 138, 0.15);
+}
+.avatar-preview-placeholder {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 4rpx dashed #D1D5DB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-choose-btn {
+  width: 100%;
+  height: 88rpx;
+  background: var(--brand-color-light);
+  color: var(--brand-color);
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  border: 2rpx solid var(--brand-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 88rpx;
+}
+.avatar-choose-btn::after { border: none; }
+.avatar-choose-btn:active { opacity: 0.8; }
+.avatar-popup-footer {
+  padding: 0 44rpx;
+}
+.avatar-confirm-btn {
+  width: 100%;
+  height: 96rpx;
+  background: var(--brand-gradient);
+  color: #FFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 96rpx;
+  box-shadow: var(--shadow-brand);
+}
+.avatar-confirm-btn::after { border: none; }
+.avatar-confirm-btn:active { opacity: 0.85; }

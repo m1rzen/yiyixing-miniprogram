@@ -6,7 +6,8 @@
     <!-- 用户信息头部 -->
     <view class="user-bar" bindtap="goToProfile">
       <view class="avatar">
-        <t-icon name="user" size="40rpx" color="#FFF" />
+        <image wx:if="{{userInfo.avatarUrl}}" class="avatar-img" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+        <t-icon wx:else name="user" size="40rpx" color="#FFF" />
       </view>
       <view class="user-text">
         <view class="user-name">
