@@ -70,10 +70,14 @@
         <text class="auth-desc">为保障社区安全，我们需要验证您的身份信息</text>
       </view>
 
-      <t-button block t-class="wechat-btn" bindtap="handleSimulateAuth">
-        <t-icon name="logo-wechat" size="36rpx" slot="icon" color="#FFF" />
-        微信手机号快捷授权
-      </t-button>
+      <!-- 微信手机号快捷授权（原生 button） -->
+      <button class="wechat-auth-btn {{!isAgreed ? 'disabled' : ''}}"
+              open-type="{{isAgreed ? 'getPhoneNumber' : ''}}"
+              bindgetphonenumber="onGetPhoneNumber"
+              bindtap="{{isAgreed ? '' : 'onAuthNotAgreed'}}">
+        <t-icon name="logo-wechat" size="36rpx" color="#FFF" />
+        <text>微信手机号快捷授权</text>
+      </button>
 
       <t-button block variant="outline" t-class="phone-btn" bindtap="goToPhoneLogin">
         手机号验证码登录
@@ -84,6 +88,36 @@
         <view class="agreement-text">
           我已阅读并同意<text class="link" catchtap="openPrivacy">《邑易行隐私保护指引》</text>
         </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- 头像选择弹窗 -->
+  <t-popup visible="{{avatarVisible}}" placement="bottom" round>
+    <view class="avatar-popup">
+      <view class="avatar-popup-header">
+        <view class="avatar-success-icon">
+          <t-icon name="check-circle-filled" size="48rpx" color="#07C160" />
+        </view>
+        <text class="avatar-popup-title">手机号授权成功</text>
+        <text class="avatar-popup-phone">{{authPhone}}</text>
+      </view>
+      <view class="avatar-popup-body">
+        <text class="avatar-popup-desc">选择一个头像，作为您在邑易行的个人形象</text>
+        <view class="avatar-preview-wrap">
+          <image wx:if="{{tempAvatarUrl}}" class="avatar-preview-img" src="{{tempAvatarUrl}}" mode="aspectFill" />
+          <view wx:else class="avatar-preview-placeholder">
+            <t-icon name="user" size="60rpx" color="#D1D5DB" />
+          </view>
+        </view>
+        <button class="avatar-choose-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          选择微信头像
+        </button>
+      </view>
+      <view class="avatar-popup-footer">
+        <button class="avatar-confirm-btn" bindtap="confirmLogin">
+          {{tempAvatarUrl ? '确认并登录' : '跳过，直接登录'}}
+        </button>
       </view>
     </view>
   </t-popup>
@@ -142,30 +176,6 @@
       </scroll-view>
       <view class="privacy-footer">
         <t-button block t-class="btn-primary" bindtap="closePrivacy">我已了解并同意</t-button>
-      </view>
-    </view>
-  </t-popup>
-
-  <!-- 微信授权模拟弹窗 -->
-  <t-popup visible="{{wechatAuthVisible}}" placement="bottom" round>
-    <view class="wechat-auth-popup">
-      <view class="wechat-auth-header">
-        <view class="wechat-app-icon">
-          <t-icon name="secured" size="36rpx" color="#FFF" />
-        </view>
-        <text class="wechat-app-name">邑易行 申请</text>
-      </view>
-      <view class="wechat-auth-title">获取你的手机号</view>
-      <view class="wechat-phone-row">
-        <view class="phone-info">
-          <text class="phone-num">198****0468</text>
-          <text class="phone-tag">微信绑定号码</text>
-        </view>
-        <t-icon name="check-circle-filled" color="#07C160" size="44rpx" />
-      </view>
-      <view class="wechat-auth-actions">
-        <button class="wa-btn cancel" bindtap="cancelWechatAuth">拒绝</button>
-        <button class="wa-btn confirm" bindtap="confirmWechatAuth">允许</button>
       </view>
     </view>
   </t-popup>

@@ -57,21 +57,47 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.gd-actions {
+/* 操作按钮栏 */
+.gd-action-bar {
   display: flex;
-  gap: 12rpx;
-  flex-shrink: 0;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 16rpx;
+  padding: 16rpx 20rpx;
+  background: rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  border: 1rpx solid rgba(255,255,255,0.08);
 }
-.gd-action-btn {
-  width: 68rpx; height: 68rpx;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 1rpx solid rgba(255,255,255,0.1);
+.gd-action-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+.gd-action-item:active { opacity: 0.7; }
+.gd-action-icon {
+  width: 52rpx; height: 52rpx;
+  border-radius: 14rpx;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.gd-action-btn:active { background: rgba(255,255,255,0.18); }
+.refresh-icon { background: rgba(45,139,111,0.3); }
+.logout-icon { background: rgba(255,255,255,0.1); }
+.gd-action-label {
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.7);
+  font-weight: 500;
+}
+.gd-action-time {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.35);
+}
+.gd-action-divider {
+  width: 1rpx;
+  height: 28rpx;
+  background: rgba(255,255,255,0.12);
+}
+.gd-action-spacer { flex: 1; }
 
 /* 统计卡片 */
 .stats-row { display: flex; gap: 12rpx; margin-bottom: 16rpx; }
@@ -115,14 +141,7 @@
   color: rgba(255,255,255,0.6);
 }
 
-/* 刷新时间 */
-.refresh-time {
-  display: flex;
-  align-items: center;
-  gap: 8rpx;
-  font-size: 22rpx;
-  color: rgba(255,255,255,0.35);
-}
+/* (refresh-time removed - merged into action bar) */
 
 /* Tab 自定义标签 */
 .tab-label-wrap {

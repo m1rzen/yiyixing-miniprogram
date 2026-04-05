@@ -5,19 +5,23 @@ Page({
   data: {
     popupVisible: false,
     privacyVisible: false,
-    wechatAuthVisible: false,
+    avatarVisible: false,
     isAgreed: false,
     phoneLoginVisible: false,
     countdown: 0,
     phoneNumber: '',
     verifyCode: '',
     animReady: false,
-    brandColor: '#1D5F8A'
+    brandColor: '#1D5F8A',
+
+    // 微信授权获取的真实数据
+    authPhone: '',
+    authPhoneFull: '',
+    tempAvatarUrl: ''
   },
 
   onLoad() {
     if (!app.globalData) app.globalData = {};
-    // 检查是否已登录
     const userInfo = wx.getStorageSync('userInfo');
     if (userInfo && userInfo.phone) {
       app.globalData.isLoggedIn = true;
@@ -41,32 +45,99 @@ Page({
   closePrivacy() { this.setData({ privacyVisible: false, isAgreed: true }); },
   onPrivacyVisibleChange(e) { this.setData({ privacyVisible: e.detail.visible }); },
 
-  // 微信快捷授权
-  handleSimulateAuth() {
+  // 未同意隐私协议时点击微信授权按钮
+  onAuthNotAgreed() {
     if (!this.data.isAgreed) {
       Toast({ context: this, selector: '#t-toast', message: '请先阅读并同意隐私指引' });
-      return;
     }
-    this.setData({ popupVisible: false });
-    setTimeout(() => this.setData({ wechatAuthVisible: true }), 300);
   },
 
-  cancelWechatAuth() { this.setData({ wechatAuthVisible: false }); },
+  // 微信手机号快捷授权回调
+  onGetPhoneNumber(e) {
+    if (e.detail.errMsg !== 'getPhoneNumber:ok') {
+      // 用户拒绝授权
+      return;
+    }
 
-  confirmWechatAuth() {
-    this.setData({ wechatAuthVisible: false });
+    this.setData({ popupVisible: false });
+    wx.showLoading({ title: '获取手机号...', mask: true });
+
+    // 调用云函数解密手机号
+    wx.cloud.callFunction({
+      name: 'getPhoneNumber',
+      data: { code: e.detail.code }
+    }).then(res => {
+      wx.hideLoading();
+      if (res.result && res.result.success) {
+        const fullPhone = res.result.purePhoneNumber || res.result.phoneNumber;
+        const maskedPhone = fullPhone.substring(0, 3) + '****' + fullPhone.substring(7);
+        this.setData({
+          authPhone: maskedPhone,
+          authPhoneFull: fullPhone,
+          avatarVisible: true
+        });
+      } else {
+        console.error('获取手机号失败', res.result);
+        Toast({ context: this, selector: '#t-toast', message: '获取手机号失败，请使用验证码登录' });
+        setTimeout(() => this.setData({ popupVisible: true }), 1000);
+      }
+    }).catch(err => {
+      wx.hideLoading();
+      console.error('云函数调用失败', err);
+      Toast({ context: this, selector: '#t-toast', message: '网络异常，请使用验证码登录' });
+      setTimeout(() => this.setData({ popupVisible: true }), 1000);
+    });
+  },
+
+  // 选择头像回调
+  onChooseAvatar(e) {
+    const avatarUrl = e.detail.avatarUrl;
+    if (avatarUrl) {
+      this.setData({ tempAvatarUrl: avatarUrl });
+    }
+  },
+
+  // 确认登录（头像选择后或跳过）
+  confirmLogin() {
+    this.setData({ avatarVisible: false });
     wx.showLoading({ title: '安全登录中...', mask: true });
 
-    // 获取openid并存储登录状态
-    app.getOpenid((openid) => {
-      const userInfo = { phone: '198****0468', loginType: 'wechat', openid: openid };
-      wx.setStorageSync('userInfo', userInfo);
-      app.globalData.isLoggedIn = true;
-      app.globalData.userInfo = userInfo;
-      app.globalData.userRole = 'visitor';
-      wx.hideLoading();
-      wx.redirectTo({ url: '/pages/dashboard/dashboard' });
-    });
+    const avatarUrl = this.data.tempAvatarUrl;
+
+    // 如果有头像，先上传到云存储
+    const doLogin = (avatarFileId) => {
+      app.getOpenid((openid) => {
+        const userInfo = {
+          phone: this.data.authPhone,
+          fullPhone: this.data.authPhoneFull,
+          loginType: 'wechat',
+          openid: openid
+        };
+        if (avatarFileId) {
+          userInfo.avatarUrl = avatarFileId;
+        }
+        wx.setStorageSync('userInfo', userInfo);
+        wx.setStorageSync('loginPhone', this.data.authPhoneFull);
+        app.globalData.isLoggedIn = true;
+        app.globalData.userInfo = userInfo;
+        app.globalData.userRole = 'visitor';
+        wx.hideLoading();
+        wx.redirectTo({ url: '/pages/dashboard/dashboard' });
+      });
+    };
+
+    if (avatarUrl) {
+      // 上传头像到云存储
+      const cloudPath = `avatars/${Date.now()}-${Math.random().toString(36).substr(2, 9)}.jpg`;
+      wx.cloud.uploadFile({
+        cloudPath,
+        filePath: avatarUrl,
+        success: res => doLogin(res.fileID),
+        fail: () => doLogin('')  // 上传失败也允许登录
+      });
+    } else {
+      doLogin('');
+    }
   },
 
   goToPhoneLogin() {
