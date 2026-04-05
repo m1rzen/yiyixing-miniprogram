@@ -70,11 +70,14 @@
         <text class="auth-desc">为保障社区安全，我们需要验证您的身份信息</text>
       </view>
 
-      <!-- 微信手机号快捷授权（原生 button） -->
-      <button class="wechat-auth-btn {{!isAgreed ? 'disabled' : ''}}"
-              open-type="{{isAgreed ? 'getPhoneNumber' : ''}}"
-              bindgetphonenumber="onGetPhoneNumber"
-              bindtap="{{isAgreed ? '' : 'onAuthNotAgreed'}}">
+      <!-- 微信手机号快捷授权（原生 button，需分两个以支持动态 open-type） -->
+      <button wx:if="{{isAgreed}}" class="wechat-auth-btn"
+              open-type="getPhoneNumber"
+              bindgetphonenumber="onGetPhoneNumber">
+        <t-icon name="logo-wechat" size="36rpx" color="#FFF" />
+        <text>微信手机号快捷授权</text>
+      </button>
+      <button wx:else class="wechat-auth-btn disabled" bindtap="onAuthNotAgreed">
         <t-icon name="logo-wechat" size="36rpx" color="#FFF" />
         <text>微信手机号快捷授权</text>
       </button>

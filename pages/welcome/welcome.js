@@ -27,7 +27,14 @@ Page({
       app.globalData.isLoggedIn = true;
       app.globalData.userInfo = userInfo;
       wx.redirectTo({ url: '/pages/dashboard/dashboard' });
+      return;
     }
+    // 保底：即使 onReady 未正常触发，500ms 后也确保页面可见
+    setTimeout(() => {
+      if (!this.data.animReady) {
+        this.setData({ animReady: true });
+      }
+    }, 500);
   },
 
   onReady() {
