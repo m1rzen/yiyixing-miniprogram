@@ -67,6 +67,12 @@ Page({
       return;
     }
     if (e.detail.errMsg !== 'getPhoneNumber:ok') {
+      // API 不可用（账号未认证等），自动回退到手机号验证码登录
+      this.setData({ popupVisible: false });
+      Toast({ context: this, selector: '#t-toast', message: '手机号授权不可用，请用验证码登录' });
+      setTimeout(() => {
+        this.setData({ phoneLoginVisible: true });
+      }, 800);
       return;
     }
 
