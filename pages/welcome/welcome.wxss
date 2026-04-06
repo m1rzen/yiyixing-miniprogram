@@ -368,27 +368,24 @@
 
 /* ========== 微信手机号授权按钮（原生 button） ========== */
 .wechat-auth-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12rpx;
   width: 100%;
   height: 96rpx;
-  background: #07C160;
-  color: #FFF;
+  line-height: 96rpx;
+  text-align: center;
+  background: #07C160 !important;
+  color: #FFF !important;
   font-size: 32rpx;
   font-weight: 600;
   border-radius: var(--radius-lg);
   border: none;
-  margin-bottom: 20rpx;
-  box-shadow: 0 8rpx 20rpx rgba(7, 193, 96, 0.20);
-  line-height: 96rpx;
+  margin: 0 0 20rpx;
   padding: 0;
+  box-shadow: 0 8rpx 20rpx rgba(7, 193, 96, 0.20);
 }
 .wechat-auth-btn::after { border: none; }
 .wechat-auth-btn:active { opacity: 0.85; }
 .wechat-auth-btn.disabled {
-  background: #A8D8B8;
+  background: #A8D8B8 !important;
   box-shadow: none;
 }
 

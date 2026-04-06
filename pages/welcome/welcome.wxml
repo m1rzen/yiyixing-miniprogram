@@ -70,16 +70,11 @@
         <text class="auth-desc">为保障社区安全，我们需要验证您的身份信息</text>
       </view>
 
-      <!-- 微信手机号快捷授权（原生 button，需分两个以支持动态 open-type） -->
-      <button wx:if="{{isAgreed}}" class="wechat-auth-btn"
+      <!-- 微信手机号快捷授权（原生 button，不可嵌套自定义组件） -->
+      <button class="wechat-auth-btn {{!isAgreed ? 'disabled' : ''}}"
               open-type="getPhoneNumber"
               bindgetphonenumber="onGetPhoneNumber">
-        <t-icon name="logo-wechat" size="36rpx" color="#FFF" />
-        <text>微信手机号快捷授权</text>
-      </button>
-      <button wx:else class="wechat-auth-btn disabled" bindtap="onAuthNotAgreed">
-        <t-icon name="logo-wechat" size="36rpx" color="#FFF" />
-        <text>微信手机号快捷授权</text>
+        微信手机号快捷授权
       </button>
 
       <t-button block variant="outline" t-class="phone-btn" bindtap="goToPhoneLogin">
