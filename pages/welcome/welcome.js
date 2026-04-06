@@ -70,7 +70,7 @@ Page({
     wx.showLoading({ title: '获取手机号...', mask: true });
 
     // 调用云函数解密手机号
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'getPhoneNumber',
       data: { code: e.detail.code }
     }).then(res => {

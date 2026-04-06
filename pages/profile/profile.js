@@ -19,7 +19,7 @@ Page({
   },
 
   loadHistory() {
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'getVisitStatus',
       data: {}
     }).then(res => {

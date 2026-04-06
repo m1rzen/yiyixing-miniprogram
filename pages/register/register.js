@@ -49,7 +49,7 @@ Page({
   // 查询用户已有档案，决定表单模式
   loadUserProfile() {
     this.setData({ isLoadingProfile: true });
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'registerUser',
       data: { checkProfile: true }
     }).then(res => {
@@ -184,7 +184,7 @@ Page({
         submitData.idCard = idCard;
       }
 
-      const res = await wx.cloud.callFunction({ name: 'registerUser', data: submitData });
+      const res = await app.callCloud({ name: 'registerUser', data: submitData });
 
       wx.hideLoading();
       this.setData({ isSubmitting: false });

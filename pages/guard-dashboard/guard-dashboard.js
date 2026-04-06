@@ -65,15 +65,15 @@ Page({
     const jobId = this.data.guardInfo ? this.data.guardInfo.jobId : '';
 
     // 并行请求三个列表（传入 jobId 确保身份可被识别）
-    const pendingReq = wx.cloud.callFunction({
+    const pendingReq = app.callCloud({
       name: 'getVisitorList',
       data: { status: 'pending', page: 1, pageSize: 50, jobId }
     });
-    const activeReq = wx.cloud.callFunction({
+    const activeReq = app.callCloud({
       name: 'getVisitorList',
       data: { status: 'active', page: 1, pageSize: 50, jobId }
     });
-    const historyReq = wx.cloud.callFunction({
+    const historyReq = app.callCloud({
       name: 'getVisitorList',
       data: { status: 'history', page: 1, pageSize: 30, jobId }
     });

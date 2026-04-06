@@ -51,15 +51,40 @@ App({
     activeVisit: null
   },
 
+  // 安全云函数调用（带超时保护，防止云环境未配置时永久挂起）
+  callCloud: function(options, timeoutMs) {
+    timeoutMs = timeoutMs || 10000;
+    return new Promise(function(resolve, reject) {
+      var done = false;
+      var timer = setTimeout(function() {
+        if (!done) {
+          done = true;
+          reject(new Error('云函数调用超时（' + (timeoutMs/1000) + 's）'));
+        }
+      }, timeoutMs);
+      wx.cloud.callFunction(options).then(function(res) {
+        if (!done) {
+          done = true;
+          clearTimeout(timer);
+          resolve(res);
+        }
+      }).catch(function(err) {
+        if (!done) {
+          done = true;
+          clearTimeout(timer);
+          reject(err);
+        }
+      });
+    });
+  },
+
   // 工具方法：获取openid
   getOpenid: function(callback) {
     if (this.globalData.openid) {
       callback && callback(this.globalData.openid);
       return;
     }
-    wx.cloud.callFunction({
-      name: 'getOpenid'
-    }).then(res => {
+    this.callCloud({ name: 'getOpenid' }).then(res => {
       this.globalData.openid = res.result.openid;
       callback && callback(res.result.openid);
     }).catch(err => {

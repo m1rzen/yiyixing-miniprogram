@@ -20,7 +20,8 @@ Page({
   },
 
   onShow() {
-    // 每20秒自动刷新位置数据
+    // 先清旧定时器再创新的，防止多次 onShow 导致定时器叠加
+    this.clearRefresh();
     if (this.data.visitId) {
       this.data.refreshTimer = setInterval(() => {
         this.loadData(this.data.visitId);
@@ -41,7 +42,7 @@ Page({
   goBack() { wx.navigateBack(); },
 
   loadData(visitId) {
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'getLocationHistory',
       data: { visitId, page: 1, pageSize: 100 }
     }).then(res => {

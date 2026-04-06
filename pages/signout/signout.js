@@ -18,7 +18,7 @@ Page({
   },
 
   loadVisitInfo(visitId) {
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'getVisitStatus',
       data: { visitId }
     }).then(res => {
@@ -53,7 +53,7 @@ Page({
     this.setData({ isLoading: true });
     wx.showLoading({ title: '签退中...', mask: true });
 
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'signOut',
       data: { visitId: this.data.visitId }
     }).then(res => {

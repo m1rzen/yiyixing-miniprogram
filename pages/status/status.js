@@ -94,7 +94,7 @@ Page({
 
   loadVisitStatus(visitId) {
     this.setData({ status: 'loading' });
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'getVisitStatus',
       data: { visitId }
     }).then(res => {
@@ -126,7 +126,7 @@ Page({
         this.stopPolling();
         return;
       }
-      wx.cloud.callFunction({
+      app.callCloud({
         name: 'getVisitStatus',
         data: { visitId: this.data.visitId }
       }).then(res => {

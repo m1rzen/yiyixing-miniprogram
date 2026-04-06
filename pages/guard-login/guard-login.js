@@ -35,7 +35,7 @@ Page({
     this.setData({ isLoading: true });
     wx.showLoading({ title: '登录中...', mask: true });
 
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'guardLogin',
       data: { jobId: jobId.trim(), password }
     }).then(res => {
