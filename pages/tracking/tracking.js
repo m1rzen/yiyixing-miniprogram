@@ -118,7 +118,7 @@ Page({
         this.setData({ locationLogs: logs });
 
         // 上传到云端
-        wx.cloud.callFunction({
+        app.callCloud({
           name: 'submitLocation',
           data: {
             visitId: this.data.visitId,

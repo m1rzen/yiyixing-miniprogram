@@ -27,7 +27,7 @@ Page({
 
   loadVisitDetail(visitId) {
     this.setData({ isLoading: true });
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'getVisitStatus',
       data: { visitId }
     }).then(res => {
@@ -92,7 +92,7 @@ Page({
     wx.showLoading({ title: `${actionText}中...`, mask: true });
 
     const guardInfo = wx.getStorageSync('guardInfo') || {};
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'approveVisit',
       data: {
         visitId: this.data.visitId,

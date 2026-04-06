@@ -55,7 +55,7 @@ Page({
 
   checkActiveVisit() {
     this.setData({ isLoading: true });
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'getVisitStatus',
       data: {}
     }).then(res => {
@@ -132,7 +132,7 @@ Page({
     wx.showLoading({ title: '正在连接' + platform.platformName + '...', mask: true });
 
     const userInfo = this.data.userInfo || {};
-    wx.cloud.callFunction({
+    app.callCloud({
       name: 'registerUser',
       data: {
         name: userInfo.name || '快捷核验用户',
