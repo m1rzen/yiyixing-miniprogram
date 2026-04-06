@@ -61,8 +61,12 @@ Page({
 
   // 微信手机号快捷授权回调
   onGetPhoneNumber(e) {
+    // 未同意隐私指引时，忽略授权结果
+    if (!this.data.isAgreed) {
+      Toast({ context: this, selector: '#t-toast', message: '请先阅读并同意隐私指引' });
+      return;
+    }
     if (e.detail.errMsg !== 'getPhoneNumber:ok') {
-      // 用户拒绝授权
       return;
     }
 
