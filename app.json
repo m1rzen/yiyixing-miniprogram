@@ -14,7 +14,9 @@
     "pages/guard-approval/guard-approval",
     "pages/guard-monitor/guard-monitor",
     "pages/yixiaoqu/yixiaoqu",
-    "pages/sub-feature/sub-feature"
+    "pages/sub-feature/sub-feature",
+    "pages/admin/dashboard/admin-dashboard",
+    "pages/admin/manage/admin/manage"
   ],
   "window": {
     "backgroundTextStyle": "light",

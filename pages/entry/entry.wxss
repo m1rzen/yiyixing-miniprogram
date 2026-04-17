@@ -183,6 +183,7 @@
 .dot-blue  { background: #1D5F8A; }
 .dot-gold  { background: #C8963E; }
 .dot-green { background: #8FB89A; }
+.dot-brown { background: #5C3D2E; }
 .dot-red   { background: #D4A08A; }
 
 .bottom-label {
@@ -206,4 +207,82 @@
   letter-spacing: 1rpx;
   line-height: 1.6;
   font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* ══════════════════════════════════
+   管理员登录弹窗
+   ══════════════════════════════════ */
+.popup-card {
+  background: #FFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 0 36rpx calc(env(safe-area-inset-bottom) + 32rpx);
+}
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40rpx 0 24rpx;
+  border-bottom: 2rpx solid #EDE4DB;
+}
+.popup-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #3D2B1F;
+}
+.popup-close {
+  width: 56rpx; height: 56rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32rpx; color: #A09486;
+  background: #F5EDE5;
+  border-radius: 50%;
+}
+.popup-close:active { background: #EDE4DB; }
+.popup-body { padding: 28rpx 0; }
+.popup-desc {
+  display: block;
+  font-size: 28rpx;
+  color: #A09486;
+  margin-bottom: 28rpx;
+}
+
+/* 管理员表单 */
+.admin-form { display: flex; flex-direction: column; gap: 24rpx; }
+.admin-field { display: flex; flex-direction: column; gap: 10rpx; }
+.admin-label {
+  font-size: 26rpx;
+  color: #5C3D2E;
+  font-weight: 600;
+}
+.picker-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 24rpx;
+  background: #FAF7F3;
+  border-radius: 12rpx;
+}
+.picker-text {
+  font-size: 28rpx;
+  color: #3D2B1F;
+}
+.admin-input {
+  padding: 20rpx 24rpx;
+  background: #FAF7F3;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #3D2B1F;
+}
+.admin-submit-btn {
+  background: linear-gradient(135deg, #5C3D2E, #3D2B1F);
+  height: 92rpx;
+  border-radius: 20rpx;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 32rpx;
+}
+.admin-submit-btn:active { opacity: 0.8; }
+.admin-submit-text {
+  font-size: 32rpx;
+  color: #FFF;
+  font-weight: 700;
+  letter-spacing: 6rpx;
 }

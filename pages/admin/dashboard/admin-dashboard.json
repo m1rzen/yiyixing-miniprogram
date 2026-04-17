@@ -2,7 +2,7 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-badge": "tdesign-miniprogram/badge/badge",
     "t-toast": "tdesign-miniprogram/toast/toast"
   }
 }

@@ -1,0 +1,378 @@
+<view class="page">
+
+  <!-- 自定义导航栏 -->
+  <view class="custom-nav">
+    <view class="nav-btn" bindtap="goBack">
+      <t-icon name="chevron-left" size="36rpx" color="#5C3D2E" />
+    </view>
+    <text class="nav-title">社区管理</text>
+    <view class="nav-btn" bindtap="goHome">
+      <t-icon name="home" size="36rpx" color="#5C3D2E" />
+    </view>
+  </view>
+
+  <!-- Tabs -->
+  <t-tabs value="{{activeTab}}" bind:change="onTabChange" t-class="manage-tabs" space-evenly>
+    <t-tab-panel label="住户管理" value="{{0}}">
+      <view class="tab-content">
+        <view class="card-list">
+          <view class="mgmt-card" wx:for="{{residents}}" wx:key="_id" bindtap="showResident" data-id="{{item._id}}">
+            <view class="card-row-top">
+              <text class="card-name">{{item.name}}</text>
+              <view class="status-tag {{item.status === 'pending' ? 'pending' : item.status === 'verified' ? 'approved' : 'rejected'}}">
+                {{item.status === 'pending' ? '待审核' : item.status === 'verified' ? '已通过' : '已驳回'}}
+              </view>
+            </view>
+            <view class="card-row">
+              <text class="card-label">房号</text>
+              <text class="card-value">{{item.room}}</text>
+            </view>
+            <view class="card-row">
+              <text class="card-label">手机</text>
+              <text class="card-value">{{item.phone}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{residents.length === 0}}">
+          <t-empty description="暂无住户数据" />
+        </view>
+      </view>
+    </t-tab-panel>
+
+    <t-tab-panel label="公告管理" value="{{1}}">
+      <view class="tab-content">
+        <view class="tab-action-bar">
+          <view class="add-btn" bindtap="newAnnounce">
+            <t-icon name="add" size="32rpx" color="#FFF" />
+            <text class="add-btn-text">发布公告</text>
+          </view>
+        </view>
+        <view class="card-list">
+          <view class="mgmt-card" wx:for="{{announcements}}" wx:key="_id" bindtap="showAnnounce" data-id="{{item._id}}">
+            <view class="card-row-top">
+              <text class="card-name {{item.isTop ? 'top-title' : ''}}">{{item.title}}</text>
+              <view class="top-badge" wx:if="{{item.isTop}}">置顶</view>
+            </view>
+            <view class="card-meta-row">
+              <view class="type-tag" style="background: {{item.type === '紧急' ? '#FDECEE' : item.type === '公告' ? '#FBF5EB' : '#E8F2FA'}}; color: {{item.type === '紧急' ? '#C94545' : item.type === '公告' ? '#C8963E' : '#1D5F8A'}};">
+                {{item.type}}
+              </view>
+              <text class="card-date">{{item.createdAt}}</text>
+            </view>
+            <text class="card-summary">{{item.content}}</text>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{announcements.length === 0}}">
+          <t-empty description="暂无公告" />
+        </view>
+      </view>
+    </t-tab-panel>
+
+    <t-tab-panel label="诉求处理" value="{{2}}">
+      <view class="tab-content">
+        <view class="card-list">
+          <view class="mgmt-card" wx:for="{{suggestions}}" wx:key="_id" bindtap="showSuggestion" data-id="{{item._id}}">
+            <view class="card-row-top">
+              <text class="card-name">{{item.residentName}} · {{item.residentRoom}}</text>
+              <view class="status-tag {{item.status === 'pending' ? 'pending' : item.status === 'processing' ? 'active' : 'approved'}}">
+                {{item.status === 'pending' ? '待处理' : item.status === 'processing' ? '处理中' : '已办结'}}
+              </view>
+            </view>
+            <text class="card-summary">{{item.content}}</text>
+            <text class="card-date">{{item.createdAt}}</text>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{suggestions.length === 0}}">
+          <t-empty description="暂无诉求" />
+        </view>
+      </view>
+    </t-tab-panel>
+
+    <t-tab-panel label="活动管理" value="{{3}}">
+      <view class="tab-content">
+        <view class="tab-action-bar">
+          <view class="add-btn" bindtap="newActivity">
+            <t-icon name="add" size="32rpx" color="#FFF" />
+            <text class="add-btn-text">创建活动</text>
+          </view>
+        </view>
+        <view class="card-list">
+          <view class="mgmt-card" wx:for="{{activities}}" wx:key="_id" bindtap="showActivity" data-id="{{item._id}}">
+            <view class="card-row-top">
+              <text class="card-name">{{item.title}}</text>
+              <view class="type-tag">{{item.type}}</view>
+            </view>
+            <!-- 进度条 -->
+            <view class="progress-wrap">
+              <view class="progress-bar">
+                <view class="progress-fill" style="width: {{item.progress}}%;"></view>
+              </view>
+              <text class="progress-text">{{item.progress}}%</text>
+            </view>
+            <view class="card-meta-row">
+              <text class="card-date">{{item.status}}</text>
+              <text class="card-date">{{item.createdAt}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{activities.length === 0}}">
+          <t-empty description="暂无活动" />
+        </view>
+      </view>
+    </t-tab-panel>
+
+    <t-tab-panel label="开通申请" value="{{4}}" wx:if="{{adminInfo.role === 'super'}}">
+      <view class="tab-content">
+        <view class="card-list">
+          <view class="mgmt-card" wx:for="{{applications}}" wx:key="_id" bindtap="showApplication" data-id="{{item._id}}">
+            <view class="card-row-top">
+              <text class="card-name">{{item.orgName}}</text>
+              <view class="status-tag {{item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected'}}">
+                {{item.status === 'pending' ? '待审核' : item.status === 'approved' ? '已通过' : '已驳回'}}
+              </view>
+            </view>
+            <view class="card-row">
+              <text class="card-label">类型</text>
+              <text class="card-value">{{item.type}}</text>
+            </view>
+            <view class="card-row">
+              <text class="card-label">负责人</text>
+              <text class="card-value">{{item.contactName}} · {{item.contactPhone}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{applications.length === 0}}">
+          <t-empty description="暂无申请" />
+        </view>
+      </view>
+    </t-tab-panel>
+  </t-tabs>
+
+  <!-- ══════════════════════════════════
+       弹窗：住户审核
+       ══════════════════════════════════ -->
+  <t-popup visible="{{residentPopup}}" placement="bottom" bind:close="hideResident">
+    <view class="popup-card">
+      <view class="popup-header">
+        <text class="popup-title">住户详情</text>
+        <text class="popup-close" bindtap="hideResident">✕</text>
+      </view>
+      <view class="popup-body" wx:if="{{currentResident}}">
+        <view class="detail-group">
+          <view class="detail-row"><text class="detail-label">姓名</text><text class="detail-value">{{currentResident.name}}</text></view>
+          <view class="detail-row"><text class="detail-label">手机号</text><text class="detail-value">{{currentResident.phone}}</text></view>
+          <view class="detail-row"><text class="detail-label">身份证</text><text class="detail-value">{{currentResident.idcard}}</text></view>
+          <view class="detail-row"><text class="detail-label">房号</text><text class="detail-value">{{currentResident.room}}</text></view>
+          <view class="detail-row"><text class="detail-label">申请时间</text><text class="detail-value">{{currentResident.appliedAt}}</text></view>
+        </view>
+
+        <!-- 已驳回显示驳回理由 -->
+        <view class="reject-info" wx:if="{{currentResident.status === 'rejected' && currentResident.rejectReason}}">
+          <text class="reject-label">驳回理由</text>
+          <text class="reject-text">{{currentResident.rejectReason}}</text>
+        </view>
+
+        <!-- 待审核显示操作按钮 -->
+        <view class="popup-actions" wx:if="{{currentResident.status === 'pending'}}">
+          <view class="btn-approve" bindtap="approveResident">
+            <text class="btn-action-text">通过</text>
+          </view>
+          <view class="btn-reject" bindtap="showRejectInput">
+            <text class="btn-action-text reject-text">驳回</text>
+          </view>
+        </view>
+
+        <!-- 驳回输入 -->
+        <view class="reject-form" wx:if="{{currentResident.status === 'pending' && showRejectForm}}">
+          <text class="reject-form-label">请输入驳回理由</text>
+          <t-textarea value="{{rejectReason}}" bindchange="onRejectReasonInput" placeholder="请说明驳回原因" maxlength="200" />
+          <view class="btn-approve reject-confirm" bindtap="rejectResident">
+            <text class="btn-action-text">确认驳回</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- ══════════════════════════════════
+       弹窗：公告编辑
+       ══════════════════════════════════ -->
+  <t-popup visible="{{announcePopup}}" placement="bottom" bind:close="hideAnnounce">
+    <view class="popup-card popup-tall">
+      <view class="popup-header">
+        <text class="popup-title">{{isEditingAnnounce ? '编辑公告' : '发布公告'}}</text>
+        <text class="popup-close" bindtap="hideAnnounce">✕</text>
+      </view>
+      <view class="popup-body">
+        <view class="form-field">
+          <text class="form-label">标题</text>
+          <t-input value="{{editAnnounce.title}}" bindchange="onAnnounceInput" data-key="title" placeholder="请输入公告标题" />
+        </view>
+        <view class="form-field">
+          <text class="form-label">类型</text>
+          <picker mode="selector" range="{{announceTypes}}" value="{{editAnnounce.typeIndex}}" bindchange="onAnnounceTypeChange">
+            <view class="picker-display">
+              <text>{{announceTypes[editAnnounce.typeIndex]}}</text>
+              <t-icon name="chevron-right" size="28rpx" color="#A09486" />
+            </view>
+          </picker>
+        </view>
+        <view class="form-field">
+          <text class="form-label">内容</text>
+          <t-textarea value="{{editAnnounce.content}}" bindchange="onAnnounceInput" data-key="content" placeholder="请输入公告内容" maxlength="1000" />
+        </view>
+        <view class="form-switch">
+          <text class="form-label">置顶</text>
+          <switch checked="{{editAnnounce.isTop}}" bindchange="onAnnounceTopChange" color="#C8963E" />
+        </view>
+        <view class="popup-actions-row">
+          <view class="btn-save" bindtap="saveAnnounce">
+            <text class="btn-action-text">保存</text>
+          </view>
+          <view class="btn-delete" bindtap="deleteAnnounce" wx:if="{{isEditingAnnounce}}">
+            <text class="btn-action-text delete-text">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- ══════════════════════════════════
+       弹窗：诉求详情
+       ══════════════════════════════════ -->
+  <t-popup visible="{{suggestionPopup}}" placement="bottom" bind:close="hideSuggestion">
+    <view class="popup-card popup-tall">
+      <view class="popup-header">
+        <text class="popup-title">诉求详情</text>
+        <text class="popup-close" bindtap="hideSuggestion">✕</text>
+      </view>
+      <view class="popup-body" wx:if="{{currentSuggestion}}">
+        <view class="detail-group">
+          <view class="detail-row"><text class="detail-label">住户</text><text class="detail-value">{{currentSuggestion.residentName}} · {{currentSuggestion.residentRoom}}</text></view>
+          <view class="detail-row"><text class="detail-label">时间</text><text class="detail-value">{{currentSuggestion.createdAt}}</text></view>
+        </view>
+        <view class="detail-content">
+          <text class="form-label">诉求内容</text>
+          <text class="content-text">{{currentSuggestion.content}}</text>
+        </view>
+
+        <!-- 历史回复 -->
+        <view class="history-reply" wx:if="{{currentSuggestion.reply}}">
+          <text class="form-label">历史回复</text>
+          <text class="reply-text">{{currentSuggestion.reply}}</text>
+        </view>
+
+        <!-- 状态选择 -->
+        <view class="status-btns" wx:if="{{currentSuggestion.status !== 'done'}}">
+          <text class="form-label">变更状态</text>
+          <view class="status-btn-row">
+            <view class="status-btn {{currentSuggestion.status === 'pending' ? 'active' : ''}}" bindtap="changeSuggestionStatus" data-status="pending">待处理</view>
+            <view class="status-btn {{currentSuggestion.status === 'processing' ? 'active' : ''}}" bindtap="changeSuggestionStatus" data-status="processing">处理中</view>
+          </view>
+        </view>
+
+        <!-- 回复 -->
+        <view class="reply-form" wx:if="{{currentSuggestion.status !== 'done'}}">
+          <t-textarea value="{{suggestionReply}}" bindchange="onSuggestionReplyInput" placeholder="输入回复内容" maxlength="500" />
+          <view class="btn-save" bindtap="submitSuggestionReply" style="margin-top: 20rpx;">
+            <text class="btn-action-text">提交回复</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- ══════════════════════════════════
+       弹窗：活动编辑
+       ══════════════════════════════════ -->
+  <t-popup visible="{{activityPopup}}" placement="bottom" bind:close="hideActivity">
+    <view class="popup-card popup-tall">
+      <view class="popup-header">
+        <text class="popup-title">{{isEditingActivity ? '编辑活动' : '创建活动'}}</text>
+        <text class="popup-close" bindtap="hideActivity">✕</text>
+      </view>
+      <view class="popup-body">
+        <view class="form-field">
+          <text class="form-label">标题</text>
+          <t-input value="{{editActivity.title}}" bindchange="onActivityInput" data-key="title" placeholder="请输入活动标题" />
+        </view>
+        <view class="form-field">
+          <text class="form-label">类型</text>
+          <picker mode="selector" range="{{activityTypes}}" value="{{editActivity.typeIndex}}" bindchange="onActivityTypeChange">
+            <view class="picker-display">
+              <text>{{activityTypes[editActivity.typeIndex]}}</text>
+              <t-icon name="chevron-right" size="28rpx" color="#A09486" />
+            </view>
+          </picker>
+        </view>
+        <view class="form-field">
+          <text class="form-label">内容</text>
+          <t-textarea value="{{editActivity.content}}" bindchange="onActivityInput" data-key="content" placeholder="请输入活动内容" maxlength="1000" />
+        </view>
+        <view class="form-field">
+          <text class="form-label">进度 ({{editActivity.progress}}%)</text>
+          <slider min="0" max="100" step="5" value="{{editActivity.progress}}" activeColor="#C8963E" backgroundColor="#EDE4DB" block-size="24" bindchange="onActivityProgressChange" />
+        </view>
+        <view class="form-field">
+          <text class="form-label">状态</text>
+          <picker mode="selector" range="{{activityStatuses}}" value="{{editActivity.statusIndex}}" bindchange="onActivityStatusChange">
+            <view class="picker-display">
+              <text>{{activityStatuses[editActivity.statusIndex]}}</text>
+              <t-icon name="chevron-right" size="28rpx" color="#A09486" />
+            </view>
+          </picker>
+        </view>
+        <view class="popup-actions-row">
+          <view class="btn-save" bindtap="saveActivity">
+            <text class="btn-action-text">保存</text>
+          </view>
+          <view class="btn-delete" bindtap="deleteActivity" wx:if="{{isEditingActivity}}">
+            <text class="btn-action-text delete-text">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- ══════════════════════════════════
+       弹窗：开通申请详情
+       ══════════════════════════════════ -->
+  <t-popup visible="{{applicationPopup}}" placement="bottom" bind:close="hideApplication">
+    <view class="popup-card">
+      <view class="popup-header">
+        <text class="popup-title">申请详情</text>
+        <text class="popup-close" bindtap="hideApplication">✕</text>
+      </view>
+      <view class="popup-body" wx:if="{{currentApplication}}">
+        <view class="detail-group">
+          <view class="detail-row"><text class="detail-label">单位名称</text><text class="detail-value">{{currentApplication.orgName}}</text></view>
+          <view class="detail-row"><text class="detail-label">类型</text><text class="detail-value">{{currentApplication.type}}</text></view>
+          <view class="detail-row"><text class="detail-label">负责人</text><text class="detail-value">{{currentApplication.contactName}}</text></view>
+          <view class="detail-row"><text class="detail-label">联系电话</text><text class="detail-value">{{currentApplication.contactPhone}}</text></view>
+          <view class="detail-row"><text class="detail-label">申请时间</text><text class="detail-value">{{currentApplication.createdAt}}</text></view>
+        </view>
+        <view class="popup-actions" wx:if="{{currentApplication.status === 'pending'}}">
+          <view class="btn-approve" bindtap="approveApplication">
+            <text class="btn-action-text">通过</text>
+          </view>
+          <view class="btn-reject" bindtap="rejectApplication">
+            <text class="btn-action-text reject-text">驳回</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- 确认删除弹窗 -->
+  <t-dialog
+    visible="{{confirmDialog}}"
+    title="确认删除"
+    content="删除后不可恢复，确定要删除吗？"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="onConfirmDialog"
+    bind:cancel="cancelDialog"
+  />
+
+  <t-toast id="t-toast" />
+</view>

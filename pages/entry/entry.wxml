@@ -58,6 +58,10 @@
       <view class="bottom-dot dot-green"></view>
       <text class="bottom-label">保安端</text>
     </view>
+    <view class="bottom-item" bindtap="showAdminLogin">
+      <view class="bottom-dot dot-brown"></view>
+      <text class="bottom-label">管理员入口</text>
+    </view>
     <view class="bottom-item">
       <view class="bottom-dot dot-red"></view>
       <text class="bottom-label">关于我们</text>
@@ -68,4 +72,41 @@
   <view class="slogan {{animReady ? 'show delay2' : ''}}">
     <text class="slogan-text">Having safe community\nand happy living equally.</text>
   </view>
+
+  <!-- ====== 弹窗：管理员登录 ====== -->
+  <t-popup visible="{{adminLoginPopupVisible}}" placement="bottom" bind:close="hideAdminLogin">
+    <view class="popup-card">
+      <view class="popup-header">
+        <text class="popup-title">管理员登录</text>
+        <text class="popup-close" bindtap="hideAdminLogin">✕</text>
+      </view>
+      <view class="popup-body">
+        <text class="popup-desc">登录管理后台以管理社区事务</text>
+        <view class="admin-form">
+          <view class="admin-field">
+            <text class="admin-label">选择小区</text>
+            <picker mode="selector" range="{{communityNames}}" value="{{selectedCommunityIdx}}" bindchange="onCommunityChange">
+              <view class="picker-box">
+                <text class="picker-text">{{communityNames[selectedCommunityIdx] || '请选择小区'}}</text>
+                <t-icon name="chevron-right" size="28rpx" color="#A09486" />
+              </view>
+            </picker>
+          </view>
+          <view class="admin-field">
+            <text class="admin-label">手机号</text>
+            <input class="admin-input" type="number" placeholder="请输入手机号" bindinput="onAdminPhoneInput" maxlength="11" />
+          </view>
+          <view class="admin-field">
+            <text class="admin-label">密码</text>
+            <input class="admin-input" password placeholder="请输入密码" bindinput="onAdminPasswordInput" maxlength="32" />
+          </view>
+        </view>
+        <view class="admin-submit-btn" bindtap="doAdminLogin">
+          <text class="admin-submit-text">登录</text>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-toast id="t-toast" />
 </view>

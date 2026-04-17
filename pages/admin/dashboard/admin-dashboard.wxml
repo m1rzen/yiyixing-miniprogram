@@ -1,0 +1,74 @@
+<view class="page">
+
+  <!-- 自定义导航栏 -->
+  <view class="custom-nav">
+    <view class="nav-btn" bindtap="goHome">
+      <t-icon name="home" size="36rpx" color="#FFF" />
+    </view>
+    <text class="nav-title">管理后台</text>
+    <view class="nav-btn" bindtap="goHome">
+      <t-icon name="home" size="36rpx" color="transparent" />
+    </view>
+  </view>
+
+  <!-- Banner 区 -->
+  <view class="banner">
+    <view class="banner-bg"></view>
+    <view class="banner-content">
+      <view class="banner-admin-row">
+        <view class="banner-avatar">
+          <t-icon name="user-safety" size="40rpx" color="#FFF" />
+        </view>
+        <view class="banner-admin-info">
+          <text class="banner-admin-name">{{adminInfo.name || '管理员'}}</text>
+          <text class="banner-admin-role">{{adminInfo.role === 'super' ? '超级管理员' : '社区管理员'}}</text>
+        </view>
+      </view>
+      <text class="banner-community">{{adminInfo.communityName || '暂未选择小区'}}</text>
+    </view>
+  </view>
+
+  <!-- 统计卡片 2x2 -->
+  <view class="stats-grid">
+    <view class="stat-card" bindtap="goManageAll">
+      <text class="stat-num">{{stats.totalResidents}}</text>
+      <text class="stat-label">住户总数</text>
+    </view>
+    <view class="stat-card highlight" bindtap="goManage" data-tab="{{0}}">
+      <view class="stat-num-row">
+        <text class="stat-num warn">{{stats.pendingAuth}}</text>
+        <t-badge count="{{stats.pendingAuth}}" wx:if="{{stats.pendingAuth > 0}}" />
+      </view>
+      <text class="stat-label">待审核</text>
+    </view>
+    <view class="stat-card" bindtap="goManage" data-tab="{{2}}">
+      <text class="stat-num">{{stats.pendingSuggestions}}</text>
+      <text class="stat-label">待处理诉求</text>
+    </view>
+    <view class="stat-card" bindtap="goManage" data-tab="{{1}}">
+      <text class="stat-num">{{stats.monthAnnouncements}}</text>
+      <text class="stat-label">本月公告</text>
+    </view>
+  </view>
+
+  <!-- 快捷操作网格 2x3 -->
+  <view class="section-header">
+    <text class="section-title">快捷操作</text>
+  </view>
+  <view class="action-grid">
+    <view
+      class="action-item"
+      wx:for="{{quickActions}}"
+      wx:key="key"
+      bindtap="goManage"
+      data-tab="{{item.tab}}"
+    >
+      <view class="action-icon" style="background: {{item.color}};">
+        <t-icon name="{{item.icon}}" size="44rpx" color="#FFF" />
+      </view>
+      <text class="action-label">{{item.label}}</text>
+    </view>
+  </view>
+
+  <t-toast id="t-toast" />
+</view>
