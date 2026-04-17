@@ -41,12 +41,8 @@ Page({
   onAdminPasswordInput(e) {
     this.setData({ adminPassword: e.detail.value });
   },
-  doAdminLogin() {
-    const { adminPhone, adminPassword, selectedCommunityIdx, communityNames } = this.data;
-    if (selectedCommunityIdx < 0) {
-      Toast({ context: this, selector: '#t-toast', message: '请选择小区' });
-      return;
-    }
+  async doAdminLogin() {
+    const { adminPhone, adminPassword, selectedCommunityIdx } = this.data;
     if (!adminPhone || adminPhone.length !== 11) {
       Toast({ context: this, selector: '#t-toast', message: '请输入正确的手机号' });
       return;
@@ -57,16 +53,37 @@ Page({
     }
 
     const community = app.globalData.communities[selectedCommunityIdx];
-    // 演示模式：任何手机号+密码即可登录，role 固定为 admin
+    const communityId = community ? (community.communityId || community.id) : '';
+
+    try {
+      const res = await app.callCloud({ name: 'adminLogin', data: { communityId, phone: adminPhone, password: adminPassword } });
+      if (res.result && res.result.success) {
+        const info = res.result.adminInfo || res.result;
+        info.communityId = communityId;
+        info.communityName = info.communityName || community.name;
+        wx.setStorageSync('adminInfo', info);
+        Toast({ context: this, selector: '#t-toast', message: '登录成功', theme: 'success' });
+        this.setData({ adminLoginPopupVisible: false });
+        wx.navigateTo({ url: '/pages/admin/dashboard/admin-dashboard' });
+        return;
+      } else {
+        Toast({ context: this, selector: '#t-toast', message: (res.result && res.result.errMsg) || '登录失败，请检查手机号和密码' });
+        return;
+      }
+    } catch (e) {
+      console.warn('adminLogin 云端失败，降级演示模式', e);
+    }
+
+    // 降级：演示模式登录
     const adminInfo = {
       name: adminPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'),
       phone: adminPhone,
-      communityId: community.id,
-      communityName: community.name,
+      communityId: communityId,
+      communityName: community ? community.name : '演示小区',
       role: 'admin'
     };
     wx.setStorageSync('adminInfo', adminInfo);
-    Toast({ context: this, selector: '#t-toast', message: '登录成功', theme: 'success' });
+    Toast({ context: this, selector: '#t-toast', message: '登录成功（演示模式）', theme: 'success' });
     this.setData({ adminLoginPopupVisible: false });
     wx.navigateTo({ url: '/pages/admin/dashboard/admin-dashboard' });
   }

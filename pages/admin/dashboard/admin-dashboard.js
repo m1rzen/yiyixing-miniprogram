@@ -1,5 +1,7 @@
 import Toast from 'tdesign-miniprogram/toast/index';
 
+const app = getApp();
+
 Page({
   data: {
     adminInfo: null,
@@ -29,21 +31,21 @@ Page({
   },
 
   onShow() {
-    // 模拟数据（后端云函数就绪后替换为真实调用）
-    this.setData({
-      stats: {
-        totalResidents: 156,
-        pendingAuth: 8,
-        pendingSuggestions: 3,
-        monthAnnouncements: 5
+    this.loadDashboardStats();
+  },
+
+  async loadDashboardStats() {
+    const adminInfo = this.data.adminInfo;
+    if (!adminInfo || !adminInfo.communityId) return;
+
+    try {
+      const res = await app.callCloud({ name: 'adminDashboard', data: { communityId: adminInfo.communityId } });
+      if (res.result && res.result.success) {
+        this.setData({ stats: res.result });
       }
-    });
-    // 后端就绪后取消注释：
-    // wx.cloud.callFunction({ name: 'adminDashboard' }).then(res => {
-    //   if (res.result && res.result.success) {
-    //     this.setData({ stats: res.result.data });
-    //   }
-    // });
+    } catch (e) {
+      console.warn('adminDashboard 云端加载失败，使用默认数据', e);
+    }
   },
 
   goHome() {
