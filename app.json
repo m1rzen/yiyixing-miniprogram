@@ -13,7 +13,8 @@
     "pages/guard-dashboard/guard-dashboard",
     "pages/guard-approval/guard-approval",
     "pages/guard-monitor/guard-monitor",
-    "pages/yixiaoqu/yixiaoqu"
+    "pages/yixiaoqu/yixiaoqu",
+    "pages/sub-feature/sub-feature"
   ],
   "window": {
     "backgroundTextStyle": "light",

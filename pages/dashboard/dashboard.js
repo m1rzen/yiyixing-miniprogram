@@ -105,6 +105,7 @@ Page({
   },
 
   goToProfile() { wx.navigateTo({ url: '/pages/profile/profile' }); },
+  goHome() { wx.reLaunch({ url: '/pages/entry/entry' }); },
 
   // 平台快捷登入
   handlePlatformAuth(e) {

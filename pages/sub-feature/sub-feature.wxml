@@ -1,0 +1,76 @@
+<view class="page" wx:if="{{feature}}">
+  <!-- Header Banner -->
+  <view class="header-banner" style="background: {{feature.gradient}};">
+    <view class="nav-row">
+      <view class="nav-btn" bindtap="goBack"><t-icon name="chevron-left" size="40rpx" color="#FFF" /></view>
+      <text class="nav-title">{{feature.title}}</text>
+      <view class="nav-btn" bindtap="goHome"><t-icon name="home" size="36rpx" color="#FFF" /></view>
+    </view>
+    <view class="header-icon-wrap"><t-icon name="{{feature.icon}}" size="56rpx" color="#FFF" /></view>
+    <text class="header-desc">{{feature.desc}}</text>
+  </view>
+
+  <!-- 内容区 -->
+  <view class="content">
+
+    <!-- ═══ 表单（诉求建议） ═══ -->
+    <block wx:if="{{feature.type === 'form'}}">
+      <view class="form-card">
+        <view class="form-group" wx:for="{{feature.formFields}}" wx:key="key">
+          <text class="form-label">{{item.label}}</text>
+          <picker wx:if="{{item.type === 'picker'}}" range="{{item.options}}" bindchange="onPickerChange" value="{{pickerIndex}}">
+            <view class="form-picker">
+              <text>{{item.options[pickerIndex]}}</text>
+              <t-icon name="chevron-right" size="28rpx" color="#A09486" />
+            </view>
+          </picker>
+          <textarea wx:elif="{{item.type === 'textarea'}}" class="form-textarea" placeholder="{{item.placeholder}}" bindinput="onFormInput" data-key="{{item.key}}" maxlength="500" />
+          <input wx:elif="{{item.type === 'input'}}" class="form-input" placeholder="{{item.placeholder}}" bindinput="onFormInput" data-key="{{item.key}}" />
+        </view>
+        <view class="submit-btn" bindtap="submitSuggestion"><text class="submit-btn-text">提交</text></view>
+      </view>
+    </block>
+
+    <!-- ═══ 进度条（民生微实事） ═══ -->
+    <block wx:elif="{{featureKey === 'livelihood'}}">
+      <view class="item-card" wx:for="{{feature.items}}" wx:key="title" bindtap="handleItemTap">
+        <view class="item-top">
+          <text class="item-title">{{item.title}}</text>
+          <view class="pill {{item.status === '已完成' ? 'pill-green' : 'pill-gold'}}">
+            <text>{{item.status}}</text>
+          </view>
+        </view>
+        <view class="progress-track"><view class="progress-fill" style="width: {{item.progress}}%;"></view></view>
+        <text class="progress-label">完成度 {{item.progress}}%</text>
+      </view>
+    </block>
+
+    <!-- ═══ 列表（默认） ═══ -->
+    <block wx:else>
+      <view class="item-card" wx:for="{{feature.items}}" wx:key="{{item.title || item.label}}" bindtap="handleItemTap">
+        <!-- 键值对型（物业缴费/财务公开） -->
+        <view class="item-row" wx:if="{{item.label}}">
+          <text class="item-label">{{item.label}}</text>
+          <text class="item-value">{{item.value}}</text>
+        </view>
+        <!-- 标题型 -->
+        <view class="item-row" wx:else>
+          <view class="item-left">
+            <text class="item-title">{{item.title}}</text>
+            <text class="item-meta" wx:if="{{item.meta}}">{{item.meta}}</text>
+          </view>
+          <view class="pill" wx:if="{{item.tag || item.status}}" style="background: {{item.tagColor || item.statusColor}};">
+            <text>{{item.tag || item.status}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="empty-hint" wx:if="{{!feature.items && feature.type !== 'form'}}">
+      <t-icon name="info-circle" size="64rpx" color="#D4C4B0" />
+      <text>暂无数据</text>
+    </view>
+  </view>
+
+  <t-toast id="t-toast" />
+</view>

@@ -5,6 +5,11 @@
   <!-- 碉楼剪影装饰 -->
   <view class="bg-deco-bottom"></view>
 
+  <!-- 返回主页按钮 -->
+  <view class="home-float-btn" bindtap="goHome">
+    <t-icon name="home" size="36rpx" color="#FFF" />
+  </view>
+
   <!-- 品牌区域 -->
   <view class="brand-area {{animReady ? 'anim-in' : ''}}">
     <view class="brand-icon-wrap">

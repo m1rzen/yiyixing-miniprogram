@@ -46,6 +46,7 @@ Page({
   },
 
   handleRegister() { this.setData({ popupVisible: true }); },
+  goHome() { wx.reLaunch({ url: '/pages/entry/entry' }); },
   onVisibleChange(e) { this.setData({ popupVisible: e.detail.visible }); },
   onAgreeChange(e) { this.setData({ isAgreed: e.detail.checked }); },
   openPrivacy() { this.setData({ privacyVisible: true }); },

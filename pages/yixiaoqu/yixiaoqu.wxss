@@ -352,3 +352,110 @@
 .bottom-placeholder {
   height: calc(140rpx + env(safe-area-inset-bottom));
 }
+
+/* ══════════════════════════════════
+   自定义导航栏
+   ══════════════════════════════════ */
+.custom-nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 100rpx 28rpx 16rpx;
+  background: transparent;
+}
+.nav-btn { width: 64rpx; height: 64rpx; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.12); }
+.nav-btn:active { background: rgba(255,255,255,0.25); }
+.custom-nav .nav-title { font-size: 32rpx; font-weight: 700; color: #FFF; letter-spacing: 4rpx; }
+
+/* ══════════════════════════════════
+   账单卡片箭头
+   ══════════════════════════════════ */
+.bill-card { display: flex; align-items: center; flex-wrap: wrap; }
+.bill-num { flex: 1; }
+.bill-label { flex: 1; }
+.bill-arrow { width: 40rpx; display: flex; align-items: center; }
+
+/* ══════════════════════════════════
+   已登录状态栏
+   ══════════════════════════════════ */
+.logged-in { align-items: center; }
+.user-avatar { width: 64rpx; height: 64rpx; border-radius: 50%; background: linear-gradient(135deg, #C8963E, #A67930); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.user-info { flex: 1; margin-left: 20rpx; }
+.user-name { display: block; font-size: 30rpx; color: #3D2B1F; font-weight: 700; }
+.user-addr { display: block; font-size: 24rpx; color: #A09486; margin-top: 4rpx; }
+
+/* ══════════════════════════════════
+   弹窗通用
+   ══════════════════════════════════ */
+.popup-card { background: #FFF; border-radius: 32rpx 32rpx 0 0; padding: 0 36rpx calc(env(safe-area-inset-bottom) + 32rpx); }
+.popup-header { display: flex; align-items: center; justify-content: space-between; padding: 40rpx 0 24rpx; border-bottom: 2rpx solid #EDE4DB; }
+.popup-title { font-size: 36rpx; font-weight: 800; color: #3D2B1F; }
+.popup-close { width: 56rpx; height: 56rpx; display: flex; align-items: center; justify-content: center; font-size: 32rpx; color: #A09486; background: #F5EDE5; border-radius: 50%; }
+.popup-close:active { background: #EDE4DB; }
+.popup-body { padding: 28rpx 0; }
+.popup-desc { display: block; font-size: 28rpx; color: #A09486; margin-bottom: 28rpx; }
+.popup-submit-btn { background: linear-gradient(135deg, #C8963E, #A67930); height: 92rpx; border-radius: 20rpx; display: flex; align-items: center; justify-content: center; margin-top: 24rpx; }
+.popup-submit-btn:active { opacity: 0.8; }
+.popup-submit-text { font-size: 32rpx; color: #FFF; font-weight: 700; letter-spacing: 4rpx; }
+
+/* ── 登录弹窗 ── */
+.wechat-auth-btn { width: 100%; height: 92rpx; display: flex; align-items: center; justify-content: center; gap: 12rpx; background: #07C160; color: #FFF; font-size: 32rpx; font-weight: 600; border-radius: 20rpx; border: none; margin: 0 0 20rpx; box-shadow: 0 8rpx 20rpx rgba(7,193,96,0.2); }
+.wechat-auth-btn::after { border: none; }
+.wechat-auth-btn:active { opacity: 0.85; }
+.phone-login-entry { text-align: center; padding: 16rpx 0; }
+.phone-link { font-size: 28rpx; color: #C8963E; font-weight: 500; }
+.phone-form { margin-top: 20rpx; }
+.phone-input { height: 88rpx; background: #F5EDE5; border-radius: 16rpx; padding: 0 24rpx; font-size: 30rpx; color: #3D2B1F; margin-bottom: 20rpx; box-sizing: border-box; }
+.code-row { display: flex; gap: 16rpx; margin-bottom: 20rpx; }
+.code-input { flex: 1; }
+.code-btn { width: 200rpx; height: 88rpx; background: #C8963E; color: #FFF; border-radius: 16rpx; display: flex; align-items: center; justify-content: center; font-size: 26rpx; font-weight: 600; }
+.code-btn.disabled { background: #D4C4B0; }
+.code-btn:active:not(.disabled) { opacity: 0.8; }
+.phone-submit-btn { background: linear-gradient(135deg, #C8963E, #A67930); height: 92rpx; border-radius: 20rpx; display: flex; align-items: center; justify-content: center; }
+.phone-submit-btn:active { opacity: 0.8; }
+.phone-submit-btn text { font-size: 32rpx; color: #FFF; font-weight: 700; }
+
+/* ── 认证表单 ── */
+.auth-form { margin-bottom: 8rpx; }
+.auth-field { margin-bottom: 24rpx; }
+.auth-label { display: block; font-size: 28rpx; color: #3D2B1F; font-weight: 600; margin-bottom: 12rpx; }
+.auth-input { height: 88rpx; background: #F5EDE5; border-radius: 16rpx; padding: 0 24rpx; font-size: 30rpx; color: #3D2B1F; box-sizing: border-box; }
+
+/* ── 公告详情 ── */
+.announce-item { margin-bottom: 28rpx; padding-bottom: 28rpx; border-bottom: 2rpx solid #EDE4DB; }
+.announce-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.announce-item-tag { display: inline-block; padding: 4rpx 16rpx; border-radius: 8rpx; background: #C8963E; font-size: 22rpx; color: #FFF; font-weight: 600; margin-bottom: 12rpx; }
+.announce-item-tag.old { background: #A09486; }
+.announce-item-title { display: block; font-size: 32rpx; color: #3D2B1F; font-weight: 700; margin-bottom: 8rpx; }
+.announce-item-date { display: block; font-size: 24rpx; color: #A09486; margin-bottom: 16rpx; }
+.announce-item-content { font-size: 28rpx; color: #6B5E50; line-height: 1.7; }
+
+/* ── 邻里互助 ── */
+.neighbor-desc { font-size: 28rpx; color: #6B5E50; line-height: 1.7; margin-bottom: 24rpx; }
+.neighbor-list { margin-bottom: 16rpx; }
+.neighbor-item { display: flex; align-items: center; gap: 24rpx; padding: 24rpx 0; border-bottom: 2rpx solid #EDE4DB; }
+.neighbor-item:last-child { border-bottom: none; }
+.neighbor-icon { width: 72rpx; height: 72rpx; border-radius: 20rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.neighbor-info { flex: 1; }
+.neighbor-title { display: block; font-size: 30rpx; color: #3D2B1F; font-weight: 600; margin-bottom: 4rpx; }
+.neighbor-meta { font-size: 24rpx; color: #A09486; }
+
+/* ── 申请开通 ── */
+.apply-type-row { display: flex; gap: 16rpx; }
+.type-chip { padding: 16rpx 28rpx; background: #F5EDE5; border-radius: 100rpx; font-size: 28rpx; color: #6B5E50; font-weight: 500; }
+.type-chip.active { background: linear-gradient(135deg, #C8963E, #A67930); color: #FFF; }
+.type-chip:active { opacity: 0.7; }
+
+/* ── 账单详情 ── */
+.bill-detail-card { background: #F5EDE5; border-radius: 20rpx; padding: 28rpx; margin-bottom: 20rpx; }
+.bill-detail-title { display: block; font-size: 30rpx; color: #3D2B1F; font-weight: 700; margin-bottom: 20rpx; }
+.bill-row { display: flex; justify-content: space-between; padding: 16rpx 0; border-bottom: 2rpx solid #EDE4DB; }
+.bill-row:last-child { border-bottom: none; }
+.bill-row.total { margin-top: 8rpx; }
+.bill-row.total .bill-row-label { font-weight: 700; }
+.bill-row.total .bill-row-value { font-weight: 800; font-size: 34rpx; color: #C8963E; }
+.bill-row-label { font-size: 28rpx; color: #6B5E50; }
+.bill-row-value { font-size: 28rpx; color: #3D2B1F; font-weight: 600; }
+.bill-row-value.green { color: #2D8B6F; }
+.bill-row-value.red { color: #C94545; }
+.bill-empty-hint { display: flex; flex-direction: column; align-items: center; gap: 12rpx; padding: 24rpx 0; font-size: 26rpx; color: #A09486; }

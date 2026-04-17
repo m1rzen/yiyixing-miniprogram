@@ -2,6 +2,11 @@
   <view class="bg-gradient"></view>
   <view class="bg-pattern"></view>
 
+  <!-- 返回主页 -->
+  <view class="home-float-btn" bindtap="goHome">
+    <t-icon name="home" size="36rpx" color="#FFF" />
+  </view>
+
   <view class="content immersive-content">
     <!-- 用户信息头部 -->
     <view class="user-bar" bindtap="goToProfile">
