@@ -103,5 +103,21 @@ App({
     const min = String(date.getMinutes()).padStart(2, '0');
     const s = String(date.getSeconds()).padStart(2, '0');
     return `${y}-${m}-${d} ${h}:${min}:${s}`;
+  },
+
+  // 获取当前住户信息（供各页面使用）
+  getCurrentResident: function() {
+    return {
+      logged: !!wx.getStorageSync('yixiaoqu_logged'),
+      name: wx.getStorageSync('yixiaoqu_name') || '',
+      room: wx.getStorageSync('yixiaoqu_room') || '',
+      communityId: wx.getStorageSync('yixiaoqu_communityId') || '',
+      residentId: wx.getStorageSync('yixiaoqu_residentId') || ''
+    };
+  },
+
+  // 获取管理员信息
+  getAdminInfo: function() {
+    return wx.getStorageSync('adminInfo') || null;
   }
 });

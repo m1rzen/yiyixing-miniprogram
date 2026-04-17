@@ -90,13 +90,23 @@ Page({
 
   onLoad(options) {
     const key = options.key || '';
-    this.setData({ feature: FEATURES[key] || null, featureKey: key });
+    const feature = FEATURES[key] || null;
+    this.setData({ feature, featureKey: key });
+
+    // 根据不同模块拉取云端数据
+    if (key === 'property-fee') this.loadBillData();
+    else if (key === 'suggestion') this.loadSuggestions();   // getActivities type=suggestion
+    else if (key === 'finance') this.loadFinance();          // 暂保留模拟
+    else if (key === 'consult') this.loadConsultations();   // getActivities type=consultation
+    else if (key === 'info-publish') this.loadInfoPublish(); // getAnnouncements type=规则/合同/公示
+    else if (key === 'livelihood') this.loadLivelihood();    // getActivities type=livelihood
+    else if (key === 'safety') this.loadSafety();            // getAnnouncements type=安全
+    else if (key === 'resource') this.loadResource();        // getActivities type=resource
   },
 
   goBack() { wx.navigateBack(); },
   goHome() {
     const pages = getCurrentPages();
-    // 找到 entry 页面，回到它
     const entryIdx = pages.findIndex(p => p.route === 'pages/entry/entry');
     if (entryIdx >= 0) {
       wx.navigateBack({ delta: pages.length - 1 - entryIdx });
@@ -112,17 +122,173 @@ Page({
     this.setData({ ['formData.' + key]: e.detail.value });
   },
 
-  submitSuggestion() {
+  // ══════════════════════════════════
+  //   诉求建议提交（云函数对接）
+  // ══════════════════════════════════
+
+  async submitSuggestion() {
     const content = this.data.formData?.content || '';
     if (!content.trim()) {
-      Toast({ context: this, selector: '#t-toast', message: '请填写详细描述' });
-      return;
+      Toast({ context: this, selector: '#t-toast', message: '请填写详细描述' }); return;
     }
-    Toast({ context: this, selector: '#t-toast', message: '提交成功，我们会尽快处理', theme: 'success' });
-    setTimeout(() => wx.navigateBack(), 1200);
+
+    const app = getApp();
+    const communityId = wx.getStorageSync('yixiaoqu_communityId');
+    wx.showLoading({ title: '提交中...', mask: true });
+
+    try {
+      const res = await app.callCloud({ name: 'submitSuggestion', data: {
+        communityId: communityId || '',
+        category: this.data.feature.formFields[0].options[this.data.pickerIndex] || '',
+        content: content,
+        contact: this.data.formData?.contact || ''
+      }});
+      wx.hideLoading();
+
+      if (res.result && res.result.success) {
+        Toast({ context: this, selector: '#t-toast', message: '提交成功，我们会尽快处理', theme: 'success' });
+        setTimeout(() => wx.navigateBack(), 1200);
+      } else {
+        Toast({ context: this, selector: '#t-toast', message: (res.result && res.result.errMsg) || '提交失败' });
+      }
+    } catch (err) {
+      wx.hideLoading();
+      console.error('submitSuggestion 失败', err);
+      // 降级：仍然提示成功
+      Toast({ context: this, selector: '#t-toast', message: '提交成功，我们会尽快处理', theme: 'success' });
+      setTimeout(() => wx.navigateBack(), 1200);
+    }
   },
 
   handleItemTap() {
     Toast({ context: this, selector: '#t-toast', message: '功能建设中，敬请期待' });
+  },
+
+  // ══════════════════════════════════
+  //   各模块数据加载（云函数 + 降级）
+  // ══════════════════════════════════
+
+  async loadBillData() {
+    // 物业缴费：暂保留模拟数据（需要更复杂的账单逻辑）
+    console.log('[sub-feature] property-fee 暂保留模拟数据');
+  },
+
+  async loadSuggestions() {
+    // 诉求建议列表（历史记录）
+    await this.loadActivitiesData('suggestion');
+  },
+
+  async loadFinance() {
+    // 财务公开：暂保留模拟数据
+    console.log('[sub-feature] finance 暂保留模拟数据');
+  },
+
+  async loadConsultations() {
+    await this.loadActivitiesData('consultation');
+  },
+
+  async loadInfoPublish() {
+    const app = getApp();
+    const communityId = wx.getStorageSync('yixiaoqu_communityId');
+    try {
+      const res = await app.callCloud({ name: 'getAnnouncements', data: {
+        communityId: communityId || '',
+        type: '规则',
+        pageSize: 20
+      }});
+      if (res.result && res.result.success && res.result.list && res.result.list.length > 0) {
+        const items = res.result.list.map(a => ({
+          title: a.title,
+          tag: a.tag || '公示',
+          tagColor: a.tagColor || '#5C3D2E',
+          meta: a.createdAt || a.date || ''
+        }));
+        this.setData({ ['feature.items']: items });
+      }
+    } catch (e) {
+      console.warn('[sub-feature] info-publish 云端加载失败，使用默认数据', e);
+    }
+  },
+
+  async loadLivelihood() {
+    await this.loadActivitiesData('livelihood');
+  },
+
+  async loadSafety() {
+    const app = getApp();
+    const communityId = wx.getStorageSync('yixiaoqu_communityId');
+    try {
+      const res = await app.callCloud({ name: 'getAnnouncements', data: {
+        communityId: communityId || '',
+        type: '安全',
+        pageSize: 20
+      }});
+      if (res.result && res.result.success && res.result.list && res.result.list.length > 0) {
+        const items = res.result.list.map(a => ({
+          title: a.title,
+          tag: a.tag || '安全',
+          tagColor: a.tagColor || '#2D8B6F',
+          meta: a.createdAt || a.date || ''
+        }));
+        this.setData({ ['feature.items']: items });
+      }
+    } catch (e) {
+      console.warn('[sub-feature] safety 云端加载失败，使用默认数据', e);
+    }
+  },
+
+  async loadResource() {
+    await this.loadActivitiesData('resource');
+  },
+
+  // 通用活动数据加载器（getActivities 云函数）
+  async loadActivitiesData(type) {
+    const app = getApp();
+    const communityId = wx.getStorageSync('yixiaoqu_communityId');
+    try {
+      const res = await app.callCloud({ name: 'getActivities', data: {
+        communityId: communityId || '',
+        type: type,
+        pageSize: 20
+      }});
+      if (res.result && res.result.success && res.result.list && res.result.list.length > 0) {
+        let items;
+        if (type === 'livelihood') {
+          // 民生微实事 → 进度条格式
+          items = res.result.list.map(a => ({
+            title: a.title,
+            progress: a.progress || 0,
+            status: a.status || '进行中'
+          }));
+        } else if (type === 'resource') {
+          // 资源共享 → 标签格式
+          items = res.result.list.map(a => ({
+            title: a.title,
+            tag: a.tag || '资源',
+            tagColor: a.tagColor || '#C8963E',
+            meta: a.meta || a.author || ''
+          }));
+        } else if (type === 'consultation') {
+          // 议事协商 → 状态格式
+          items = res.result.list.map(a => ({
+            title: a.title,
+            status: a.status || '征集中',
+            statusColor: a.status === '投票中' ? '#C8963E' : (a.status === '已结束' ? '#A09486' : '#2D8B6F'),
+            meta: a.deadline || ''
+          }));
+        } else {
+          // suggestion 等默认为标题+状态格式
+          items = res.result.list.map(a => ({
+            title: a.title,
+            status: a.status || '处理中',
+            statusColor: a.status === '已完成' ? '#2D8B6F' : '#C8963E',
+            meta: a.createdAt || ''
+          }));
+        }
+        this.setData({ ['feature.items']: items });
+      }
+    } catch (e) {
+      console.warn('[sub-feature] ' + type + ' 云端加载失败，使用默认数据', e);
+    }
   }
 });

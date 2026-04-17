@@ -11,9 +11,10 @@
   <view class="banner">
     <view class="banner-bg"></view>
     <image class="banner-skyline" src="../entry/skyline.svg" mode="widthFix" />
-    <view class="addr-pill">
+    <view class="addr-pill" bindtap="showCommunityPicker">
       <t-icon name="location" size="28rpx" color="#FDF5F0" />
-      <text class="addr-text">暂无房屋信息</text>
+      <text class="addr-text">{{userAddr || '暂无房屋信息'}}</text>
+      <t-icon name="chevron-down" size="24rpx" color="#FDF5F0" wx:if="{{isLoggedIn && communityList.length > 1}}" />
     </view>
     <view class="banner-titles">
       <view class="banner-title-row">
@@ -68,7 +69,7 @@
       <text class="announce-prefix">公告</text>
     </view>
     <t-icon name="sound" size="32rpx" color="#B8956F" />
-    <text class="announce-content">欢迎使用邑小区智慧社区平台</text>
+    <text class="announce-content">{{latestAnnounce ? latestAnnounce.title : '欢迎使用邑小区智慧社区平台'}}</text>
     <t-icon name="chevron-right" size="28rpx" color="#D4C4B0" />
   </view>
 
@@ -161,6 +162,15 @@
         <text class="popup-desc">认证后可使用缴费、投票等核心功能</text>
         <view class="auth-form">
           <view class="auth-field">
+            <text class="auth-label">所属小区</text>
+            <picker mode="selector" range="{{communityNames}}" value="{{authCommunityIdx}}" bindchange="onAuthCommunityChange">
+              <view class="picker-box">
+                <text class="picker-text">{{authCommunityName || '请选择小区'}}</text>
+                <t-icon name="chevron-right" size="28rpx" color="#A09486" />
+              </view>
+            </picker>
+          </view>
+          <view class="auth-field">
             <text class="auth-label">真实姓名</text>
             <input class="auth-input" placeholder="请输入姓名" bindinput="onAuthInput" data-key="name" />
           </view>
@@ -186,18 +196,30 @@
         <text class="popup-close" bindtap="hideAnnounceDetail">✕</text>
       </view>
       <view class="popup-body announce-body">
-        <view class="announce-item" bindtap="hideAnnounceDetail">
-          <view class="announce-item-tag">公告</view>
-          <text class="announce-item-title">欢迎使用邑小区智慧社区平台</text>
-          <text class="announce-item-date">2026-04-18</text>
-          <text class="announce-item-content">邑小区智慧社区平台正式上线！业主可通过本平台进行物业缴费、诉求建议、议事协商、信息查询等操作。如有疑问请联系物业服务中心。</text>
-        </view>
-        <view class="announce-item">
-          <view class="announce-item-tag old">通知</view>
-          <text class="announce-item-title">关于小区门禁系统升级的通知</text>
-          <text class="announce-item-date">2026-04-15</text>
-          <text class="announce-item-content">为提升小区安全管理水平，物业将于近期对门禁系统进行全面升级，届时请各位业主配合登记人脸信息。</text>
-        </view>
+        <!-- 云端公告数据 -->
+        <block wx:if="{{latestAnnounce}}">
+          <view class="announce-item" bindtap="hideAnnounceDetail">
+            <view class="announce-item-tag">公告</view>
+            <text class="announce-item-title">{{latestAnnounce.title}}</text>
+            <text class="announce-item-date">{{latestAnnounce.createdAt || latestAnnounce.date || ''}}</text>
+            <text class="announce-item-content">{{latestAnnounce.content || latestAnnounce.summary || ''}}</text>
+          </view>
+        </block>
+        <!-- 降级默认公告 -->
+        <block wx:else>
+          <view class="announce-item" bindtap="hideAnnounceDetail">
+            <view class="announce-item-tag">公告</view>
+            <text class="announce-item-title">欢迎使用邑小区智慧社区平台</text>
+            <text class="announce-item-date">2026-04-18</text>
+            <text class="announce-item-content">邑小区智慧社区平台正式上线！业主可通过本平台进行物业缴费、诉求建议、议事协商、信息查询等操作。如有疑问请联系物业服务中心。</text>
+          </view>
+          <view class="announce-item">
+            <view class="announce-item-tag old">通知</view>
+            <text class="announce-item-title">关于小区门禁系统升级的通知</text>
+            <text class="announce-item-date">2026-04-15</text>
+            <text class="announce-item-content">为提升小区安全管理水平，物业将于近期对门禁系统进行全面升级，届时请各位业主配合登记人脸信息。</text>
+          </view>
+        </block>
       </view>
     </view>
   </t-popup>
@@ -295,6 +317,22 @@
         <view class="bill-empty-hint">
           <t-icon name="info-circle" size="40rpx" color="#D4C4B0" />
           <text>当前无待缴费账单</text>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- ====== 弹窗：多小区选择 ====== -->
+  <t-popup visible="{{communityPickerVisible}}" placement="bottom" bind:close="hideCommunityPicker">
+    <view class="popup-card">
+      <view class="popup-header">
+        <text class="popup-title">选择小区</text>
+        <text class="popup-close" bindtap="hideCommunityPicker">✕</text>
+      </view>
+      <view class="popup-body">
+        <view class="comm-item" wx:for="{{communityList}}" wx:key="_id" bindtap="selectCommunity" data-item="{{item}}">
+          <text class="comm-item-text">{{item.room}} · {{item.name}}</text>
+          <t-icon name="check" size="32rpx" color="#C8963E" wx:if="{{currentCommunityId === item.communityId}}" />
         </view>
       </view>
     </view>

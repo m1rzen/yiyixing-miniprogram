@@ -459,3 +459,13 @@
 .bill-row-value.green { color: #2D8B6F; }
 .bill-row-value.red { color: #C94545; }
 .bill-empty-hint { display: flex; flex-direction: column; align-items: center; gap: 12rpx; padding: 24rpx 0; font-size: 26rpx; color: #A09486; }
+
+/* ── 多小区选择 ── */
+.comm-item { display: flex; align-items: center; justify-content: space-between; padding: 28rpx 0; border-bottom: 2rpx solid #EDE4DB; }
+.comm-item:last-child { border-bottom: none; }
+.comm-item:active { background: #F9F3EE; }
+.comm-item-text { font-size: 30rpx; color: #3D2B2B; font-weight: 500; }
+
+/* ── Picker 样式（认证表单小区选择） ── */
+.picker-box { display: flex; align-items: center; justify-content: space-between; height: 88rpx; background: #F5EDE5; border-radius: 16rpx; padding: 0 24rpx; box-sizing: border-box; }
+.picker-text { font-size: 30rpx; color: #3D2B1F; }
