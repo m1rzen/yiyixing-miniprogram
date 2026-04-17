@@ -1,0 +1,189 @@
+.yxq-page {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 背景 */
+.yxq-bg {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(165deg, #F8F6F3 0%, #F2EDE7 40%, #F5F1EC 100%);
+  z-index: 1;
+}
+.yxq-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120rpx);
+  z-index: 2;
+  opacity: 0.4;
+}
+.yxq-orb-1 {
+  width: 500rpx; height: 500rpx;
+  top: -60rpx; left: -80rpx;
+  background: radial-gradient(circle, rgba(200,150,62,0.2) 0%, transparent 70%);
+}
+.yxq-orb-2 {
+  width: 400rpx; height: 400rpx;
+  bottom: 100rpx; right: -60rpx;
+  background: radial-gradient(circle, rgba(45,139,111,0.12) 0%, transparent 70%);
+}
+
+/* 动画 */
+.fade-in {
+  animation: yxqFadeUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+.delay-1 { animation-delay: 0.15s; }
+.delay-2 { animation-delay: 0.3s; }
+.delay-3 { animation-delay: 0.5s; }
+
+@keyframes yxqFadeUp {
+  from { opacity: 0; transform: translateY(40rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 导航栏 */
+.yxq-nav {
+  position: relative; z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 120rpx 40rpx 0;
+  opacity: 0;
+}
+.yxq-nav-back {
+  width: 72rpx; height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px);
+  border: 1rpx solid rgba(0,0,0,0.04);
+}
+.yxq-nav-back:active { background: rgba(255,255,255,0.9); }
+.yxq-nav-title {
+  flex: 1;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #2C2419;
+  letter-spacing: 4rpx;
+}
+.yxq-nav-placeholder { width: 72rpx; }
+
+/* 欢迎区 */
+.yxq-welcome {
+  position: relative; z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 56rpx 40rpx 36rpx;
+  opacity: 0;
+}
+.yxq-welcome-icon {
+  width: 120rpx; height: 120rpx;
+  border-radius: 36rpx;
+  background: linear-gradient(135deg, #C8963E, #A67930);
+  box-shadow: 0 12rpx 32rpx rgba(200,150,62,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28rpx;
+}
+.yxq-welcome-title {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #2C2419;
+  letter-spacing: 4rpx;
+}
+.yxq-welcome-desc {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #A09486;
+  letter-spacing: 2rpx;
+}
+
+/* 功能网格 */
+.yxq-grid {
+  position: relative; z-index: 10;
+  padding: 20rpx 40rpx;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24rpx;
+  opacity: 0;
+}
+.yxq-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(16px);
+  border-radius: 28rpx;
+  padding: 36rpx 16rpx 28rpx;
+  border: 1rpx solid rgba(255,255,255,0.9);
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.03);
+  transition: all 0.2s;
+}
+.yxq-grid-item:active {
+  transform: scale(0.96);
+  background: rgba(255,255,255,0.95);
+}
+.yxq-item-icon {
+  width: 80rpx; height: 80rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+.yxq-item-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #2C2419;
+  letter-spacing: 2rpx;
+  margin-bottom: 6rpx;
+}
+.yxq-item-desc {
+  font-size: 20rpx;
+  color: #A09486;
+  text-align: center;
+}
+
+/* 开发中提示 */
+.yxq-coming {
+  position: relative; z-index: 10;
+  padding: 40rpx 40rpx 0;
+  opacity: 0;
+}
+.yxq-coming-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 20rpx;
+  padding: 28rpx;
+  border: 1rpx solid rgba(200,150,62,0.12);
+}
+.yxq-coming-text {
+  font-size: 26rpx;
+  color: #A09486;
+  font-weight: 500;
+}
+
+/* 底部 */
+.yxq-footer {
+  position: relative; z-index: 10;
+  margin-top: auto;
+  padding: 48rpx 0 calc(env(safe-area-inset-bottom) + 40rpx);
+  text-align: center;
+  opacity: 0;
+}
+.yxq-footer-text {
+  font-size: 22rpx;
+  color: #B8AD9E;
+  letter-spacing: 2rpx;
+}

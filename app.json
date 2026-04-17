@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/entry/entry",
     "pages/welcome/welcome",
     "pages/dashboard/dashboard",
     "pages/register/register",
@@ -11,7 +12,8 @@
     "pages/guard-login/guard-login",
     "pages/guard-dashboard/guard-dashboard",
     "pages/guard-approval/guard-approval",
-    "pages/guard-monitor/guard-monitor"
+    "pages/guard-monitor/guard-monitor",
+    "pages/yixiaoqu/yixiaoqu"
   ],
   "window": {
     "backgroundTextStyle": "light",

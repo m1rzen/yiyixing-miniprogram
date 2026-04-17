@@ -1,0 +1,284 @@
+.entry-page {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ========== 背景层 — 喜茶式柔和渐变 ========== */
+.bg-base {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(165deg, #F8F6F3 0%, #F2EDE7 35%, #EDE8E1 65%, #F5F1EC 100%);
+  z-index: 1;
+}
+/* 柔光色团 — 模拟喜茶的温暖氛围 */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120rpx);
+  z-index: 2;
+  opacity: 0.45;
+}
+.orb-1 {
+  width: 600rpx; height: 600rpx;
+  top: -100rpx; right: -120rpx;
+  background: radial-gradient(circle, rgba(200,150,62,0.25) 0%, transparent 70%);
+}
+.orb-2 {
+  width: 500rpx; height: 500rpx;
+  bottom: 60rpx; left: -100rpx;
+  background: radial-gradient(circle, rgba(29,95,138,0.15) 0%, transparent 70%);
+}
+.bg-noise {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 3; opacity: 0.02;
+  background-image:
+    radial-gradient(circle at 20% 30%, #000 0.5px, transparent 0.5px),
+    radial-gradient(circle at 80% 70%, #000 0.5px, transparent 0.5px);
+  background-size: 40px 40px;
+}
+
+/* ========== 动画 ========== */
+.fade-in {
+  animation: fadeSlideUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+.delay-1 { animation-delay: 0.15s; }
+.delay-2 { animation-delay: 0.3s; }
+.delay-3 { animation-delay: 0.5s; }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(40rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== 顶部品牌 ========== */
+.header {
+  position: relative; z-index: 10;
+  width: 100%;
+  padding: 140rpx 56rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  opacity: 0;
+}
+.logo-pill {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(20px);
+  padding: 14rpx 28rpx 14rpx 20rpx;
+  border-radius: 100rpx;
+  border: 1rpx solid rgba(0,0,0,0.04);
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+}
+.logo-dot {
+  width: 28rpx; height: 28rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C8963E, #A67930);
+  box-shadow: 0 4rpx 12rpx rgba(200,150,62,0.3);
+}
+.logo-text {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #3D3228;
+  letter-spacing: 4rpx;
+}
+.header-slogan {
+  margin-top: 24rpx;
+  font-size: 24rpx;
+  color: #A09486;
+  letter-spacing: 2rpx;
+  font-weight: 400;
+}
+
+/* ========== 主标题区 ========== */
+.hero {
+  position: relative; z-index: 10;
+  width: 100%;
+  padding: 64rpx 56rpx 20rpx;
+  opacity: 0;
+}
+.hero-title {
+  display: block;
+  font-size: 60rpx;
+  font-weight: 800;
+  color: #2C2419;
+  letter-spacing: 4rpx;
+  line-height: 1.2;
+}
+.hero-desc {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 28rpx;
+  color: #A09486;
+  font-weight: 400;
+}
+
+/* ========== 双卡片区 ========== */
+.card-group {
+  position: relative; z-index: 10;
+  width: 100%;
+  padding: 36rpx 40rpx 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+  opacity: 0;
+}
+
+.service-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(24px);
+  border-radius: 36rpx;
+  border: 1rpx solid rgba(255,255,255,0.9);
+  box-shadow:
+    0 4rpx 24rpx rgba(0,0,0,0.04),
+    0 1rpx 4rpx rgba(0,0,0,0.02);
+  padding: 40rpx;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+.card-hover {
+  transform: scale(0.98);
+  box-shadow:
+    0 2rpx 12rpx rgba(0,0,0,0.06),
+    0 1rpx 2rpx rgba(0,0,0,0.03);
+}
+
+/* 角标 */
+.card-badge {
+  position: absolute;
+  top: 32rpx; right: 32rpx;
+  background: linear-gradient(135deg, #1D5F8A, #134566);
+  color: #FFF;
+  font-size: 22rpx;
+  font-weight: 600;
+  padding: 8rpx 24rpx;
+  border-radius: 100rpx;
+  letter-spacing: 2rpx;
+}
+.badge-alt {
+  background: linear-gradient(135deg, #C8963E, #A67930);
+}
+
+/* 图标区 */
+.card-icon-area {
+  margin-bottom: 28rpx;
+}
+.card-icon-bg {
+  width: 96rpx; height: 96rpx;
+  border-radius: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.yiyixing-icon-bg {
+  background: linear-gradient(135deg, #1D5F8A 0%, #134566 100%);
+  box-shadow: 0 8rpx 24rpx rgba(29,95,138,0.25);
+}
+.yixiaoqu-icon-bg {
+  background: linear-gradient(135deg, #C8963E 0%, #A67930 100%);
+  box-shadow: 0 8rpx 24rpx rgba(200,150,62,0.25);
+}
+
+/* 卡片主体 */
+.card-body {
+  margin-bottom: 8rpx;
+}
+.card-title {
+  display: block;
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #2C2419;
+  letter-spacing: 4rpx;
+  line-height: 1.2;
+}
+.card-subtitle {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #A09486;
+  font-weight: 400;
+  letter-spacing: 2rpx;
+}
+.card-divider {
+  width: 48rpx;
+  height: 4rpx;
+  border-radius: 2rpx;
+  background: linear-gradient(90deg, #D4C5B0, transparent);
+  margin: 28rpx 0;
+}
+
+/* 功能列表 */
+.card-features {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  font-size: 26rpx;
+  color: #6B5E50;
+  font-weight: 400;
+}
+.feature-dot {
+  width: 10rpx; height: 10rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.yiyixing-dot { background: #1D5F8A; }
+.yixiaoqu-dot { background: #C8963E; }
+
+/* 底部进入按钮 */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  margin-top: 32rpx;
+  padding: 24rpx 0;
+  border-radius: 20rpx;
+}
+.yiyixing-footer {
+  background: linear-gradient(135deg, #1D5F8A 0%, #134566 100%);
+  box-shadow: 0 8rpx 24rpx rgba(29,95,138,0.2);
+}
+.yixiaoqu-footer {
+  background: linear-gradient(135deg, #C8963E 0%, #A67930 100%);
+  box-shadow: 0 8rpx 24rpx rgba(200,150,62,0.2);
+}
+.card-action-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #FFF;
+  letter-spacing: 4rpx;
+}
+
+/* ========== 底部 ========== */
+.footer {
+  position: relative; z-index: 10;
+  margin-top: auto;
+  padding: 48rpx 0 calc(env(safe-area-inset-bottom) + 40rpx);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  opacity: 0;
+}
+.footer-text {
+  font-size: 22rpx;
+  color: #B8AD9E;
+  letter-spacing: 2rpx;
+}
+.footer-version {
+  font-size: 20rpx;
+  color: #CFC6B9;
+  letter-spacing: 1rpx;
+}

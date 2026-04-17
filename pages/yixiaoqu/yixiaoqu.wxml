@@ -1,0 +1,48 @@
+<view class="yxq-page">
+  <!-- 背景 -->
+  <view class="yxq-bg"></view>
+  <view class="yxq-orb yxq-orb-1"></view>
+  <view class="yxq-orb yxq-orb-2"></view>
+
+  <!-- 导航栏 -->
+  <view class="yxq-nav {{animReady ? 'fade-in' : ''}}">
+    <view class="yxq-nav-back" bindtap="goBack">
+      <t-icon name="chevron-left" size="40rpx" color="#3D3228" />
+    </view>
+    <text class="yxq-nav-title">邑小区</text>
+    <view class="yxq-nav-placeholder"></view>
+  </view>
+
+  <!-- 欢迎区 -->
+  <view class="yxq-welcome {{animReady ? 'fade-in delay-1' : ''}}">
+    <view class="yxq-welcome-icon">
+      <t-icon name="city-1" size="64rpx" color="#FFF" />
+    </view>
+    <text class="yxq-welcome-title">智慧社区平台</text>
+    <text class="yxq-welcome-desc">您的社区生活，一屏掌握</text>
+  </view>
+
+  <!-- 功能网格 -->
+  <view class="yxq-grid {{animReady ? 'fade-in delay-2' : ''}}">
+    <view class="yxq-grid-item" wx:for="{{features}}" wx:key="title">
+      <view class="yxq-item-icon" style="background: linear-gradient(135deg, {{item.color}}, {{item.color}}CC);">
+        <t-icon name="{{item.icon}}" size="44rpx" color="#FFF" />
+      </view>
+      <text class="yxq-item-title">{{item.title}}</text>
+      <text class="yxq-item-desc">{{item.desc}}</text>
+    </view>
+  </view>
+
+  <!-- 开发中提示 -->
+  <view class="yxq-coming {{animReady ? 'fade-in delay-3' : ''}}">
+    <view class="yxq-coming-inner">
+      <t-icon name="tips" size="36rpx" color="#C8963E" />
+      <text class="yxq-coming-text">邑小区平台正在建设中，敬请期待</text>
+    </view>
+  </view>
+
+  <!-- 底部 -->
+  <view class="yxq-footer {{animReady ? 'fade-in delay-3' : ''}}">
+    <text class="yxq-footer-text">江门市蓬江区 · 智慧社区公共服务平台</text>
+  </view>
+</view>
