@@ -84,6 +84,20 @@
     <view class="promo-deco"><t-icon name="usergroup" size="100rpx" color="rgba(255,255,255,0.35)" /></view>
   </view>
 
+  <!-- ====== 社区管理入口 ====== -->
+  <view class="admin-entry" bindtap="showAdminLogin">
+    <view class="admin-entry-left">
+      <view class="admin-entry-icon">
+        <t-icon name="setting" size="40rpx" color="#FFF" />
+      </view>
+      <view class="admin-entry-info">
+        <text class="admin-entry-title">社区管理</text>
+        <text class="admin-entry-desc">管理员登录后台</text>
+      </view>
+    </view>
+    <t-icon name="chevron-right" size="32rpx" color="#B8A090" />
+  </view>
+
   <!-- ====== 功能网格 ====== -->
   <view class="grid">
     <view class="grid-item" wx:for="{{features}}" wx:key="key" bindtap="goFeature" data-key="{{item.key}}">
@@ -115,9 +129,6 @@
     <view class="bottom-btns">
       <view class="apply-btn" bindtap="showApplyPopup">
         <text class="apply-btn-text">去申请</text>
-      </view>
-      <view class="admin-entry-btn" bindtap="showAdminLogin">
-        <t-icon name="setting" size="28rpx" color="#5C3D2E" />
       </view>
     </view>
   </view>

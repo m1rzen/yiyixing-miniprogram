@@ -225,6 +225,45 @@
 }
 
 /* ══════════════════════════════════
+   社区管理入口
+   ══════════════════════════════════ */
+.admin-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 24rpx 28rpx 0;
+  padding: 28rpx 32rpx;
+  background: #FFF;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(92,61,46,0.04);
+}
+.admin-entry:active { background: #FBF5EF; }
+.admin-entry-left {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+.admin-entry-icon {
+  width: 72rpx; height: 72rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #5C3D2E, #3D2B1F);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.admin-entry-info { display: flex; flex-direction: column; gap: 4rpx; }
+.admin-entry-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #3D2B1F;
+}
+.admin-entry-desc {
+  font-size: 24rpx;
+  color: #A09486;
+}
+
+/* ══════════════════════════════════
    功能网格
    ══════════════════════════════════ */
 .grid {
@@ -344,14 +383,6 @@
 .apply-btn:active { opacity: 0.6; }
 .apply-btn-text { font-size: 26rpx; color: #C8963E; font-weight: 600; }
 .bottom-btns { display: flex; align-items: center; gap: 16rpx; flex-shrink: 0; }
-.admin-entry-btn {
-  width: 68rpx; height: 68rpx;
-  border-radius: 50%;
-  background: #F5EDE5;
-  display: flex; align-items: center; justify-content: center;
-  border: 2rpx solid #EDE4DB;
-}
-.admin-entry-btn:active { background: #EDE4DB; }
 
 /* 底部占位 */
 .bottom-placeholder {

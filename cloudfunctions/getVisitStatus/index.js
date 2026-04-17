@@ -6,10 +6,10 @@ const _ = db.command;
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const openid = wxContext.OPENID;
-  const { visitId } = event;
+  const { visitId, filterPhone } = event;
 
   try {
-    // 查询用户身份档案（附带在所有结果中）
+    // 查询用户身份档案
     const userCheck = await db.collection('users').where({ _openid: openid }).get();
     const userProfile = userCheck.data.length > 0 ? userCheck.data[0] : null;
     const identityInfo = userProfile ? {
@@ -20,15 +20,23 @@ exports.main = async (event, context) => {
     } : null;
 
     if (visitId) {
-      // 查询特定记录
       const doc = await db.collection('visits').doc(visitId).get();
       return { success: true, visit: doc.data, identityInfo };
+    }
+
+    // 构建查询条件：必须匹配当前 openid
+    const baseWhere = { _openid: openid };
+
+    // ★ 关键修复：如果前端传了 filterPhone，额外按 phone 过滤
+    // 这样换手机号登录后只看到该手机号的记录
+    if (filterPhone && filterPhone.length === 11) {
+      baseWhere.phone = filterPhone;
     }
 
     // 查询该用户最新的活跃拜访记录
     const result = await db.collection('visits')
       .where({
-        _openid: openid,
+        ...baseWhere,
         status: _.in(['pending', 'approved'])
       })
       .orderBy('createTime', 'desc')
@@ -36,9 +44,8 @@ exports.main = async (event, context) => {
       .get();
 
     if (result.data.length > 0) {
-      // 同时查询历史记录（最近5条）
       const historyResult = await db.collection('visits')
-        .where({ _openid: openid })
+        .where(baseWhere)
         .orderBy('createTime', 'desc')
         .limit(5)
         .get();
@@ -46,9 +53,9 @@ exports.main = async (event, context) => {
       return { success: true, visit: result.data[0], hasActiveVisit: true, history: historyResult.data, identityInfo };
     }
 
-    // 查询最近的历史记录
+    // 查询历史记录
     const historyResult = await db.collection('visits')
-      .where({ _openid: openid })
+      .where(baseWhere)
       .orderBy('createTime', 'desc')
       .limit(5)
       .get();

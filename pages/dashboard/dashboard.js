@@ -55,9 +55,11 @@ Page({
 
   checkActiveVisit() {
     this.setData({ isLoading: true });
+    const userInfo = wx.getStorageSync('userInfo') || {};
+    const filterPhone = userInfo.fullPhone || '';
     app.callCloud({
       name: 'getVisitStatus',
-      data: {}
+      data: filterPhone ? { filterPhone } : {}
     }).then(res => {
       if (res.result.success && res.result.hasActiveVisit && res.result.visit) {
         const visit = res.result.visit;

@@ -19,15 +19,16 @@ Page({
   },
 
   loadHistory() {
-    // Always fetch history (getVisitStatus only returns history when no active visit)
-    // So we make a separate call that always returns history
     const app = getApp();
+    // ★ 传入当前登录手机号，云函数按 phone 过滤，避免显示其他用户的记录
+    const userInfo = wx.getStorageSync('userInfo') || {};
+    const filterPhone = userInfo.fullPhone || '';
+
     wx.cloud.callFunction({
       name: 'getVisitStatus',
-      data: {}
+      data: filterPhone ? { filterPhone } : {}
     }).then(res => {
       if (res.result && res.result.success) {
-        // If history was returned, use it
         if (res.result.history && res.result.history.length > 0) {
           const history = res.result.history.map(item => ({
             ...item,
@@ -35,7 +36,6 @@ Page({
           }));
           this.setData({ visitHistory: history });
         } else if (res.result.visit) {
-          // Only active visit, no history — show it as the single record
           const v = res.result.visit;
           this.setData({
             visitHistory: [{
@@ -43,6 +43,8 @@ Page({
               createTimeStr: this.formatTime(v.createTime)
             }]
           });
+        } else {
+          this.setData({ visitHistory: [] });
         }
       }
     }).catch(err => {
