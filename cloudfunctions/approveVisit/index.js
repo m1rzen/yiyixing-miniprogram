@@ -63,13 +63,12 @@ exports.main = async (event, context) => {
           totalVisits: _.inc(1),
           updateTime: db.serverDate()
         };
-        // 如果还未被认证过，则本次审批完成认证
-        if (!user.identityVerified) {
-          userUpdate.identityVerified = true;
-          userUpdate.verifiedBy = guardInfo.name || '保安';
-          userUpdate.verifiedCommunity = visit.community || '';
-          userUpdate.verifiedAt = db.serverDate();
-        }
+        // ★ 修复：每次审批通过都更新认证信息（尤其是 verifiedCommunity）
+        // 这样用户在小区 B 被审批通过后，下次访问小区 B 也能自动通过
+        userUpdate.identityVerified = true;
+        userUpdate.verifiedBy = guardInfo.name || '保安';
+        userUpdate.verifiedCommunity = visit.community || '';
+        userUpdate.verifiedAt = db.serverDate();
         await db.collection('users').where({ _openid: visitorOpenid }).update({ data: userUpdate });
       }
     }

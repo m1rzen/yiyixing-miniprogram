@@ -49,6 +49,8 @@ Page({
   // 查询用户已有档案，决定表单模式
   loadUserProfile() {
     this.setData({ isLoadingProfile: true });
+    const currentLoginPhone = wx.getStorageSync('loginPhone') || '';
+
     app.callCloud({
       name: 'registerUser',
       data: { checkProfile: true }
@@ -56,27 +58,43 @@ Page({
       this.setData({ isLoadingProfile: false });
       if (res.result && res.result.success && res.result.hasProfile) {
         const user = res.result.user;
-        this.setData({
-          name: user.name || '',
-          phone: user.phone || '',
-          idCard: user.idCard || '',
-          photoFileId: user.photoFileId || '',
-          verifiedBy: user.verifiedBy || '',
-          verifiedCommunity: user.verifiedCommunity || '',
-          totalVisits: user.totalVisits || 0,
-          profileMode: user.identityVerified ? 'returning_verified' : 'returning_unverified'
-        });
-        // 同步到本地存储
-        const userInfo = wx.getStorageSync('userInfo') || {};
-        userInfo.name = user.name;
-        userInfo.idCard = user.idCard;
-        userInfo.fullPhone = user.phone;
-        wx.setStorageSync('userInfo', userInfo);
+        const cloudPhone = user.phone || '';
+
+        // ★ 核心修复：对比当前登录手机号与云端手机号
+        // 如果手机号一致（同一人回头），正常回填全部信息
+        // 如果手机号不一致（换号登录），进入 new 模式，仅预填新手机号
+        if (currentLoginPhone && cloudPhone && currentLoginPhone !== cloudPhone) {
+          // 换号登录：不使用云端旧身份，但保留新手机号
+          this.setData({
+            name: '',
+            phone: currentLoginPhone,
+            idCard: '',
+            photoFileId: '',
+            profileMode: 'new'
+          });
+        } else {
+          // 同一用户回头：正常回填云端信息
+          this.setData({
+            name: user.name || '',
+            phone: cloudPhone || currentLoginPhone || '',
+            idCard: user.idCard || '',
+            photoFileId: user.photoFileId || '',
+            verifiedBy: user.verifiedBy || '',
+            verifiedCommunity: user.verifiedCommunity || '',
+            totalVisits: user.totalVisits || 0,
+            profileMode: user.identityVerified ? 'returning_verified' : 'returning_unverified'
+          });
+          // 同步到本地存储（仅同一用户时才同步）
+          const userInfo = wx.getStorageSync('userInfo') || {};
+          userInfo.name = user.name;
+          userInfo.idCard = user.idCard;
+          userInfo.fullPhone = cloudPhone;
+          wx.setStorageSync('userInfo', userInfo);
+        }
       } else {
         // 新用户，从本地存储读取预填信息
-        const loginPhone = wx.getStorageSync('loginPhone') || '';
         const userInfo = wx.getStorageSync('userInfo') || {};
-        if (loginPhone) this.setData({ phone: loginPhone });
+        if (currentLoginPhone) this.setData({ phone: currentLoginPhone });
         else if (userInfo.fullPhone) this.setData({ phone: userInfo.fullPhone });
         if (userInfo.name) this.setData({ name: userInfo.name });
         if (userInfo.idCard) this.setData({ idCard: userInfo.idCard });
@@ -86,9 +104,8 @@ Page({
       console.error('查询用户档案失败', err);
       this.setData({ isLoadingProfile: false, profileMode: 'new' });
       // 回退到本地存储
-      const loginPhone = wx.getStorageSync('loginPhone') || '';
       const userInfo = wx.getStorageSync('userInfo') || {};
-      if (loginPhone) this.setData({ phone: loginPhone });
+      if (currentLoginPhone) this.setData({ phone: currentLoginPhone });
       else if (userInfo.fullPhone) this.setData({ phone: userInfo.fullPhone });
       if (userInfo.name) this.setData({ name: userInfo.name });
       if (userInfo.idCard) this.setData({ idCard: userInfo.idCard });
@@ -175,14 +192,12 @@ Page({
         communityId: currentCommunityId,
         reason,
         platform,
-        photoFileId
+        photoFileId,
+        // ★ 始终传入身份信息，让云端能检测手机号变更
+        name: name.trim(),
+        phone,
+        idCard
       };
-      // 新用户和未认证用户传入身份信息
-      if (profileMode !== 'returning_verified') {
-        submitData.name = name.trim();
-        submitData.phone = phone;
-        submitData.idCard = idCard;
-      }
 
       const res = await app.callCloud({ name: 'registerUser', data: submitData });
 
@@ -198,10 +213,8 @@ Page({
         wx.setStorageSync('activeVisit', { visitId: res.result.visitId, status: res.result.status });
 
         let msg = '登记成功，等待保安审核';
-        if (res.result.identityPreVerified) {
-          msg = '身份已认证，系统自动通过！';
-        } else if (res.result.platformVerified) {
-          msg = '平台核验通过，准予通行！';
+        if (res.result.canAutoApprove) {
+          msg = res.result.platformVerified ? '平台核验通过，准予通行！' : '身份已认证（同小区），系统自动通过！';
         }
         Toast({ context: this, selector: '#t-toast', message: msg, theme: 'success' });
         setTimeout(() => {

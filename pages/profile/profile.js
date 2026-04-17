@@ -70,6 +70,7 @@ Page({
           wx.clearStorageSync();
           app.globalData.isLoggedIn = false;
           app.globalData.userInfo = null;
+          app.globalData.openid = '';  // ★ 清空 openid 缓存
           app.globalData.activeVisit = null;
           Toast({ context: this, selector: '#t-toast', message: '数据已清除', theme: 'success' });
           setTimeout(() => wx.reLaunch({ url: '/pages/welcome/welcome' }), 1000);
@@ -88,6 +89,7 @@ Page({
           wx.clearStorageSync();
           app.globalData.isLoggedIn = false;
           app.globalData.userInfo = null;
+          app.globalData.openid = '';  // ★ 清空 openid 缓存
           app.globalData.tempRecord = { selectedCommunity: '', selectedCommunityId: '', reason: '' };
           wx.reLaunch({ url: '/pages/welcome/welcome' });
         }

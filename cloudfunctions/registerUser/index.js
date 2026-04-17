@@ -45,11 +45,12 @@ exports.main = async (event, context) => {
     const userCheck = await db.collection('users').where({ _openid: openid }).get();
     const existingUser = userCheck.data.length > 0 ? userCheck.data[0] : null;
 
-    // 已有档案的用户：从数据库读取身份信息，无需重新填写
-    const finalName = (name && name.trim()) || (existingUser && existingUser.name) || '';
-    const finalPhone = phone || (existingUser && existingUser.phone) || '';
-    const finalIdCard = idCard || (existingUser && existingUser.idCard) || '';
-    const finalPhoto = photoFileId || (existingUser && existingUser.photoFileId) || '';
+    // ★ 修复：前端传入的信息优先，仅在前端未传时才 fallback 到云端旧值
+    // 这样换号登录时前端传入新手机号，不会被旧档案覆盖
+    const finalName = (name && name.trim()) ? name.trim() : (existingUser ? existingUser.name : '') || '';
+    const finalPhone = phone ? phone : (existingUser ? existingUser.phone : '') || '';
+    const finalIdCard = idCard ? idCard : (existingUser ? existingUser.idCard : '') || '';
+    const finalPhoto = photoFileId ? photoFileId : (existingUser ? existingUser.photoFileId : '') || '';
 
     // 新用户必须填写完整信息
     if (!existingUser) {
@@ -59,6 +60,9 @@ exports.main = async (event, context) => {
         return { success: false, errMsg: '身份证号格式不正确' };
       }
     }
+
+    // ★ 检测手机号变更：如果已有档案且前端传入了不同手机号，视为身份变更
+    const isPhoneChanged = existingUser && phone && existingUser.phone && phone !== existingUser.phone;
 
     // 第三方平台快捷核验
     let platformVerified = false;
@@ -82,7 +86,17 @@ exports.main = async (event, context) => {
 
     // 判断此次申请提交时用户身份是否已预认证
     const wasAlreadyVerified = (existingUser && existingUser.identityVerified) || false;
-    // 平台核验通过也算已认证
+
+    // ★ 核心修复：自动通过仅限「同一小区 + 已认证 + 手机号未变更」
+    // 跨小区拜访 → 需保安审批（pending）
+    // 手机号变更 → 需重新审批（pending）
+    const verifiedCommunity = (existingUser && existingUser.verifiedCommunity) || '';
+    const isSameCommunity = verifiedCommunity && verifiedCommunity === community;
+    const canAutoApprove = !isPhoneChanged && (
+      platformVerified ||
+      (wasAlreadyVerified && isSameCommunity)
+    );
+
     const identityPreVerified = wasAlreadyVerified || platformVerified;
 
     // 更新或创建用户档案
@@ -93,6 +107,15 @@ exports.main = async (event, context) => {
       photoFileId: finalPhoto,
       updateTime: db.serverDate()
     };
+
+    // ★ 手机号变更时重置认证状态，需重新审批
+    if (isPhoneChanged) {
+      userUpdateData.identityVerified = false;
+      userUpdateData.verifiedBy = '';
+      userUpdateData.verifiedCommunity = '';
+      userUpdateData.verifiedAt = null;
+    }
+
     // 平台核验通过时顺带认证身份
     if (platformVerified && existingUser && !existingUser.identityVerified) {
       userUpdateData.identityVerified = true;
@@ -132,10 +155,10 @@ exports.main = async (event, context) => {
       platform: platform || '普通访客',
       platformVerified,
       platformInfo,
-      identityPreVerified,          // 提交时是否已是认证用户
-      status: (platformVerified || wasAlreadyVerified) ? 'approved' : 'pending',
-      approvedBy: (platformVerified || wasAlreadyVerified) ? 'system' : '',
-      approveTime: (platformVerified || wasAlreadyVerified) ? db.serverDate() : null,
+      identityPreVerified,
+      status: canAutoApprove ? 'approved' : 'pending',
+      approvedBy: canAutoApprove ? 'system' : '',
+      approveTime: canAutoApprove ? db.serverDate() : null,
       rejectReason: '',
       entryTime: null, exitTime: null,
       isInside: false,
@@ -151,6 +174,7 @@ exports.main = async (event, context) => {
       status: visitData.status,
       platformVerified,
       identityPreVerified,
+      canAutoApprove,
       openid
     };
   } catch (err) {

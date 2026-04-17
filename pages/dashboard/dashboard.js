@@ -181,6 +181,7 @@ Page({
           wx.clearStorageSync();
           app.globalData.isLoggedIn = false;
           app.globalData.userInfo = null;
+          app.globalData.openid = '';  // ★ 清空 openid 缓存，防止身份残留
           app.globalData.activeVisit = null;
           app.globalData.tempRecord = { selectedCommunity: '', selectedCommunityId: '', reason: '' };
           wx.reLaunch({ url: '/pages/welcome/welcome' });

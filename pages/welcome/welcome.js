@@ -124,6 +124,14 @@ Page({
     // 如果有头像，先上传到云存储
     const doLogin = (avatarFileId) => {
       app.getOpenid((openid) => {
+        // ★ 检测手机号变更：新手机号与旧存储不一致时，清空旧身份
+        const oldPhone = wx.getStorageSync('loginPhone') || '';
+        const newPhone = this.data.authPhoneFull;
+        if (oldPhone && newPhone && oldPhone !== newPhone) {
+          wx.clearStorageSync();
+          app.globalData.openid = '';
+        }
+
         const userInfo = {
           phone: this.data.authPhone,
           fullPhone: this.data.authPhoneFull,
@@ -207,6 +215,14 @@ Page({
 
     app.getOpenid((openid) => {
       const phone = this.data.phoneNumber;
+
+      // ★ 检测手机号变更：新手机号与旧存储不一致时，清空旧身份
+      const oldPhone = wx.getStorageSync('loginPhone') || '';
+      if (oldPhone && oldPhone !== phone) {
+        wx.clearStorageSync();
+        app.globalData.openid = '';
+      }
+
       const maskedPhone = phone.substring(0, 3) + '****' + phone.substring(7);
       const userInfo = { phone: maskedPhone, fullPhone: phone, loginType: 'phone', openid: openid };
       wx.setStorageSync('userInfo', userInfo);
@@ -220,17 +236,45 @@ Page({
   },
 
   handleQuickPass() {
-    wx.showLoading({ title: '核验本地凭证...', mask: true });
-    setTimeout(() => {
+    wx.showLoading({ title: '查询通行证...', mask: true });
+
+    // ★ 实时向云端查询当前 openid 下是否有活跃的已通过通行证
+    app.callCloud({
+      name: 'getVisitStatus',
+      data: {}   // 不传 visitId，云函数按 openid 查最新 pending/approved 记录
+    }).then(res => {
       wx.hideLoading();
-      const activeVisit = wx.getStorageSync('activeVisit');
-      if (activeVisit && activeVisit.visitId) {
-        wx.redirectTo({ url: '/pages/status/status?visitId=' + activeVisit.visitId });
+      if (res.result && res.result.success && res.result.hasActiveVisit && res.result.visit) {
+        const visit = res.result.visit;
+        // 同步到本地缓存
+        wx.setStorageSync('activeVisit', { visitId: visit._id, status: visit.status });
+
+        if (visit.status === 'approved') {
+          // 已通过审核，直接亮码
+          wx.redirectTo({ url: '/pages/status/status?visitId=' + visit._id });
+        } else if (visit.status === 'pending') {
+          // 还在等审核，跳到状态页看进度
+          Toast({ context: this, selector: '#t-toast', message: '通行证正在审核中，请稍候' });
+          setTimeout(() => {
+            wx.redirectTo({ url: '/pages/status/status?visitId=' + visit._id });
+          }, 1000);
+        }
       } else {
-        Toast({ context: this, selector: '#t-toast', message: '未查到有效通行证，请先登录' });
+        // 没有活跃通行证
+        Toast({ context: this, selector: '#t-toast', message: '暂无有效通行证，请先登记' });
         setTimeout(() => this.setData({ popupVisible: true }), 1500);
       }
-    }, 600);
+    }).catch(err => {
+      wx.hideLoading();
+      console.error('查询通行证失败', err);
+      // 云端查询失败时回退到本地缓存
+      const activeVisit = wx.getStorageSync('activeVisit');
+      if (activeVisit && activeVisit.visitId && activeVisit.status === 'approved') {
+        wx.redirectTo({ url: '/pages/status/status?visitId=' + activeVisit.visitId });
+      } else {
+        Toast({ context: this, selector: '#t-toast', message: '网络异常，请稍后重试' });
+      }
+    });
   },
 
   goToGuardLogin() {
