@@ -1,99 +1,52 @@
-<view class="entry-page">
-  <!-- 背景层 -->
-  <view class="bg-base"></view>
-  <view class="bg-orb orb-1"></view>
-  <view class="bg-orb orb-2"></view>
-  <view class="bg-noise"></view>
+<view class="page">
+  <!-- 背景 -->
+  <view class="bg"></view>
+  <view class="orb orb-a"></view>
+  <view class="orb orb-b"></view>
 
-  <!-- 顶部品牌 -->
-  <view class="header {{animReady ? 'fade-in' : ''}}">
-    <view class="logo-pill">
-      <view class="logo-dot"></view>
-      <text class="logo-text">邑 Yi</text>
+  <!-- 头部 -->
+  <view class="top {{animReady ? 'show' : ''}}">
+    <view class="brand-row">
+      <view class="brand-dot"></view>
+      <text class="brand-name">邑 Yi</text>
     </view>
-    <text class="header-slogan">五邑侨乡 · 智慧社区生态</text>
+    <text class="greeting">你好，欢迎回来</text>
+    <text class="title">选择服务</text>
   </view>
 
-  <!-- 主标题区 -->
-  <view class="hero {{animReady ? 'fade-in delay-1' : ''}}">
-    <text class="hero-title">选择服务</text>
-    <text class="hero-desc">请选择您需要使用的功能模块</text>
-  </view>
+  <!-- 双卡片 — 左右并排 -->
+  <view class="cards {{animReady ? 'show delay' : ''}}">
 
-  <!-- 双卡片选择区 -->
-  <view class="card-group {{animReady ? 'fade-in delay-2' : ''}}">
-
-    <!-- 邑易行卡片 -->
-    <view class="service-card card-yiyixing" bindtap="goToYiyixing" hover-class="card-hover">
-      <view class="card-badge">访客通行</view>
-      <view class="card-icon-area">
-        <view class="card-icon-bg yiyixing-icon-bg">
-          <t-icon name="secured" size="56rpx" color="#FFF" />
-        </view>
+    <view class="card" hover-class="card-tap" bindtap="goToYiyixing">
+      <!-- 图标 -->
+      <view class="card-icon icon-blue">
+        <t-icon name="secured" size="52rpx" color="#FFF" />
       </view>
-      <view class="card-body">
-        <text class="card-title">邑易行</text>
-        <text class="card-subtitle">智慧通行系统</text>
-        <view class="card-divider"></view>
-        <view class="card-features">
-          <view class="feature-item">
-            <view class="feature-dot yiyixing-dot"></view>
-            <text>实名登记入场</text>
-          </view>
-          <view class="feature-item">
-            <view class="feature-dot yiyixing-dot"></view>
-            <text>保安实时审批</text>
-          </view>
-          <view class="feature-item">
-            <view class="feature-dot yiyixing-dot"></view>
-            <text>电子通行凭证</text>
-          </view>
-        </view>
-      </view>
-      <view class="card-footer yiyixing-footer">
-        <text class="card-action-text">进入</text>
-        <t-icon name="chevron-right" size="32rpx" color="#FFF" />
+      <!-- 名称 -->
+      <text class="card-name">邑易行</text>
+      <text class="card-desc">访客通行登记</text>
+      <!-- 箭头 -->
+      <view class="card-arrow arrow-blue">
+        <t-icon name="arrow-right" size="28rpx" color="#FFF" />
       </view>
     </view>
 
-    <!-- 邑小区卡片 -->
-    <view class="service-card card-yixiaoqu" bindtap="goToYixiaoqu" hover-class="card-hover">
-      <view class="card-badge badge-alt">社区生活</view>
-      <view class="card-icon-area">
-        <view class="card-icon-bg yixiaoqu-icon-bg">
-          <t-icon name="city-1" size="56rpx" color="#FFF" />
-        </view>
+    <view class="card" hover-class="card-tap" bindtap="goToYixiaoqu">
+      <view class="card-icon icon-gold">
+        <t-icon name="city-1" size="52rpx" color="#FFF" />
       </view>
-      <view class="card-body">
-        <text class="card-title">邑小区</text>
-        <text class="card-subtitle">智慧社区平台</text>
-        <view class="card-divider"></view>
-        <view class="card-features">
-          <view class="feature-item">
-            <view class="feature-dot yixiaoqu-dot"></view>
-            <text>社区公告通知</text>
-          </view>
-          <view class="feature-item">
-            <view class="feature-dot yixiaoqu-dot"></view>
-            <text>邻里互助交流</text>
-          </view>
-          <view class="feature-item">
-            <view class="feature-dot yixiaoqu-dot"></view>
-            <text>物业报修服务</text>
-          </view>
-        </view>
-      </view>
-      <view class="card-footer yixiaoqu-footer">
-        <text class="card-action-text">进入</text>
-        <t-icon name="chevron-right" size="32rpx" color="#FFF" />
+      <text class="card-name">邑小区</text>
+      <text class="card-desc">智慧社区生活</text>
+      <view class="card-arrow arrow-gold">
+        <t-icon name="arrow-right" size="28rpx" color="#FFF" />
       </view>
     </view>
 
   </view>
 
-  <!-- 底部 -->
-  <view class="footer {{animReady ? 'fade-in delay-3' : ''}}">
-    <text class="footer-text">江门市蓬江区 · 智慧社区公共服务平台</text>
-    <text class="footer-version">v2.1</text>
+  <!-- 底部标语 -->
+  <view class="bottom {{animReady ? 'show delay2' : ''}}">
+    <view class="bottom-line"></view>
+    <text class="bottom-text">五邑侨乡 · 智慧社区公共服务平台</text>
   </view>
 </view>
