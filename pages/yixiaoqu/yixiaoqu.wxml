@@ -1,48 +1,110 @@
-<view class="yxq-page">
-  <!-- 背景 -->
-  <view class="yxq-bg"></view>
-  <view class="yxq-orb yxq-orb-1"></view>
-  <view class="yxq-orb yxq-orb-2"></view>
+<view class="page">
 
-  <!-- 导航栏 -->
-  <view class="yxq-nav {{animReady ? 'fade-in' : ''}}">
-    <view class="yxq-nav-back" bindtap="goBack">
-      <t-icon name="chevron-left" size="40rpx" color="#3D3228" />
+  <!-- ====== 顶部 Banner ====== -->
+  <view class="banner">
+    <view class="banner-bg"></view>
+    <image class="banner-skyline" src="../entry/skyline.svg" mode="widthFix" />
+
+    <!-- 房屋地址胶囊 -->
+    <view class="addr-pill">
+      <t-icon name="location" size="28rpx" color="#FDF5F0" />
+      <text class="addr-text">暂无房屋信息</text>
     </view>
-    <text class="yxq-nav-title">邑小区</text>
-    <view class="yxq-nav-placeholder"></view>
+
+    <!-- Banner 主标题 -->
+    <view class="banner-titles">
+      <view class="banner-title-row">
+        <text class="banner-highlight">侨乡引领</text>
+        <text class="banner-brand"> 邑</text>
+        <text class="banner-brand-i">小区</text>
+      </view>
+      <text class="banner-sub">共建共治共享</text>
+    </view>
   </view>
 
-  <!-- 欢迎区 -->
-  <view class="yxq-welcome {{animReady ? 'fade-in delay-1' : ''}}">
-    <view class="yxq-welcome-icon">
-      <t-icon name="city-1" size="64rpx" color="#FFF" />
+  <!-- ====== 账单双卡片（叠在 banner 底部） ====== -->
+  <view class="bill-cards">
+    <view class="bill-card">
+      <text class="bill-num">0.00</text>
+      <text class="bill-label">本月账单（元）</text>
     </view>
-    <text class="yxq-welcome-title">智慧社区平台</text>
-    <text class="yxq-welcome-desc">您的社区生活，一屏掌握</text>
+    <view class="bill-card">
+      <text class="bill-num accent">0.00</text>
+      <text class="bill-label">共有资金余额（元）</text>
+    </view>
   </view>
 
-  <!-- 功能网格 -->
-  <view class="yxq-grid {{animReady ? 'fade-in delay-2' : ''}}">
-    <view class="yxq-grid-item" wx:for="{{features}}" wx:key="title">
-      <view class="yxq-item-icon" style="background: linear-gradient(135deg, {{item.color}}, {{item.color}}CC);">
+  <!-- ====== 登录提示条 ====== -->
+  <view class="login-bar">
+    <text class="login-hint">仅限小区已登记住户使用，请登录</text>
+    <view class="login-btn" bindtap="goLogin">
+      <text class="login-btn-text">去登录 ></text>
+    </view>
+  </view>
+
+  <!-- ====== 最新公告 ====== -->
+  <view class="announce-bar">
+    <view class="announce-label">
+      <text class="announce-prefix">最</text>
+      <text class="announce-new">新</text>
+      <text class="announce-prefix">公告</text>
+    </view>
+    <t-icon name="sound" size="32rpx" color="#B8956F" />
+    <text class="announce-content">暂无公告</text>
+  </view>
+
+  <!-- ====== 横幅：邻里互助 ====== -->
+  <view class="promo-banner">
+    <view class="promo-bg"></view>
+    <view class="promo-body">
+      <text class="promo-title">邻里互助队</text>
+      <text class="promo-desc">守望相助，共建家园</text>
+      <view class="promo-btn">
+        <text class="promo-btn-text">了解加入</text>
+      </view>
+    </view>
+    <view class="promo-deco">
+      <t-icon name="usergroup" size="100rpx" color="rgba(255,255,255,0.35)" />
+    </view>
+  </view>
+
+  <!-- ====== 功能网格 ====== -->
+  <view class="grid">
+    <view class="grid-item" wx:for="{{features}}" wx:key="title">
+      <view class="grid-icon" style="background: {{item.bg}};">
         <t-icon name="{{item.icon}}" size="44rpx" color="#FFF" />
       </view>
-      <text class="yxq-item-title">{{item.title}}</text>
-      <text class="yxq-item-desc">{{item.desc}}</text>
+      <text class="grid-label">{{item.title}}</text>
     </view>
   </view>
 
-  <!-- 开发中提示 -->
-  <view class="yxq-coming {{animReady ? 'fade-in delay-3' : ''}}">
-    <view class="yxq-coming-inner">
-      <t-icon name="tips" size="36rpx" color="#C8963E" />
-      <text class="yxq-coming-text">邑小区平台正在建设中，敬请期待</text>
+  <!-- ====== 右侧浮动按钮 ====== -->
+  <view class="fab" bindtap="goLogin">
+    <t-icon name="user-checked" size="48rpx" color="#5C3D2E" />
+    <text class="fab-text">住户认证</text>
+  </view>
+
+  <!-- ====== 底部固定条 ====== -->
+  <view class="bottom-bar">
+    <view class="bottom-left">
+      <t-icon name="edit-1" size="40rpx" color="#C8963E" />
+      <view class="bottom-info">
+        <view class="bottom-title-row">
+          <text class="bottom-title">申请开通邑小区</text>
+          <view class="free-tag">
+            <text class="free-tag-text">免费</text>
+          </view>
+        </view>
+        <text class="bottom-desc">业委会/物业公司/社区(居委会)可申请</text>
+      </view>
+    </view>
+    <view class="apply-btn">
+      <text class="apply-btn-text">去申请</text>
     </view>
   </view>
 
-  <!-- 底部 -->
-  <view class="yxq-footer {{animReady ? 'fade-in delay-3' : ''}}">
-    <text class="yxq-footer-text">江门市蓬江区 · 智慧社区公共服务平台</text>
-  </view>
+  <!-- 底部占位（防止被 bottom-bar 遮挡） -->
+  <view class="bottom-placeholder"></view>
+
+  <t-toast id="t-toast" />
 </view>
