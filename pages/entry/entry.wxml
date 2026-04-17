@@ -13,31 +13,9 @@
     <!-- 大标题 -->
     <text class="hero-title">五邑侨乡生态</text>
 
-    <!-- 中心碉楼插画区域（纯 CSS 绘制） -->
+    <!-- 碉楼天际线插画 — SVG -->
     <view class="hero-visual">
-      <!-- 主建筑剪影 -->
-      <view class="building">
-        <view class="building-body"></view>
-        <view class="building-top"></view>
-        <view class="building-window w1"></view>
-        <view class="building-window w2"></view>
-        <view class="building-window w3"></view>
-        <view class="building-window w4"></view>
-      </view>
-      <!-- 副建筑 -->
-      <view class="building-sm left-b">
-        <view class="bsm-body"></view>
-        <view class="bsm-top"></view>
-      </view>
-      <view class="building-sm right-b">
-        <view class="bsm-body"></view>
-        <view class="bsm-top"></view>
-      </view>
-      <!-- 装饰圆 -->
-      <view class="deco-circle c1"></view>
-      <view class="deco-circle c2"></view>
-      <!-- 品牌文字 -->
-      <text class="visual-brand">邑 Yi</text>
+      <image class="skyline-img" src="./skyline.svg" mode="widthFix" />
     </view>
 
     <!-- 右侧小装饰 -->
