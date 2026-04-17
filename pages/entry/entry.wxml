@@ -44,27 +44,25 @@
     </view>
   </view>
 
-  <!-- ====== 底部入口行 ====== -->
+  <!-- ====== 底部快捷入口 ====== -->
   <view class="bottom-row {{animReady ? 'show delay2' : ''}}">
     <view class="bottom-item" bindtap="goToYiyixing">
-      <view class="bottom-dot dot-blue"></view>
-      <text class="bottom-label">访客通行</text>
+      <view class="bottom-icon" style="background: linear-gradient(135deg, #1D5F8A, #134566);">
+        <t-icon name="list" size="30rpx" color="#FFF" />
+      </view>
+      <text class="bottom-label">使用指南</text>
     </view>
-    <view class="bottom-item" bindtap="goToYixiaoqu">
-      <view class="bottom-dot dot-gold"></view>
-      <text class="bottom-label">社区生活</text>
-    </view>
-    <view class="bottom-item">
-      <view class="bottom-dot dot-green"></view>
-      <text class="bottom-label">保安端</text>
-    </view>
-    <view class="bottom-item" bindtap="showAdminLogin">
-      <view class="bottom-dot dot-brown"></view>
-      <text class="bottom-label">管理员入口</text>
-    </view>
-    <view class="bottom-item">
-      <view class="bottom-dot dot-red"></view>
+    <view class="bottom-item" bindtap="showAbout">
+      <view class="bottom-icon" style="background: linear-gradient(135deg, #C8963E, #A67930);">
+        <t-icon name="info-circle" size="30rpx" color="#FFF" />
+      </view>
       <text class="bottom-label">关于我们</text>
+    </view>
+    <view class="bottom-item" bindtap="showVersion">
+      <view class="bottom-icon" style="background: linear-gradient(135deg, #8B7160, #6B5E50);">
+        <t-icon name="setting" size="30rpx" color="#FFF" />
+      </view>
+      <text class="bottom-label">版本信息</text>
     </view>
   </view>
 
@@ -73,37 +71,57 @@
     <text class="slogan-text">Having safe community\nand happy living equally.</text>
   </view>
 
-  <!-- ====== 弹窗：管理员登录 ====== -->
-  <t-popup visible="{{adminLoginPopupVisible}}" placement="bottom" bind:close="hideAdminLogin">
+  <!-- ====== 弹窗：关于我们 ====== -->
+  <t-popup visible="{{aboutPopupVisible}}" placement="bottom" bind:close="hideAbout">
     <view class="popup-card">
       <view class="popup-header">
-        <text class="popup-title">管理员登录</text>
-        <text class="popup-close" bindtap="hideAdminLogin">✕</text>
+        <text class="popup-title">关于我们</text>
+        <text class="popup-close" bindtap="hideAbout">✕</text>
       </view>
-      <view class="popup-body">
-        <text class="popup-desc">登录管理后台以管理社区事务</text>
-        <view class="admin-form">
-          <view class="admin-field">
-            <text class="admin-label">选择小区</text>
-            <picker mode="selector" range="{{communityNames}}" value="{{selectedCommunityIdx}}" bindchange="onCommunityChange">
-              <view class="picker-box">
-                <text class="picker-text">{{communityNames[selectedCommunityIdx] || '请选择小区'}}</text>
-                <t-icon name="chevron-right" size="28rpx" color="#A09486" />
-              </view>
-            </picker>
-          </view>
-          <view class="admin-field">
-            <text class="admin-label">手机号</text>
-            <input class="admin-input" type="number" placeholder="请输入手机号" bindinput="onAdminPhoneInput" maxlength="11" />
-          </view>
-          <view class="admin-field">
-            <text class="admin-label">密码</text>
-            <input class="admin-input" password placeholder="请输入密码" bindinput="onAdminPasswordInput" maxlength="32" />
-          </view>
+      <view class="popup-body about-body">
+        <view class="about-logo">
+          <view class="about-logo-dot"></view>
+          <text class="about-logo-text">邑 Yi</text>
         </view>
-        <view class="admin-submit-btn" bindtap="doAdminLogin">
-          <text class="admin-submit-text">登录</text>
+        <text class="about-appname">邑易行 · 五邑侨乡智慧社区</text>
+        <view class="about-divider"></view>
+        <text class="about-desc">邑易行是面向五邑侨乡地区的智慧社区综合服务平台，由「邑易行」访客通行系统和「邑小区」智慧社区平台两大模块组成，致力于为社区居民提供安全、便捷、温暖的生活服务。</text>
+        <view class="about-section">
+          <text class="about-section-title">邑易行 · 访客通行</text>
+          <text class="about-section-text">面向来访者的智慧通行解决方案。访客通过微信小程序即可完成实名登记、保安审批、电子凭证亮码、实时位置追踪等全流程操作，实现无纸化、高效化的社区出入管理。</text>
         </view>
+        <view class="about-section">
+          <text class="about-section-title">邑小区 · 智慧社区</text>
+          <text class="about-section-text">面向小区住户的社区生活服务平台。涵盖物业缴费、诉求建议、财务公开、议事协商、信息公示、民生微实事、小区安全、邻里资源共享等功能模块，让社区治理更加透明高效。</text>
+        </view>
+        <view class="about-section">
+          <text class="about-section-title">技术架构</text>
+          <text class="about-section-text">基于微信小程序 + 微信云开发原生架构，采用 TDesign 组件库，前后端一体化部署。品牌视觉融合侨乡碉楼文化元素，以暖棕色系打造有温度的社区服务体验。</text>
+        </view>
+        <view class="about-footer">
+          <text class="about-copyright">© 2026 邑易行团队</text>
+          <text class="about-copyright">江门市蓬江区</text>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- ====== 弹窗：版本信息 ====== -->
+  <t-popup visible="{{versionPopupVisible}}" placement="bottom" bind:close="hideVersion">
+    <view class="popup-card">
+      <view class="popup-header">
+        <text class="popup-title">版本信息</text>
+        <text class="popup-close" bindtap="hideVersion">✕</text>
+      </view>
+      <view class="popup-body version-body">
+        <view class="version-row"><text class="version-label">应用名称</text><text class="version-value">邑易行 · 五邑侨乡智慧社区</text></view>
+        <view class="version-row"><text class="version-label">版本号</text><text class="version-value">v2.1.0</text></view>
+        <view class="version-row"><text class="version-label">更新日期</text><text class="version-value">2026-04-18</text></view>
+        <view class="version-divider"></view>
+        <view class="version-row"><text class="version-label">前端框架</text><text class="version-value">微信小程序原生</text></view>
+        <view class="version-row"><text class="version-label">UI 组件库</text><text class="version-value">TDesign 微信小程序版</text></view>
+        <view class="version-row"><text class="version-label">后端服务</text><text class="version-value">微信云开发</text></view>
+        <view class="version-row"><text class="version-label">云函数数量</text><text class="version-value">28 个</text></view>
       </view>
     </view>
   </t-popup>

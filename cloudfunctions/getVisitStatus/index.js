@@ -36,7 +36,14 @@ exports.main = async (event, context) => {
       .get();
 
     if (result.data.length > 0) {
-      return { success: true, visit: result.data[0], hasActiveVisit: true, identityInfo };
+      // 同时查询历史记录（最近5条）
+      const historyResult = await db.collection('visits')
+        .where({ _openid: openid })
+        .orderBy('createTime', 'desc')
+        .limit(5)
+        .get();
+
+      return { success: true, visit: result.data[0], hasActiveVisit: true, history: historyResult.data, identityInfo };
     }
 
     // 查询最近的历史记录

@@ -342,11 +342,16 @@
   flex-shrink: 0;
 }
 .apply-btn:active { opacity: 0.6; }
-.apply-btn-text {
-  font-size: 26rpx;
-  color: #C8963E;
-  font-weight: 600;
+.apply-btn-text { font-size: 26rpx; color: #C8963E; font-weight: 600; }
+.bottom-btns { display: flex; align-items: center; gap: 16rpx; flex-shrink: 0; }
+.admin-entry-btn {
+  width: 68rpx; height: 68rpx;
+  border-radius: 50%;
+  background: #F5EDE5;
+  display: flex; align-items: center; justify-content: center;
+  border: 2rpx solid #EDE4DB;
 }
+.admin-entry-btn:active { background: #EDE4DB; }
 
 /* 底部占位 */
 .bottom-placeholder {
@@ -465,6 +470,11 @@
 .comm-item:last-child { border-bottom: none; }
 .comm-item:active { background: #F9F3EE; }
 .comm-item-text { font-size: 30rpx; color: #3D2B2B; font-weight: 500; }
+
+/* ── 管理员登录表单 ── */
+.admin-form { display: flex; flex-direction: column; gap: 24rpx; }
+.admin-field { display: flex; flex-direction: column; gap: 10rpx; }
+.admin-label { font-size: 26rpx; color: #5C3D2E; font-weight: 600; }
 
 /* ── Picker 样式（认证表单小区选择） ── */
 .picker-box { display: flex; align-items: center; justify-content: space-between; height: 88rpx; background: #F5EDE5; border-radius: 16rpx; padding: 0 24rpx; box-sizing: border-box; }

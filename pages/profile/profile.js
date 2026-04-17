@@ -19,16 +19,31 @@ Page({
   },
 
   loadHistory() {
-    app.callCloud({
+    // Always fetch history (getVisitStatus only returns history when no active visit)
+    // So we make a separate call that always returns history
+    const app = getApp();
+    wx.cloud.callFunction({
       name: 'getVisitStatus',
       data: {}
     }).then(res => {
-      if (res.result.success && res.result.history) {
-        const history = res.result.history.map(item => ({
-          ...item,
-          createTimeStr: this.formatTime(item.createTime)
-        }));
-        this.setData({ visitHistory: history });
+      if (res.result && res.result.success) {
+        // If history was returned, use it
+        if (res.result.history && res.result.history.length > 0) {
+          const history = res.result.history.map(item => ({
+            ...item,
+            createTimeStr: this.formatTime(item.createTime)
+          }));
+          this.setData({ visitHistory: history });
+        } else if (res.result.visit) {
+          // Only active visit, no history — show it as the single record
+          const v = res.result.visit;
+          this.setData({
+            visitHistory: [{
+              ...v,
+              createTimeStr: this.formatTime(v.createTime)
+            }]
+          });
+        }
       }
     }).catch(err => {
       console.error('加载历史记录失败', err);
