@@ -123,30 +123,24 @@
   position: relative; z-index: 3;
   background: #FFFFFF;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 60rpx;
-  padding: 28rpx 40rpx 32rpx;
+  gap: 40rpx;
+  padding: 32rpx 40rpx;
   opacity: 0;
 }
-.bottom-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12rpx;
+.bottom-item { padding: 12rpx 0; }
+.bottom-item:active { opacity: 0.5; }
+.bottom-dot {
+  width: 8rpx; height: 8rpx;
+  border-radius: 50%;
+  background: #D4C4B0;
 }
-.bottom-icon {
-  width: 52rpx; height: 52rpx;
-  border-radius: 16rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4rpx 16rpx rgba(92,61,46,0.12);
-}
-.bottom-item:active { opacity: 0.7; }
 .bottom-label {
   font-size: 24rpx;
-  color: #8B7160;
+  color: #A09486;
   font-weight: 400;
+  letter-spacing: 2rpx;
 }
 
 /* 底部英文标语 */

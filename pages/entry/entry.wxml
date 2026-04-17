@@ -46,22 +46,11 @@
 
   <!-- ====== 底部快捷入口 ====== -->
   <view class="bottom-row {{animReady ? 'show delay2' : ''}}">
-    <view class="bottom-item" bindtap="goToYiyixing">
-      <view class="bottom-icon" style="background: linear-gradient(135deg, #1D5F8A, #134566);">
-        <t-icon name="list" size="30rpx" color="#FFF" />
-      </view>
-      <text class="bottom-label">使用指南</text>
-    </view>
     <view class="bottom-item" bindtap="showAbout">
-      <view class="bottom-icon" style="background: linear-gradient(135deg, #C8963E, #A67930);">
-        <t-icon name="info-circle" size="30rpx" color="#FFF" />
-      </view>
       <text class="bottom-label">关于我们</text>
     </view>
+    <view class="bottom-dot"></view>
     <view class="bottom-item" bindtap="showVersion">
-      <view class="bottom-icon" style="background: linear-gradient(135deg, #8B7160, #6B5E50);">
-        <t-icon name="setting" size="30rpx" color="#FFF" />
-      </view>
       <text class="bottom-label">版本信息</text>
     </view>
   </view>
