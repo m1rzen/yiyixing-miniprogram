@@ -2,7 +2,7 @@ import Toast from 'tdesign-miniprogram/toast/index';
 
 const FEATURES = {
   'property-fee': {
-    title: '物业缴费', icon: 'money-circle',
+    title: '物业缴费', icon: 'bill',
     gradient: 'linear-gradient(135deg, #C8963E, #A67930)',
     desc: '在线缴纳物业管理费用',
     items: [

@@ -128,7 +128,7 @@
       <view class="popup-body">
         <text class="popup-desc">登录后可使用物业缴费、诉求建议等全部功能</text>
         <button class="wechat-auth-btn" open-type="getPhoneNumber" bindgetphonenumber="onGetPhone">
-          <t-icon name="logo-wechat" size="36rpx" color="#FFF" />
+          <t-icon name="logo-wechatpay" size="36rpx" color="#FFF" />
           <text>微信手机号快捷登录</text>
         </button>
         <view class="phone-login-entry" bindtap="switchToPhoneLogin">

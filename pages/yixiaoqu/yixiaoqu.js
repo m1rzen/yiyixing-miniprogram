@@ -19,7 +19,7 @@ Page({
     applyData: {},
     applyType: 'property',
     features: [
-      { key: 'property-fee',   icon: 'money-circle', title: '物业缴费', bg: 'linear-gradient(135deg, #C8963E, #A67930)' },
+      { key: 'property-fee',   icon: 'bill', title: '物业缴费', bg: 'linear-gradient(135deg, #C8963E, #A67930)' },
       { key: 'suggestion',     icon: 'edit-1',       title: '诉求建议', bg: 'linear-gradient(135deg, #2D8B6F, #1E6B52)' },
       { key: 'finance',        icon: 'chart-bar',    title: '财务公开', bg: 'linear-gradient(135deg, #B85C38, #944A2D)' },
       { key: 'consult',        icon: 'chat-bubble',  title: '议事协商', bg: 'linear-gradient(135deg, #C8963E, #A67930)' },
