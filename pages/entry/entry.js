@@ -4,7 +4,6 @@ Page({
   },
 
   onLoad() {
-    // 入场动画延迟触发
     setTimeout(() => this.setData({ animReady: true }), 100);
   },
 

@@ -1,52 +1,93 @@
 <view class="page">
-  <!-- 背景 -->
+  <!-- 暖色背景 -->
   <view class="bg"></view>
-  <view class="orb orb-a"></view>
-  <view class="orb orb-b"></view>
 
-  <!-- 头部 -->
-  <view class="top {{animReady ? 'show' : ''}}">
-    <view class="brand-row">
-      <view class="brand-dot"></view>
-      <text class="brand-name">邑 Yi</text>
+  <!-- ====== 上半：品牌主视觉区 ====== -->
+  <view class="hero {{animReady ? 'show' : ''}}">
+    <!-- 左上英文标题 -->
+    <text class="hero-en">SMART COMMUNITY</text>
+    <view class="hero-label">
+      <text class="hero-label-text">智慧社区</text>
     </view>
-    <text class="greeting">你好，欢迎回来</text>
-    <text class="title">选择服务</text>
+
+    <!-- 大标题 -->
+    <text class="hero-title">五邑侨乡生态</text>
+
+    <!-- 中心碉楼插画区域（纯 CSS 绘制） -->
+    <view class="hero-visual">
+      <!-- 主建筑剪影 -->
+      <view class="building">
+        <view class="building-body"></view>
+        <view class="building-top"></view>
+        <view class="building-window w1"></view>
+        <view class="building-window w2"></view>
+        <view class="building-window w3"></view>
+        <view class="building-window w4"></view>
+      </view>
+      <!-- 副建筑 -->
+      <view class="building-sm left-b">
+        <view class="bsm-body"></view>
+        <view class="bsm-top"></view>
+      </view>
+      <view class="building-sm right-b">
+        <view class="bsm-body"></view>
+        <view class="bsm-top"></view>
+      </view>
+      <!-- 装饰圆 -->
+      <view class="deco-circle c1"></view>
+      <view class="deco-circle c2"></view>
+      <!-- 品牌文字 -->
+      <text class="visual-brand">邑 Yi</text>
+    </view>
+
+    <!-- 右侧小装饰 -->
+    <view class="hero-side">
+      <view class="color-strip"></view>
+      <text class="side-zh">蓬江区</text>
+      <text class="side-en">Pengjiang</text>
+    </view>
   </view>
 
-  <!-- 双卡片 — 左右并排 -->
-  <view class="cards {{animReady ? 'show delay' : ''}}">
-
-    <view class="card" hover-class="card-tap" bindtap="goToYiyixing">
-      <!-- 图标 -->
-      <view class="card-icon icon-blue">
-        <t-icon name="secured" size="52rpx" color="#FFF" />
-      </view>
-      <!-- 名称 -->
-      <text class="card-name">邑易行</text>
-      <text class="card-desc">访客通行登记</text>
-      <!-- 箭头 -->
-      <view class="card-arrow arrow-blue">
-        <t-icon name="arrow-right" size="28rpx" color="#FFF" />
-      </view>
+  <!-- ====== 下半：双选择区 ====== -->
+  <view class="choices {{animReady ? 'show delay' : ''}}">
+    <!-- 邑易行 -->
+    <view class="choice" hover-class="choice-tap" bindtap="goToYiyixing">
+      <text class="choice-zh">邑易行</text>
+      <text class="choice-en">PASS</text>
     </view>
 
-    <view class="card" hover-class="card-tap" bindtap="goToYixiaoqu">
-      <view class="card-icon icon-gold">
-        <t-icon name="city-1" size="52rpx" color="#FFF" />
-      </view>
-      <text class="card-name">邑小区</text>
-      <text class="card-desc">智慧社区生活</text>
-      <view class="card-arrow arrow-gold">
-        <t-icon name="arrow-right" size="28rpx" color="#FFF" />
-      </view>
-    </view>
+    <!-- 分割线 -->
+    <view class="choice-divider"></view>
 
+    <!-- 邑小区 -->
+    <view class="choice" hover-class="choice-tap" bindtap="goToYixiaoqu">
+      <text class="choice-zh">邑小区</text>
+      <text class="choice-en">COMMUNITY</text>
+    </view>
+  </view>
+
+  <!-- ====== 底部入口行 ====== -->
+  <view class="bottom-row {{animReady ? 'show delay2' : ''}}">
+    <view class="bottom-item" bindtap="goToYiyixing">
+      <view class="bottom-dot dot-blue"></view>
+      <text class="bottom-label">访客通行</text>
+    </view>
+    <view class="bottom-item" bindtap="goToYixiaoqu">
+      <view class="bottom-dot dot-gold"></view>
+      <text class="bottom-label">社区生活</text>
+    </view>
+    <view class="bottom-item">
+      <view class="bottom-dot dot-green"></view>
+      <text class="bottom-label">保安端</text>
+    </view>
+    <view class="bottom-item">
+      <view class="bottom-dot dot-red"></view>
+      <text class="bottom-label">关于我们</text>
+    </view>
   </view>
 
   <!-- 底部标语 -->
-  <view class="bottom {{animReady ? 'show delay2' : ''}}">
-    <view class="bottom-line"></view>
-    <text class="bottom-text">五邑侨乡 · 智慧社区公共服务平台</text>
+  <view class="slogan {{animReady ? 'show delay2' : ''}}">
+    <text class="slogan-text">Having safe community\nand happy living equally.</text>
   </view>
 </view>
