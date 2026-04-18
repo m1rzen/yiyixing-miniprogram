@@ -27,13 +27,14 @@ exports.main = async (event, context) => {
     // 构建查询条件：必须匹配当前 openid
     const baseWhere = { _openid: openid };
 
-    // ★ 关键修复：如果前端传了 filterPhone，额外按 phone 过滤
+    // ★ 历史记录查询条件：如果前端传了 filterPhone，按 visitorPhone 过滤
     // 这样换手机号登录后只看到该手机号的记录
+    const historyWhere = { _openid: openid };
     if (filterPhone && filterPhone.length === 11) {
-      baseWhere.phone = filterPhone;
+      historyWhere.visitorPhone = filterPhone;
     }
 
-    // 查询该用户最新的活跃拜访记录
+    // 查询该用户最新的活跃拜访记录（不受 filterPhone 限制，确保通行功能正常）
     const result = await db.collection('visits')
       .where({
         ...baseWhere,
@@ -45,7 +46,7 @@ exports.main = async (event, context) => {
 
     if (result.data.length > 0) {
       const historyResult = await db.collection('visits')
-        .where(baseWhere)
+        .where(historyWhere)
         .orderBy('createTime', 'desc')
         .limit(5)
         .get();
@@ -55,7 +56,7 @@ exports.main = async (event, context) => {
 
     // 查询历史记录
     const historyResult = await db.collection('visits')
-      .where(baseWhere)
+      .where(historyWhere)
       .orderBy('createTime', 'desc')
       .limit(5)
       .get();

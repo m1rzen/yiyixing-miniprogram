@@ -129,7 +129,10 @@ Page({
         const oldPhone = wx.getStorageSync('loginPhone') || '';
         const newPhone = this.data.authPhoneFull;
         if (oldPhone && newPhone && oldPhone !== newPhone) {
+          // 保存旧手机号供 register.js 对比，再清空其他缓存
+          const oldLoginPhone = oldPhone;
           wx.clearStorageSync();
+          wx.setStorageSync('loginPhone', oldLoginPhone); // 保留，用于换号检测
           app.globalData.openid = '';
         }
 
@@ -220,7 +223,9 @@ Page({
       // ★ 检测手机号变更：新手机号与旧存储不一致时，清空旧身份
       const oldPhone = wx.getStorageSync('loginPhone') || '';
       if (oldPhone && oldPhone !== phone) {
+        const oldLoginPhone = oldPhone;
         wx.clearStorageSync();
+        wx.setStorageSync('loginPhone', oldLoginPhone); // 保留，用于换号检测
         app.globalData.openid = '';
       }
 

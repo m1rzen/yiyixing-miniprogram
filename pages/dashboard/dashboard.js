@@ -55,11 +55,10 @@ Page({
 
   checkActiveVisit() {
     this.setData({ isLoading: true });
-    const userInfo = wx.getStorageSync('userInfo') || {};
-    const filterPhone = userInfo.fullPhone || '';
+    // 不传 filterPhone — active visit 需要包含所有，不影响通行功能
     app.callCloud({
       name: 'getVisitStatus',
-      data: filterPhone ? { filterPhone } : {}
+      data: {}
     }).then(res => {
       if (res.result.success && res.result.hasActiveVisit && res.result.visit) {
         const visit = res.result.visit;
